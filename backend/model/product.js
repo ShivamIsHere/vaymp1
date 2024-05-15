@@ -113,6 +113,10 @@ const productSchema = new mongoose.Schema({
   ratings: {
     type: Number,
   },
+  adminCreated:{
+    type: String,
+    required: true,
+  },
   shopId: {
     type: String,
     required: true,

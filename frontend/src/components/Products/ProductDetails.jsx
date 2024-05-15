@@ -21,7 +21,7 @@ import Ratings from "./Ratings";
 import axios from "axios";
 // import { BsSortNumericDownAlt } from "react-icons/bs";
 
-const ProductDetails = ({ data }) => {
+const ProductDetails =  ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const { user, isAuthenticated } = useSelector((state) => state.user);
@@ -31,9 +31,15 @@ const ProductDetails = ({ data }) => {
   const [select, setSelect] = useState(0);
   const [selectedSize, setSelectedSize] = useState(""); // State for selected size
   const [showDescription, setShowDescription] = useState(false);
-
+//const [adminuser,setadminuser]=useState({});
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // useEffect(async()=>{
+  //   // const res5 = await axios.get(`${server}/user/user-info/65fae1d3497be0c126658a67`)
+  //   const res5 = await axios.get(`${server}/user/user-info/65fae1d3497be0c126658a67`)
+
+  //   setadminuser(res5.data.user)
+  // },[])
   useEffect(() => {
     dispatch(getAllProductsShop(data && data?.shop._id));
     if (wishlist && wishlist.find((i) => i._id === data?._id)) {
@@ -221,6 +227,10 @@ const ProductDetails = ({ data }) => {
       const groupTitle = data._id + user._id;
       const userId = user._id;
       const sellerId = data.shop._id;
+      // const sellerId="65fae1d3497be0c126658a67";
+      // const sellerId=data?.cart[0].adminCreated;
+      // console.log("data.adminCreated",data?.cart[0].adminCreated)
+
       await axios
         .post(`${server}/conversation/create-new-conversation`, {
           groupTitle,
@@ -237,7 +247,7 @@ const ProductDetails = ({ data }) => {
       toast.error("Please login to create a conversation");
     }
   };
-
+  
   return (
     <div className="bg-white">
       {data ? (
@@ -464,24 +474,36 @@ const ProductDetails = ({ data }) => {
                       className="w-[50px] h-[50px] rounded-full mr-2"
                     />
                   </Link>
+                  
+                   {/*<img
+                      src={`${adminuser?.avatar?.url}`}
+                      alt=""
+                      className="w-[50px] h-[50px] rounded-full mr-2"
+                />*/}
+                 
                   <div className="pr-8">
                     <Link to={`/shop/preview/${data?.shop._id}`}>
                       <h3 className={`${styles.shop_name} pb-1 pt-1`}>
                         {data.shop.name}
                       </h3>
                     </Link>
+                   
+                      {/* <h3 className={`${styles.shop_name} pb-1 pt-1`}>
+                        {adminuser?.name}
+                      </h3> */}
+                    
                     <h5 className="pb-3 text-[15px]">
                       ({averageRating}/5) Ratings
                     </h5>
                   </div>
-                  <div
+                  {/* <div
                     className={`${styles.button} bg-[#6443d1] mt-4 !rounded !h-11`}
                     onClick={handleMessageSubmit}
                   >
                     <span className="text-white flex items-center">
-                      Send Message <AiOutlineMessage className="ml-1" />
+                      Send Message1 <AiOutlineMessage className="ml-1" />
                     </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

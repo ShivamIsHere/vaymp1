@@ -10,7 +10,11 @@ const ErrorHandler = require("../utils/ErrorHandler");
 
 router.post(
   "/create-product",
+  // isAuthenticated,
+  // isAdmin("Admin"),
+  
   catchAsyncErrors(async (req, res, next) => {
+
     try {
       const shopId = req.body.shopId;
       if (!shopId) {
@@ -77,8 +81,8 @@ router.post(
 // get all products of a shop
 router.get(
   "/get-all-products-shop/:id",
-  isSeller,
-  catchAsyncErrors(async (req, res, next) => {
+  
+    catchAsyncErrors(async (req, res, next) => {
     try {
       const products = await Product.find({ shopId: req.params.id });
 
@@ -142,7 +146,7 @@ router.get(
       // Pagination parameters
       const page = parseInt(req.query.page) || 1;
       const perPage = parseInt(req.query.perPage) || 30;
-      console.log('Pagination Params:', { page, perPage }); // Log pagination params
+      // console.log('Pagination Params:', { page, perPage }); // Log pagination params
 
       // Sorting parameters
       let sortBy = ""; // Initialize sortBy variable
@@ -161,12 +165,12 @@ if (req.query.sortBy === "priceHighToLow") {
 
 // Use sortBy and sortOrder in your database query or sorting logic
 
-      console.log("req.query.sortBy",req.query.sortBy)
-      console.log("req.query.sortOrder",req.query.sortOrder)
-      console.log("req.query.sortBy",req.query)
-      console.log("req.query.sortBy",req.params)
+      // console.log("req.query.sortBy",req.query.sortBy)
+      // console.log("req.query.sortOrder",req.query.sortOrder)
+      // console.log("req.query.sortBy",req.query)
+      // console.log("req.query.sortBy",req.params)
 
-      console.log('Sorting Params:', { sortBy, sortOrder }); // Log sorting params
+      // console.log('Sorting Params:', { sortBy, sortOrder }); // Log sorting params
 
       // Filtering parameters
       const filters = {};

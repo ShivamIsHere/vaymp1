@@ -23,6 +23,9 @@ const CreateProduct = () => {
 
   let { id } = useParams();
   const seller=id;
+  const {user} = useSelector((state) => state.user);
+
+  // console.log("user._id",user._id)
   const { success, error } = useSelector((state) => state.products);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -145,6 +148,8 @@ const CreateProduct = () => {
     newForm.append("fit", selectedFit);
     newForm.append("gender", selectedGender);
     newForm.append("shopId", seller._id);
+    newForm.append("adminCreated", user._id);
+
 
      dispatch(
         createProduct({
@@ -165,6 +170,7 @@ const CreateProduct = () => {
           fit: selectedFit,
           gender: selectedGender,
           shopId: seller,
+          adminCreated:user,
           images,
         })
       );

@@ -102,7 +102,7 @@ const ProductDetailsCard = ({ setOpen, data }) => {
                   onClick={handleMessageSubmit}
                 >
                   <span className="text-[#fff] flex items-center">
-                    Send Message <AiOutlineMessage className="ml-1" />
+                    Send Message2 <AiOutlineMessage className="ml-1" />
                   </span>
                 </div>
                 {/* <h5 className="text-[16px] text-[red] mt-5">(50) Sold out</h5> */}

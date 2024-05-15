@@ -18,6 +18,7 @@ export const createProduct =
     ShopPrice,
     originalPrice,
     discountPrice,
+    adminCreated,
     stock,
     size,
     quantity,
@@ -46,12 +47,16 @@ export const createProduct =
         sleeveType,
         brand,
         color,
+        adminCreated,
         fabric,
         occasion,
         fit,
         gender,
         shopId,
-        images
+        images,
+        // {
+        //   withCredentials: true
+        // }
       );
       dispatch({
         type: "productCreateSuccess",
@@ -74,9 +79,7 @@ export const getAllProductsShop = (id) => async (dispatch) => {
 
     const { data } = await axios.get(
       `${server}/product/get-all-products-shop/${id}`,
-      {
-        withCredentials: true
-      }
+      
     );
     dispatch({
       type: "getAllProductsShopSuccess",

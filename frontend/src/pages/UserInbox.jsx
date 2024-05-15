@@ -25,7 +25,11 @@ const UserInbox = () => {
   const [activeStatus, setActiveStatus] = useState(false);
   const [open, setOpen] = useState(false);
   const scrollRef = useRef(null);
+  const [currTitle, setcurrTitle] = useState("");
 
+
+
+  console.log("user user..................",user)
   useEffect(() => {
     socketId.on("getMessage", (data) => {
       setArrivalMessage({
@@ -213,7 +217,7 @@ const UserInbox = () => {
         <>
           <Header />
           <h1 className="text-center text-[30px] py-3 font-Poppins">
-            All Messages
+            All Messages1
           </h1>
           {/* All messages list */}
           {conversations &&
@@ -230,6 +234,8 @@ const UserInbox = () => {
                 online={onlineCheck(item)}
                 setActiveStatus={setActiveStatus}
                 loading={loading}
+                setcurrTitle={setcurrTitle}
+                
               />
             ))}
         </>
@@ -247,6 +253,8 @@ const UserInbox = () => {
           activeStatus={activeStatus}
           scrollRef={scrollRef}
           handleImageUpload={handleImageUpload}
+          currTitle={currTitle}
+          loginuser={user}
         />
       )}
     </div>
@@ -263,7 +271,8 @@ const MessageList = ({
   userData,
   online,
   setActiveStatus,
-  loading
+  loading,
+  setcurrTitle
 }) => {
   const [active, setActive] = useState(0);
   const [user, setUser] = useState([]);
@@ -271,18 +280,25 @@ const MessageList = ({
   const handleClick = (id) => {
     navigate(`/inbox?${id}`);
     setOpen(true);
+    setcurrTitle(data?.groupTitle)
   };
 
   useEffect(() => {
     setActiveStatus(online);
     const userId = data.members.find((user) => user !== me);
+    
+    console.log(";;;;;;;;;;;;;;;;;;;;;;;;;",me,userId)
     const getUser = async () => {
       try {
         const res = await axios.get(`${server}/shop/get-shop-info/${userId}`);
-        setUser(res.data.shop);
+        const res5 = await axios.get(`${server}/user/user-info/${userId}`);
+        console.log("jj;;;;;;;hh;;;;;;;;;;;;;;;;;;",res5.data.user)
+        // setUser(res.data.shop);
+        setUser(res5.data.user);
       } catch (error) {
         console.log(error);
       }
+      
     };
     getUser();
   }, [me, data]);
@@ -313,13 +329,20 @@ const MessageList = ({
         )}
       </div>
       <div className="pl-3">
-        <h1 className="text-[18px]">{user?.name}</h1>
-        <p className="text-[16px] text-[#000c]">
+        <h1 className="text-[18px]">{user?.name} {"#"}{data?.groupTitle.split(' ')[0].substring(15)}</h1>
+        {/* <p className="text-[16px] text-[#000c]">
           {!loading && data?.lastMessageId !== userData?._id
             ? "You:"
             : userData?.name.split(" ")[0] + ": "}{" "}
           {data?.lastMessage}
-        </p>
+        </p> */}
+        <p className="text-[16px] text-[#000c]">
+  {!loading && data?.lastMessageId !== userData?._id
+    ? "You:"
+    : (userData && userData.name ? userData.name.split(" ")[0] + ":" : "")}{" "}
+  {data?.lastMessage}
+</p>
+
       </div>
     </div>
   );
@@ -336,6 +359,8 @@ const SellerInbox = ({
   activeStatus,
   scrollRef,
   handleImageUpload,
+  currTitle,
+  loginuser
 }) => {
   return (
     <div className="w-[full] min-h-full flex flex-col justify-between p-5">
@@ -348,8 +373,10 @@ const SellerInbox = ({
             className="w-[60px] h-[60px] rounded-full"
           />
           <div className="pl-3">
-            <h1 className="text-[18px] font-[600]">{userData?.name}</h1>
-            <h1>{activeStatus ? "Active Now" : ""}</h1>
+          <h1 className="text-[18px] font-[600]">
+    {userData?.name} {loginuser.role === "Admin" && currTitle? currTitle : currTitle.split(' ')[1]}
+  </h1>
+  <h1>{activeStatus ? "Active Now" : ""}</h1>
           </div>
         </div>
         <AiOutlineArrowRight

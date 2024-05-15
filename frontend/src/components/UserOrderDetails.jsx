@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BsFillBagFill } from "react-icons/bs";
+import {  useNavigate } from "react-router-dom";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../styles/styles";
@@ -12,21 +13,21 @@ import { toast } from "react-toastify";
 
 const UserOrderDetails = () => {
   const { orders } = useSelector((state) => state.order);
-  const { user } = useSelector((state) => state.user);
+  // const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [comment, setComment] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [rating, setRating] = useState(1);
-
+  const { user, isAuthenticated } = useSelector((state) => state.user);
   const { id } = useParams();
-
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getAllOrdersOfUser(user._id));
   }, [dispatch,user._id]);
 
   const data = orders && orders.find((item) => item._id === id);
-
+console.log("selectedItem,,,,,,,,,,,,,,,,,,",selectedItem)
   const reviewHandler = async (e) => {
     await axios
       .put(
@@ -62,7 +63,31 @@ const UserOrderDetails = () => {
       toast.error(error.response.data.message);
     })
   };
-
+  const handleMessageSubmit = async () => {
+    if (isAuthenticated) {
+      console.log("selectedItem,,,,,,,,,,,,,,,,,,",data)
+      const groupTitle = id +" "+data?.cart[0].name;
+      const userId = user._id;
+      //const sellerId = data.shop._id;
+      // const sellerId="65fae1d3497be0c126658a67";
+      const sellerId=data?.cart[0].adminCreated;
+      console.log("order kr do",data?.cart[0].adminCreated)
+      await axios
+        .post(`${server}/conversation/create-new-conversation`, {
+          groupTitle,
+          userId,
+          sellerId,
+        })
+        .then((res) => {
+          navigate(`/inbox?${res.data.conversation._id}`);
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    } else {
+      toast.error("Please login to create a conversation");
+    }
+  };
   return (
     <div className={`py-4 min-h-screen ${styles.section}`}>
       <div className="w-full flex items-center justify-between">
@@ -233,9 +258,17 @@ const UserOrderDetails = () => {
         </div>
       </div>
       <br />
-      <Link to="/">
-        <div className={`${styles.button} text-white`}>Send Message</div>
-      </Link>
+      <div
+                  className={`${styles.button} bg-[#000] mt-4 rounded-[4px] h-11`}
+                  onClick={handleMessageSubmit}
+                >
+                  <span className="text-[#fff] flex items-center">
+                    Send Message9 
+                  </span>
+                </div>
+      {/* <Link to="/">
+        <div className={`${styles.button} text-white`}>Send Message3</div>
+      </Link> */}
       <br />
       <br />
     </div>
