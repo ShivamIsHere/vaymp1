@@ -19,6 +19,7 @@ import ShopLoginPage from "../pages/ShopLoginPage";
 import OrderDetailsPage from "../pages/OrderDetailsPage";
 import TrackOrderPage from "../pages/TrackOrderPage";
 import UserInbox from "../pages/UserInbox.jsx";
+import AllOrders from "../pages/AllOrders.jsx";
 
 export { 
     LoginPage,
@@ -41,6 +42,7 @@ export {
     TrackOrderPage,
     ShopsPage,
     UserInbox,
+    AllOrders,
     AllCoupons,
 
 };

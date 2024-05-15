@@ -1201,11 +1201,11 @@ const ProfileContent = ({ active }) => {
       )}
 
       {/* order */}
-      {active === 2 && (
+      {/* {active === 2 && (
         <div>
           <AllOrders />
         </div>
-      )}
+      )} */}
 
       {/* Refund */}
       {active === 3 && (
@@ -1238,113 +1238,113 @@ const ProfileContent = ({ active }) => {
   );
 };
 
-const AllOrders = () => {
-  const { user } = useSelector((state) => state.user);
-  const { orders } = useSelector((state) => state.order);
-  const {allProducts,isLoading} = useSelector((state) => state.products);
+// const AllOrders = () => {
+//   const { user } = useSelector((state) => state.user);
+//   const { orders } = useSelector((state) => state.order);
+//   const {allProducts,isLoading} = useSelector((state) => state.products);
 
-  const dispatch = useDispatch();
+//   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getAllOrdersOfUser(user._id));
-  }, [dispatch, user._id]);
+//   useEffect(() => {
+//     dispatch(getAllOrdersOfUser(user._id));
+//   }, [dispatch, user._id]);
 
-  const columns = [
-    { 
-      field: "image", 
-      headerName: "Product Image", 
-      minWidth: 180, 
-      flex: 0.7,
-      renderCell: (params) => {
-        return (
-          <Link to={`/product/${params.id}`}>
-            <img src={params.value} alt="Product" style={{ width: 50, height: 50 }} />
-          </Link>
-        );
-      }
-    },
-    { field: "name", headerName: "Name", minWidth: 180, flex: 1.4 ,
-    renderCell: (params) => {
-      return (
-        <Link to={`/product/${params.id}`}>
-          {params.value}
-        </Link>
-      );
-    }
-  },
-    {
-      field: "status",
-      headerName: "Status",
-      minWidth: 130,
-      flex: 0.7,
-      cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Delivered"
-          ? "greenColor"
-          : "redColor";
-      },
-    },
-    {
-      field: "itemsQty",
-      headerName: "Items Qty",
-      type: "number",
-      minWidth: 130,
-      flex: 0.7,
-    },
+//   const columns = [
+//     { 
+//       field: "image", 
+//       headerName: "Product Image", 
+//       minWidth: 180, 
+//       flex: 0.7,
+//       renderCell: (params) => {
+//         return (
+//           <Link to={`/product/${params.id}`}>
+//             <img src={params.value} alt="Product" style={{ width: 50, height: 50 }} />
+//           </Link>
+//         );
+//       }
+//     },
+//     { field: "name", headerName: "Name", minWidth: 180, flex: 1.4 ,
+//     renderCell: (params) => {
+//       return (
+//         <Link to={`/product/${params.id}`}>
+//           {params.value}
+//         </Link>
+//       );
+//     }
+//   },
+//     {
+//       field: "status",
+//       headerName: "Status",
+//       minWidth: 130,
+//       flex: 0.7,
+//       cellClassName: (params) => {
+//         return params.getValue(params.id, "status") === "Delivered"
+//           ? "greenColor"
+//           : "redColor";
+//       },
+//     },
+//     {
+//       field: "itemsQty",
+//       headerName: "Items Qty",
+//       type: "number",
+//       minWidth: 130,
+//       flex: 0.7,
+//     },
 
-    {
-      field: "total",
-      headerName: "Total",
-      type: "number",
-      minWidth: 130,
-      flex: 0.8,
-    },
+//     {
+//       field: "total",
+//       headerName: "Total",
+//       type: "number",
+//       minWidth: 130,
+//       flex: 0.8,
+//     },
 
-    {
-      field: " ",
-      flex: 1,
-      minWidth: 150,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/user/order/${params.id}`}>
-              <Button>
-                <AiOutlineArrowRight size={20} />
-              </Button>
-            </Link>
-          </>
-        );
-      },
-    },
-  ];
+//     {
+//       field: " ",
+//       flex: 1,
+//       minWidth: 150,
+//       headerName: "",
+//       type: "number",
+//       sortable: false,
+//       renderCell: (params) => {
+//         return (
+//           <>
+//             <Link to={`/user/order/${params.id}`}>
+//               <Button>
+//                 <AiOutlineArrowRight size={20} />
+//               </Button>
+//             </Link>
+//           </>
+//         );
+//       },
+//     },
+//   ];
 
-  const row = [];
+//   const row = [];
 
-  orders &&
-    orders.forEach((item) => {
-      // console.log(item.cart[0].images[0].url)
-      console.log()
-      row.push({
-        id: item._id,
-       image: item.cart[0].images[0].url,
-       name: item.cart[0].name,
-        itemsQty: item.cart.length,
-        total: "Rs$" + item.totalPrice,
-        status: item.status,
-      });
-    });
+//   orders &&
+//     orders.forEach((item) => {
+//       // console.log(item.cart[0].images[0].url)
+//       console.log()
+//       row.push({
+//         id: item._id,
+//        image: item.cart[0].images[0].url,
+//        name: item.cart[0].name,
+//         itemsQty: item.cart.length,
+//         total: "Rs$" + item.totalPrice,
+//         status: item.status,
+//       });
+//     });
 
-  return (
-    <div className="">
-      {orders &&
-        orders.map((order) => (
-          <OrderCard key={order._id} order={order} />
-        ))}
-    </div>
-  );
-};
+//   return (
+//     <div className="">
+//       {orders &&
+//         orders.map((order) => (
+//           <OrderCard key={order._id} order={order} />
+//         ))}
+//     </div>
+//   );
+// };
 
 const AllRefundOrders = () => {
   const { user } = useSelector((state) => state.user);

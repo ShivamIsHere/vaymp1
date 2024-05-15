@@ -21,6 +21,7 @@ import {
   OrderDetailsPage,
   TrackOrderPage,
   UserInbox,
+  AllOrders,
   AllCoupons
 } from "./routes/Routes.js";
 import {
@@ -63,6 +64,7 @@ import { server } from "./server";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import ShopsPage from "./pages/Shop/ShopsPage.jsx";
+// import AllOrders from "./pages/AllOrders.jsx";
 
 const App = () => {
   const [stripeApikey, setStripeApiKey] = useState("");
@@ -136,6 +138,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <UserInbox />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <AllOrders />
             </ProtectedRoute>
           }
         />
