@@ -93,6 +93,7 @@ const ProductDetails =  ({ data }) => {
         if (val.size === selectedSize) {
           val.isSelected = true;
           val.qty = count;
+          val.quantity=val.quantity-count;
         }
       });
       // newData.qty = count;
@@ -131,6 +132,7 @@ const ProductDetails =  ({ data }) => {
         if (val.size === selectedSize) {
           val.isSelected = true;
           val.qty = count;
+          val.quantity=val.quantity-count;
         } else {
           val.qty = 0;
         }
@@ -226,8 +228,8 @@ const ProductDetails =  ({ data }) => {
     if (isAuthenticated) {
       const groupTitle = data._id + user._id;
       const userId = user._id;
-      const sellerId = data.shop._id;
-      // const sellerId="65fae1d3497be0c126658a67";
+      // const sellerId = data.shop._id;
+      const sellerId="65fae1d3497be0c126658a67";
       // const sellerId=data?.cart[0].adminCreated;
       // console.log("data.adminCreated",data?.cart[0].adminCreated)
 

@@ -47,6 +47,7 @@ export const createProduct =
         sleeveType,
         brand,
         color,
+        
         // adminCreated,
         fabric,
         occasion,

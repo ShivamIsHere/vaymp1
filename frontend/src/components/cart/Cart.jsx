@@ -263,7 +263,7 @@ const Cart = ({ setOpenCart }) => {
     console.log("5555", selectedSize,data);
     updateCartData.stock.forEach((val)=>{
       if(val.size==selectedSize){
-        val.quantity=val.quantity+val.qty;
+        val.quantity=val.quantity+val.qty ;
        val.qty=0
        val.isSelected=false;
       }

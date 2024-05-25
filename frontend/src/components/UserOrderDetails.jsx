@@ -68,10 +68,10 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",selectedItem)
       console.log("selectedItem,,,,,,,,,,,,,,,,,,",data)
       const groupTitle = id +" "+data?.cart[0].name;
       const userId = user._id;
-      //const sellerId = data.shop._id;
-      // const sellerId="65fae1d3497be0c126658a67";
-      const sellerId=data?.cart[0].adminCreated;
-      console.log("order kr do",data?.cart[0].adminCreated)
+      // const sellerId = data.shop._id;
+      const sellerId="65fae1d3497be0c126658a67";
+      // const sellerId=data?.cart[0].adminCreated;
+      // console.log("order kr do",data?.cart[0].adminCreated)
       await axios
         .post(`${server}/conversation/create-new-conversation`, {
           groupTitle,
@@ -93,7 +93,7 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",selectedItem)
       <div className="w-full flex items-center justify-between">
         <div className="flex items-center">
           <BsFillBagFill size={30} color="crimson" />
-          <h1 className="pl-2 text-[25px]">Order Details</h1>
+          <h1 className="pl-2 text-[25px]">Order Details1</h1>
         </div>
       </div>
 

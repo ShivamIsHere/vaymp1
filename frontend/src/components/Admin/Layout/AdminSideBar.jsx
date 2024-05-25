@@ -124,6 +124,7 @@ const AdminSideBar = ({ active }) => {
           </h5>
         </Link>
       </div>
+      
       <div className="w-full flex items-center p-4">
         <Link to="/admin-withdraw-request" className="w-full flex items-center">
           <CiMoneyBill
@@ -139,7 +140,83 @@ const AdminSideBar = ({ active }) => {
           </h5>
         </Link>
       </div>
+      <div className="w-full flex items-center p-4">
+        <Link
+          to="/admin-refund-request"
+          className="w-full flex items-center"
+        >
+          <CiMoneyBill
+            size={30}
+            color={`${active === 9 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 7 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            Cancel Orders
+          </h5>
+        </Link>
+      </div>
+      <div className="w-full flex items-center p-4">
+        <Link
+          to="/admin-all-orders"
+          className="w-full flex items-center"
+        >
+          <CiMoneyBill
+            size={30}
+            color={`${active === 9 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 7 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+            All Orders2
+          </h5>
+        </Link>
+      </div>
 
+
+      <div className="w-full flex items-center p-4">
+        <Link
+          to="/return-all-orders"
+          className="w-full flex items-center"
+        >
+          <CiMoneyBill
+            size={30}
+            color={`${active === 9 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 12 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+           Return/Refund
+          </h5>
+        </Link>
+      </div>
+
+
+      <div className="w-full flex items-center p-4">
+        <Link
+          to="/undelivered-order"
+          className="w-full flex items-center"
+        >
+          <CiMoneyBill
+            size={30}
+            color={`${active === 9 ? "crimson" : "#555"}`}
+          />
+          <h5
+            className={`hidden 800px:block pl-2 text-[18px] font-[400] ${
+              active === 12 ? "text-[crimson]" : "text-[#555]"
+            }`}
+          >
+           UnDelivered
+          </h5>
+        </Link>
+      </div>
+      
       <div className="w-full flex items-center p-4">
         <Link
           to="/profile"

@@ -148,7 +148,7 @@ const CreateProduct = () => {
     newForm.append("fit", selectedFit);
     newForm.append("gender", selectedGender);
     newForm.append("shopId", seller._id);
-    newForm.append("adminCreated", user._id);
+    // newForm.append("adminCreated", user._id);
 
 
      dispatch(
@@ -170,7 +170,7 @@ const CreateProduct = () => {
           fit: selectedFit,
           gender: selectedGender,
           shopId: seller,
-          adminCreated:user,
+          // adminCreated:user,
           images,
         })
       );

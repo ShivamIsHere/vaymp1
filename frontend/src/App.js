@@ -47,6 +47,10 @@ import {
   AdminDashboardProducts,
   AdminDashboardEvents,
   AdminDashboardWithdraw,
+  AdminDashboardAllOrders,
+  AdminDashboardRefund,
+  AdminDashboardAllReturn,
+  AdminDashboardUndeliveredItems,
   AdminDashboardStockNotification
 } from "./routes/AdminRoutes";
 import { ToastContainer } from "react-toastify";
@@ -357,6 +361,38 @@ const App = () => {
           element={
             <ProtectedAdminRoute>
               <AdminDashboardWithdraw />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin-all-orders"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardAllOrders />
+            </ProtectedAdminRoute>
+          }
+        />
+         <Route
+          path="/return-all-orders"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardAllReturn />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/undelivered-order"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardUndeliveredItems />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin-refund-request"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardRefund />
             </ProtectedAdminRoute>
           }
         />
