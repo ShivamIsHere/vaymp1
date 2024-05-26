@@ -241,19 +241,26 @@ const AllOrders = () => {
   }, []);
 
   const columns = [
-    // { 
-    //   field: "image", 
-    //   headerName: "Product Image", 
-    //   minWidth: 180, 
-    //   flex: 0.7,
-    //   renderCell: (params) => {
-    //     return (
-    //       <Link to={`/product/${params.id}`}>
-    //         <img src={params.value} alt="Product" style={{ width: 50, height: 50 }} />
-    //       </Link>
-    //     );
-    //   }
-    // },
+    { 
+      field: "image", 
+      headerName: "Product Image", 
+      minWidth: 180, 
+      flex: 0.7,
+      renderCell: (params) => {
+        return (
+          <Link to={`/product/${params.id}`}>
+            <img src={params.value} alt="Product" style={{ width: 50, height: 50 }} />
+          </Link>
+        );
+      }
+    },
+    {
+      field: "orderid",
+      headerName: "order id",
+      type: "number",
+      minWidth: 260,
+      flex: 0.7,
+    },
   //   { field: "name", headerName: "Name", minWidth: 180, flex: 1.4 ,
   //   renderCell: (params) => {
   //     return (
