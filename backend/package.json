@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "build":"npm install --legacy-peer-deps && npm install --force --prefix frontend && npm run build --prefix frontend"
+    "build":"npm install --legacy-peer-deps && npm install --force --legacy-peer-deps --prefix frontend && npm run build --prefix frontend"
   },
   "author": "shahriar Sajeeb",
   "license": "ISC",
