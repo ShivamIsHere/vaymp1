@@ -161,7 +161,7 @@ const AllOrders = () => {
           autoHeight
         />
       </div>
-      {open && (
+      {/* {open && (
         <div className="w-full fixed h-screen top-0 left-0 bg-[#00000031] z-[9999] flex items-center justify-center">
           <div className="w-[50%] min-h-[40vh] bg-white rounded shadow p-4">
             <div className="flex justify-end w-full">
@@ -189,7 +189,7 @@ const AllOrders = () => {
             </button>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

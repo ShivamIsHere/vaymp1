@@ -237,7 +237,7 @@ const ProductDetails =  ({ data }) => {
         .post(`${server}/conversation/create-new-conversation`, {
           groupTitle,
           userId,
-          adminId,
+          sellerId,
         })
         .then((res) => {
           navigate(`/inbox?${res.data.conversation._id}`);
