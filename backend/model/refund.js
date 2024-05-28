@@ -68,6 +68,10 @@ const refundSchema = new mongoose.Schema({
     type:String,
     default:"",
   },
+  product:{
+    type: Object,
+    default:{}
+  },
   discountPrice: {
     type: Number,
     default:0

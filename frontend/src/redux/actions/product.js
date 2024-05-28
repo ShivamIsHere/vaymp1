@@ -18,7 +18,7 @@ export const createProduct =
     ShopPrice,
     originalPrice,
     discountPrice,
-    // adminCreated,
+    adminCreated,
     stock,
     size,
     quantity,
@@ -48,7 +48,7 @@ export const createProduct =
         brand,
         color,
         
-        // adminCreated,
+        adminCreated,
         fabric,
         occasion,
         fit,

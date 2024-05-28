@@ -166,6 +166,8 @@ console.log("item",item)
           const refundStatus=params.row.refundStatus;
           const user=params.row.user;
           const productName=params.row.productName;
+          const product=params.row.product;
+
           const paymentInfo=params.row.paymentInfo;
           const cancel=params.row.cancel
           const delivered=params.row.delivered
@@ -226,6 +228,7 @@ console.log("item",item)
             user:item.user,
             paymentInfo:item.paymentInfo,
             productName:item.productName,
+            product:item.product,
             paidAt: item.paidAt.slice(0, 10),
             createdAt: item.createdAt.slice(0, 10),
             img:item.img,

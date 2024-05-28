@@ -230,7 +230,7 @@ const ProductDetails =  ({ data }) => {
       const userId = user._id;
       // const adminId = data.shop._id;
       // const adminId="65fae1d3497be0c126658a67";
-      // const adminId=data?.cart[0].adminCreated;
+      const sellerId=data?.product.adminCreated;
       // console.log("data.adminCreated",data?.cart[0].adminCreated)
 
       await axios

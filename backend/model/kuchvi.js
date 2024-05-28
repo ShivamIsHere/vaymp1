@@ -55,6 +55,10 @@ img:{
     type:String,
     default:"",
   },
+  product:{
+    type: Object,
+    default:{}
+  },
   shopPrice: {
     type: Number,
     default:0

@@ -18,7 +18,7 @@ router.post(
         user,
         paymentInfo,
         markedPrice,discountPrice,shippingAddress,refundStatus,cancel,delivered,img,
-        productName
+        productName,product
       } = req.body;
        // console.log("order created req.body",cart)
        const shopItemsMap = new Map();
@@ -45,7 +45,8 @@ router.post(
           img,
           user,
           paymentInfo,
-          productName
+          productName,
+          product
         });
         // console.log("order updated",order)
         refunds.push(refundData);
@@ -84,6 +85,7 @@ router.get(
             user:i.user,
             paymentInfo:i.paymentInfo,
             productName:i.productName,
+            product:i.product,
             paidAt: i.paidAt,
             createdAt: i.createdAt,
             cancel:i.cancel,

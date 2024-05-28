@@ -167,7 +167,7 @@ console.log("item",item)
           const user=params.row.user;
           const paymentInfo=params.row.paymentInfo;
           const productName=params.row.productName;
-
+          const product=params.row.product;
           const cancel=params.row.cancel
           const delivered=params.row.delivered
           const img=params.row.image
@@ -228,6 +228,8 @@ console.log("item",item)
             user:val.user,
             paymentInfo:val.paymentInfo,
             productName:val.productName,
+            product:val.product,
+
             address: val.shippingAddress,
             paidAt: item.paidAt.slice(0, 10),
             createdAt: item.createdAt.slice(0, 10),

@@ -128,6 +128,7 @@ const AllOrders = () => {
             user:val.user,
             paymentInfo:val.paymentInfo,
             productName:val.productName,
+            product:val.product,
             refundStatus:val.refundStatus,
             markedPrice:val.markedPrice,
             discountPrice:val.discountPrice,

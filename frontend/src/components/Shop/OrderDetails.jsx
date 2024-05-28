@@ -59,6 +59,7 @@ const OrderDetails = () => {
           user:val.user,
           paymentInfo:val.paymentInfo,
           productName:val.productName,
+          product:val.product,
           markedPrice: val.markedPrice,
           discountPrice: val.discountPrice,
           shopPrice: val.shopPrice,

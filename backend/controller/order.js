@@ -528,6 +528,7 @@ router.post(
                   shopPrice: item.ShopPrice,
                   paymentInfo:paymentInfo,
                   productName:item.name,
+                  product:item,
                   markedPrice: item.originalPrice,
                   discountPrice: item.discountPrice,
                   shippingAddress: shippingAddress,

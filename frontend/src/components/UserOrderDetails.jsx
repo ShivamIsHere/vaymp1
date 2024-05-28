@@ -69,7 +69,7 @@ const UserOrderDetails = () => {
           
           markedPrice: val.markedPrice,
           productName:val.productName,
-
+          product:val.product,
           discountPrice: val.discountPrice,
           shopPrice: val.shopPrice,
           kuchviId: val.kuchviId,
@@ -145,8 +145,8 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",data.orderid)
       const groupTitle = data?.kuchviId +" "+data?.productName;
       const userId = data.userId;
       // const sellerId = data.shopId;
-      const sellerId="65fae1d3497be0c126658a67";
-      // const sellerId=data?.cart[0].adminCreated;
+      // const sellerId="65fae1d3497be0c126658a67";
+      const sellerId=data?.product.adminCreated;
       // console.log("order kr do",data?.cart[0].adminCreated)
       await axios
         .post(`${server}/conversation/create-new-conversation`, {

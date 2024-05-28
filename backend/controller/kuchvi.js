@@ -15,7 +15,7 @@ router.post(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { refund, orderId,productId,size,qty,userId,status,shopId,shopPrice,markedPrice,discountPrice,shippingAddress,refundStatus,return1,cancel,delivered,
-        productName,
+        productName,product,
         user,
         paymentInfo 
       } = req.body;
@@ -47,6 +47,7 @@ router.post(
           delivered,
           paymentInfo,
           productName,
+          product,
           
         });
         // console.log("order updated",order)
@@ -82,6 +83,7 @@ router.get(
             shopId: i.shopId,
             user:i.user,
             productName:i.productName,
+            product:i.product,
             shopPrice: i.shopPrice,
             markedPrice: i.markedPrice,
             discountPrice: i.discountPrice,

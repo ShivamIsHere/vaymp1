@@ -369,7 +369,7 @@ const AllOrders = () => {
               const user=params.row.user;
               const paymentInfo=params.row.paymentInfo;
               const productName=params.row.productName;
-
+              const product=params.row.product;
               const cancel = params.row.cancel;
               const delivered = params.row.delivered;
               const img = params.row.image;
@@ -421,6 +421,7 @@ const AllOrders = () => {
             user:val.user,
             paymentInfo:val.paymentInfo,
             productName:val.productName,
+            product:val.product,
             markedPrice:val.markedPrice,
             discountPrice:val.discountPrice,
             shopPrice:val.shopPrice,

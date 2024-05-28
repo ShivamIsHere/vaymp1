@@ -118,7 +118,7 @@ const AllOrdersForAdmin = () => {
           const user=params.row.user;
           const paymentInfo=params.row.paymentInfo;
           const productName=params.row.productName;
-
+          const product=params.row.product;
           const cancel=params.row.cancel
           const delivered=params.row.delivered
           const img=params.row.image
@@ -174,6 +174,7 @@ const AllOrdersForAdmin = () => {
                 const delivered = params.row.delivered;
                 const img = params.row.image;
                 const productName=params.row.productName;
+                const product=params.row.product;
 
                 const kuchviId=params.row.kuchviId
                 const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
@@ -230,7 +231,7 @@ const AllOrdersForAdmin = () => {
             user:item.user,
             paymentInfo:item.paymentInfo,
             productName:item.productName,
-
+            product:item.product,
             paidAt: item.paidAt.slice(0, 10),
             createdAt: item.createdAt.slice(0, 10),
             img:item.img,
