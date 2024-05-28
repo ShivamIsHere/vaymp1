@@ -67,7 +67,7 @@ const AllOrders = () => {
     },
     {
       field: "status",
-      headerName: "Status99",
+      headerName: "Status999",
       minWidth: 130,
       flex: 0.7,
       cellClassName: (params) => {
@@ -125,6 +125,9 @@ const AllOrders = () => {
             shopId:val.shopId,
             delivered:val.delivered,
             cancel:val.cancel,
+            user:val.user,
+            paymentInfo:val.paymentInfo,
+            productName:val.productName,
             refundStatus:val.refundStatus,
             markedPrice:val.markedPrice,
             discountPrice:val.discountPrice,

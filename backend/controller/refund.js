@@ -14,7 +14,12 @@ router.post(
   "/create-refund",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { orderId,productId,size,qty,userId,status,shopId,shopPrice,markedPrice,discountPrice,shippingAddress,refundStatus,cancel,delivered,img} = req.body;
+      const { orderId,productId,size,qty,userId,status,shopId,shopPrice,
+        user,
+        paymentInfo,
+        markedPrice,discountPrice,shippingAddress,refundStatus,cancel,delivered,img,
+        productName
+      } = req.body;
        // console.log("order created req.body",cart)
        const shopItemsMap = new Map();
 
@@ -37,8 +42,10 @@ router.post(
           refundStatus,
           cancel,
           delivered,
-          img
-         
+          img,
+          user,
+          paymentInfo,
+          productName
         });
         // console.log("order updated",order)
         refunds.push(refundData);
@@ -74,6 +81,9 @@ router.get(
             markedPrice: i.markedPrice,
             discountPrice: i.discountPrice,
             refundStatus: i.refundStatus,
+            user:i.user,
+            paymentInfo:i.paymentInfo,
+            productName:i.productName,
             paidAt: i.paidAt,
             createdAt: i.createdAt,
             cancel:i.cancel,

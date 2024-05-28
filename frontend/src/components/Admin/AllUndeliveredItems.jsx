@@ -150,6 +150,7 @@ const AllUndeliveredItems = () => {
               // disabled={params.row.cancel}
               onClick={async () => {
                 console.log("================???????", params.row);
+                // const id= params.row._id
                 const orderId = params.row.orderid;
                 const productId = params.row.productid;
                 const size = params.row.size;
@@ -162,6 +163,9 @@ const AllUndeliveredItems = () => {
                 const discountPrice = params.row.discountPrice;
                 const shippingAddress = params.row.address;
                 const refundStatus = params.row.refundStatus;
+                const user=params.row.user;
+                const paymentInfo=params.row.paymentInfo;
+                const productName=params.row.productName;
                 const cancel = params.row.cancel;
                 const delivered = params.row.delivered;
                 const img = params.row.image;
@@ -216,7 +220,11 @@ const AllUndeliveredItems = () => {
             shopPrice: "Rs. " + item.shopPrice,
             markedPrice: "Rs. " + item.markedPrice,
             discountPrice: "Rs. " + item.discountPrice,
+            address: item.shippingAddress,
             refundStatus: item.refundStatus,
+            user:item.user,
+            paymentInfo:item.paymentInfo,
+            productName:item.productName,
             paidAt: item.paidAt.slice(0, 10),
             createdAt: item.createdAt.slice(0, 10),
             img:item.img,

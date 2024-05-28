@@ -14,7 +14,11 @@ router.post(
   "/create-kuchvi",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { refund, orderId,productId,size,qty,userId,status,shopId,shopPrice,markedPrice,discountPrice,shippingAddress,refundStatus,return1,cancel,delivered, } = req.body;
+      const { refund, orderId,productId,size,qty,userId,status,shopId,shopPrice,markedPrice,discountPrice,shippingAddress,refundStatus,return1,cancel,delivered,
+        productName,
+        user,
+        paymentInfo 
+      } = req.body;
        // console.log("order created req.body",cart)
        const shopItemsMap = new Map();
 
@@ -39,7 +43,10 @@ router.post(
           refund,
           return1,
           cancel,
+          user,
           delivered,
+          paymentInfo,
+          productName,
           
         });
         // console.log("order updated",order)
@@ -73,6 +80,8 @@ router.get(
             qty: i.qty,
             status: i.status,
             shopId: i.shopId,
+            user:i.user,
+            productName:i.productName,
             shopPrice: i.shopPrice,
             markedPrice: i.markedPrice,
             discountPrice: i.discountPrice,
@@ -83,9 +92,11 @@ router.get(
             delivered:i.delivered,
             createdAt: i.createdAt,
             userId:i.userId,
+            paymentInfo:i.paymentInfo,
+            // productName:i.productName,
             img:i.img,
             shippingAddress:i.shippingAddress,
-            return1:i.return1
+            // return1:i.return1
         }))
         res.status(201).json({
           success: true,
@@ -105,7 +116,7 @@ router.get(
     catchAsyncErrors(async (req, res, next) => {
       try {
         const orderId = req.params.id;
-        const { status,cancel,return1 } = req.body; // New stock object from the request body
+        const { status,cancel,return1,paymentInfo,paidAt } = req.body; // New stock object from the request body
   
         // Find the product by ID in the database
         const kuchvi = await Kuchvi.findById(orderId);
@@ -128,8 +139,13 @@ router.get(
         if (return1 !== undefined) {
           kuchvi.return1 = return1;
         }
-       
-        // kuchvi.paidAt=Date.now();
+        if (paymentInfo !== undefined) {
+          kuchvi.paymentInfo = paymentInfo;
+        }
+        if (paidAt !== undefined) {
+          kuchvi.paidAt=Date.now();
+        }
+        
   
         // Save the updated product
         await kuchvi.save();

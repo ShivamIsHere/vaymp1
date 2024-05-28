@@ -47,7 +47,27 @@ const refundSchema = new mongoose.Schema({
     default:0
 
   },
-  
+  paymentInfo:{
+    id:{
+        type: String,
+    },
+    status: {
+        type: String,
+        default:"Not Paid"
+    },
+    type:{
+        type: String,
+        default:"Cash On Delivery"
+    },
+  },
+  user: {
+    type: Object,
+    default:{}
+},
+  productName:{
+    type:String,
+    default:"",
+  },
   discountPrice: {
     type: Number,
     default:0

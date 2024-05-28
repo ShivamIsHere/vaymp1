@@ -151,6 +151,7 @@ console.log("item",item)
         disabled={params.row.status== "Cancelled"?true:false}
         onClick={async() =>{
           console.log("================",params.row)
+          // const id=params.row._id;
           const orderId = params.row.orderId;
           const productId=params.row.productId;
           const size = params.row.size;
@@ -163,6 +164,9 @@ console.log("item",item)
           const discountPrice=params.row.discountPrice;
           const shippingAddress=params.row.address;
           const refundStatus=params.row.refundStatus;
+          const user=params.row.user;
+          const paymentInfo=params.row.paymentInfo;
+          const productName=params.row.productName;
 
           const cancel=params.row.cancel
           const delivered=params.row.delivered
@@ -172,6 +176,7 @@ console.log("item",item)
 
          const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
           status: "Cancelled", // Update the stock value in the request body
+
           });
   
           if (response.status >= 200 && response.status < 300) {
@@ -220,6 +225,10 @@ console.log("item",item)
             markedPrice: "Rs. " + item.markedPrice,
             discountPrice: "Rs. " + item.discountPrice,
             refundStatus: item.refundStatus,
+            user:val.user,
+            paymentInfo:val.paymentInfo,
+            productName:val.productName,
+            address: val.shippingAddress,
             paidAt: item.paidAt.slice(0, 10),
             createdAt: item.createdAt.slice(0, 10),
             img:item.img,

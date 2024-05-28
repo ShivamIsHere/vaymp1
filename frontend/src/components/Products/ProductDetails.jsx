@@ -228,16 +228,16 @@ const ProductDetails =  ({ data }) => {
     if (isAuthenticated) {
       const groupTitle = data._id + user._id;
       const userId = user._id;
-      // const sellerId = data.shop._id;
-      const sellerId="65fae1d3497be0c126658a67";
-      // const sellerId=data?.cart[0].adminCreated;
+      // const adminId = data.shop._id;
+      // const adminId="65fae1d3497be0c126658a67";
+      // const adminId=data?.cart[0].adminCreated;
       // console.log("data.adminCreated",data?.cart[0].adminCreated)
 
       await axios
         .post(`${server}/conversation/create-new-conversation`, {
           groupTitle,
           userId,
-          sellerId,
+          adminId,
         })
         .then((res) => {
           navigate(`/inbox?${res.data.conversation._id}`);
@@ -597,7 +597,7 @@ const ProductDetailsInfo = ({
                 <div className="pl-2 ">
                   <div className="w-full flex items-center">
                     <h1 className="font-[500] mr-3">{item.user.name}</h1>
-                    <Ratings rating={data?.ratings} />
+                    <Ratings rating={item.rating} />
                   </div>
                   <p>{item.comment}</p>
                 </div>

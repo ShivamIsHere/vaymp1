@@ -102,6 +102,7 @@ const AllOrdersForAdmin = () => {
         disabled={params.row.status== "processing"?false:true}
         onClick={async() =>{
           console.log("================",params.row)
+          // const id=params.row._id;
           const orderId = params.row.orderId;
           const productId=params.row.productId;
           const size = params.row.size;
@@ -114,13 +115,17 @@ const AllOrdersForAdmin = () => {
           const discountPrice=params.row.discountPrice;
           const shippingAddress=params.row.address;
           const refundStatus=params.row.refundStatus;
+          const user=params.row.user;
+          const paymentInfo=params.row.paymentInfo;
+          const productName=params.row.productName;
 
           const cancel=params.row.cancel
           const delivered=params.row.delivered
           const img=params.row.image
           console.log("params.row.kuchviId",params.row.kuchviId)
          const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
-          status: "Delivered", // Update the stock value in the request body
+          status: "Delivered",
+          paymentInfo:{ status: "Paid" }, // Update the stock value in the request body
           });
   
           if (response.status >= 200 && response.status < 300) {
@@ -150,6 +155,7 @@ const AllOrdersForAdmin = () => {
               // disabled={params.row.cancel}
               onClick={async () => {
                 console.log("================???????", params.row);
+                // const id=params.row._id;
                 const orderId = params.row.orderid;
                 const productId = params.row.productid;
                 const size = params.row.size;
@@ -160,11 +166,15 @@ const AllOrdersForAdmin = () => {
                 const shopPrice = params.row.shopPrice;
                 const markedPrice = params.row.markedPrice;
                 const discountPrice = params.row.discountPrice;
+                const user=params.row.user;
+                const paymentInfo=params.row.paymentInfo;
                 const shippingAddress = params.row.address;
                 const refundStatus = params.row.refundStatus;
                 const cancel = params.row.cancel;
                 const delivered = params.row.delivered;
                 const img = params.row.image;
+                const productName=params.row.productName;
+
                 const kuchviId=params.row.kuchviId
                 const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
                   cancel:true, // Update the stock value in the request body
@@ -217,6 +227,10 @@ const AllOrdersForAdmin = () => {
             markedPrice: "Rs. " + item.markedPrice,
             discountPrice: "Rs. " + item.discountPrice,
             refundStatus: item.refundStatus,
+            user:item.user,
+            paymentInfo:item.paymentInfo,
+            productName:item.productName,
+
             paidAt: item.paidAt.slice(0, 10),
             createdAt: item.createdAt.slice(0, 10),
             img:item.img,

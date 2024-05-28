@@ -59,13 +59,17 @@ const UserOrderDetails = () => {
           itemsQty: 1,
           total: "US$ " + val.markedPrice,
           status: val.status,
+          user:val.user,
+          paymentInfo:val.paymentInfo,
           address: val.shippingAddress,
           userId: val.userId,
           shopId: val.shopId,
           delivered: val.delivered,
           cancel: val.cancel,
-          refundStatus: val.refundStatus,
+          
           markedPrice: val.markedPrice,
+          productName:val.productName,
+
           discountPrice: val.discountPrice,
           shopPrice: val.shopPrice,
           kuchviId: val.kuchviId,
@@ -82,7 +86,7 @@ const UserOrderDetails = () => {
     }
   }, [kuchvi, user._id, loading]);
 
-  const data = rows.find((item) => item.orderid === id);
+  const data = rows.find((item) => item.productid === id);
   console.log("Data:", data);
 
   if (loading) {
@@ -104,11 +108,12 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",data.orderid)
       .put(
         `${server}/product/create-new-review`,
         {
-          user:data?.userId,
+          user,
           rating,
           comment,
           productId: data?.productid,
-          orderId: data?.orderid,
+          kuchviId: data?.kuchviId,
+          orderId:data?.orderId
         },
         { withCredentials: true }
       )
@@ -137,7 +142,7 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",data.orderid)
   const handleMessageSubmit = async () => {
     if (isAuthenticated) {
       console.log("selectedItem,,,,,,,,,,,,,,,,,,",data)
-      const groupTitle = data?.orderid +" "+data?.name;
+      const groupTitle = data?.kuchviId +" "+data?.productName;
       const userId = data.userId;
       // const sellerId = data.shopId;
       const sellerId="65fae1d3497be0c126658a67";
@@ -385,17 +390,20 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",data.orderid)
             {data.size} x {data.itemsQty}
           </h5>
         </div>
-        { data?.status === "Delivered" ? (
-                <div
-                  className={`${styles.button} text-[#fff]`}
-                  onClick={() => setOpen(true) || setSelectedItem(data)}
-                >
-                  Write a review
-                </div>
-              ) : null}
+        {!data.isReviewed && data.status === "Delivered" ? (
+          <div
+            className={`${styles.button} text-[#fff]`}
+            onClick={() => {
+              setOpen(true);
+              setSelectedItem(data); // Ensure selectedItem is set correctly
+            }}
+          >
+            Write a review
+          </div>
+        ) : null}
       </div>
-    ):(
-      <p>hi</p>
+    ) : (
+      <p>No data found for this order.</p>
     )}
      
 

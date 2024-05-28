@@ -3,7 +3,9 @@ const { isSeller, isAuthenticated, isAdmin } = require("../middleware/auth");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const router = express.Router();
 const Product = require("../model/product");
+const Kuchvi = require("../model/kuchvi");
 const Order = require("../model/order");
+
 const Shop = require("../model/shop");
 const cloudinary = require("cloudinary");
 const ErrorHandler = require("../utils/ErrorHandler");
@@ -252,25 +254,30 @@ router.put(
   isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { user, rating, comment, productId, orderId } = req.body;
+      const { user, rating, comment, productId, kuchviId,orderId } = req.body;
 
       const product = await Product.findById(productId);
+      const order = await Order.findById(orderId);
 
       const review = {
         user,
         rating,
         comment,
         productId,
+        kuchviId,
+        orderId
       };
 
       const isReviewed = product.reviews.find(
-        (rev) => rev.user._id === req.user._id
+        (rev) => rev.user._id.toString() === user._id.toString()
       );
 
       if (isReviewed) {
         product.reviews.forEach((rev) => {
-          if (rev.user._id === req.user._id) {
-            (rev.rating = rating), (rev.comment = comment), (rev.user = user);
+          if (rev.user._id.toString() === user._id.toString()) {
+            rev.rating = rating;
+            rev.comment = comment;
+            rev.user = user;
           }
         });
       } else {
@@ -278,24 +285,25 @@ router.put(
       }
 
       let avg = 0;
-
       product.reviews.forEach((rev) => {
         avg += rev.rating;
       });
-
       product.ratings = avg / product.reviews.length;
 
       await product.save({ validateBeforeSave: false });
 
-      await Order.findByIdAndUpdate(
-        orderId,
-        { $set: { "cart.$[elem].isReviewed": true } },
-        { arrayFilters: [{ "elem._id": productId }], new: true }
-      );
+      if (order) {
+        order.cart.forEach((item) => {
+          if (item.productId.toString() === productId.toString()) {
+            item.isReviewed = true;
+          }
+        });
+        await order.save({ validateBeforeSave: false });
+      }
 
       res.status(200).json({
         success: true,
-        message: "Reviwed succesfully!",
+        message: "Reviewed successfully!",
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));

@@ -104,6 +104,9 @@ const productSchema = new mongoose.Schema({
       productId: {
         type: String,
       },
+      kuchviId: {
+        type: String,
+      },
       createdAt:{
         type: Date,
         default: Date.now(),

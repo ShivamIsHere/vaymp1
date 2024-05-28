@@ -307,7 +307,7 @@ const AllOrders = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/user/order/${params.row?.orderid}`}>
+            <Link to={`/user/order/${params.row?.productid}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -353,6 +353,7 @@ const AllOrders = () => {
             // disabled={params.row.cancel}
             onClick={async () => {
               console.log("================???????", params.row);
+              // const id= params.row._id
               const orderId = params.row.orderid;
               const productId = params.row.productid;
               const size = params.row.size;
@@ -365,6 +366,10 @@ const AllOrders = () => {
               const discountPrice = params.row.discountPrice;
               const shippingAddress = params.row.address;
               const refundStatus = params.row.refundStatus;
+              const user=params.row.user;
+              const paymentInfo=params.row.paymentInfo;
+              const productName=params.row.productName;
+
               const cancel = params.row.cancel;
               const delivered = params.row.delivered;
               const img = params.row.image;
@@ -413,6 +418,9 @@ const AllOrders = () => {
             delivered:val.delivered,
             cancel:val.cancel,
             refundStatus:val.refundStatus,
+            user:val.user,
+            paymentInfo:val.paymentInfo,
+            productName:val.productName,
             markedPrice:val.markedPrice,
             discountPrice:val.discountPrice,
             shopPrice:val.shopPrice,

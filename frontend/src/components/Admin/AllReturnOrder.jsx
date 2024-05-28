@@ -151,6 +151,7 @@ console.log("item",item)
         disabled={params.row.status== "Returned"?true:false}
         onClick={async() =>{
           console.log("================",params.row)
+          // const id= params.row._id
           const orderId = params.row.orderId;
           const productId=params.row.productId;
           const size = params.row.size;
@@ -163,7 +164,9 @@ console.log("item",item)
           const discountPrice=params.row.discountPrice;
           const shippingAddress=params.row.address;
           const refundStatus=params.row.refundStatus;
-
+          const user=params.row.user;
+          const productName=params.row.productName;
+          const paymentInfo=params.row.paymentInfo;
           const cancel=params.row.cancel
           const delivered=params.row.delivered
           const img=params.row.image
@@ -220,6 +223,9 @@ console.log("item",item)
             markedPrice: "Rs. " + item.markedPrice,
             discountPrice: "Rs. " + item.discountPrice,
             refundStatus: item.refundStatus,
+            user:item.user,
+            paymentInfo:item.paymentInfo,
+            productName:item.productName,
             paidAt: item.paidAt.slice(0, 10),
             createdAt: item.createdAt.slice(0, 10),
             img:item.img,

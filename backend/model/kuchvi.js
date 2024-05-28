@@ -47,6 +47,14 @@ img:{
     default:""
 
   },
+  user: {
+    type: Object,
+    default:{}
+},
+  productName:{
+    type:String,
+    default:"",
+  },
   shopPrice: {
     type: Number,
     default:0
@@ -78,6 +86,17 @@ return1:{
     type: Boolean,
     default:false
 },
+paymentInfo:[{
+  status: {
+      type: String,
+      default:"Not Paid"
+  },
+  type:{
+      type: String,
+      default:"Cash On Delivery"
+  },
+}],
+
 refund:{
     type: Boolean,
     default:false
