@@ -1,7 +1,7 @@
 const app = require("./app");
 const connectDatabase = require("./db/Database");
 const cloudinary = require("cloudinary");
-
+const path= require("path")
 // Handling uncaught Exception
 process.on("uncaughtException", (err) => {
   console.log(`Error: ${err.message}`);
@@ -27,11 +27,27 @@ cloudinary.config({
 
 // create server
 const server = app.listen(process.env.PORT, () => {
+//   const __dirname1=path.resolve();
+// console.log("hi",path.join(__dirname1,"../frontend/build"))
   console.log(
     `Server is running on http://localhost:${process.env.PORT}`
   );
 });
 
+
+// const __dirname1=path.resolve();
+// console.log("hi",path.join(__dirname1,"../frontend/build"))
+
+// if(process.env.NODE_ENV==='production'){
+// app.use(express.static(path.join(__dirname1,"../frontend/build")))
+// app.get('*',(req,res)=>{
+// res.sendFile(path.resolve(__dirname1,"../frontend","build","index.html"))
+// })
+// }else{
+//   app.get("/",(req,res)=>{
+//     res.send("API is Running Successfully");
+//   });
+// }
 // unhandled promise rejection
 process.on("unhandledRejection", (err) => {
   console.log(`Shutting down the server for ${err.message}`);

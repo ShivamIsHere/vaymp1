@@ -12,6 +12,7 @@ app.use(cors({
 
 // app.use(express.json());
 app.use(cookieParser());
+app.use("/",express.static("uploads"));
 app.use("/test", (req, res) => {
   res.send("Hello world!");
 });
@@ -40,6 +41,9 @@ const conversation = require("./controller/conversation");
 const message = require("./controller/message");
 const withdraw = require("./controller/withdraw");
 const admin = require("./controller/admin");
+const notification = require("./controller/notification");
+const refund = require("./controller/refund");
+const kuchvi = require("./controller/kuchvi");
 
 app.use("/api/v2/user", user);
 app.use("/api/v2/conversation", conversation);
@@ -52,6 +56,10 @@ app.use("/api/v2/coupon", coupon);
 app.use("/api/v2/payment", payment);
 app.use("/api/v2/withdraw", withdraw);
 app.use("/api/v2/admin", admin);
+app.use("/api/v2/notification", notification);
+app.use("/api/v2/refund", refund);
+app.use("/api/v2/kuchvi", kuchvi);
+
 
 // it's for ErrorHandling
 app.use(ErrorHandler);
