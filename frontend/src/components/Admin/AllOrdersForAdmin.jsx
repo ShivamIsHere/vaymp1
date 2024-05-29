@@ -123,7 +123,7 @@ const AllOrdersForAdmin = () => {
           const delivered=params.row.delivered
           const img=params.row.image
           console.log("params.row.kuchviId",params.row.kuchviId)
-         const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
+         const response=await axios.patch(`https://vaymp1-rho.vercel.app/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
           status: "Delivered",
           paymentInfo:{ status: "Paid" }, // Update the stock value in the request body
           });
@@ -177,7 +177,7 @@ const AllOrdersForAdmin = () => {
                 const product=params.row.product;
 
                 const kuchviId=params.row.kuchviId
-                const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
+                const response=await axios.patch(`https://vaymp1-rho.vercel.app/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
                   cancel:true, // Update the stock value in the request body
                   status:"cancel Request"
                   });
