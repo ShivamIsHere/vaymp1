@@ -160,7 +160,7 @@ router.get(
     try {
       res.cookie("token", null, {
         expires: new Date(Date.now()),
-        httpOnly: true,
+        httpsOnly: true,
         sameSite: "None",
         secure: true,
       });
