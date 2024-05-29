@@ -1,4 +1,4 @@
-export const server = "https://vaymp1-rho.vercel.app/api/v2";
+export const server = "http://localhost:8000/";
 
-// export const backend_url ="https://vaymp1-rho.vercel.app/";
+export const backend_url ="http://localhost:8000/";
 
