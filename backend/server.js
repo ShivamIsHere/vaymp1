@@ -29,9 +29,9 @@ cloudinary.config({
 const server = app.listen(process.env.PORT, () => {
 //   const __dirname1=path.resolve();
 // console.log("hi",path.join(__dirname1,"../frontend/build"))
-//   console.log(
-//     `Server is running on http://localhost:${process.env.PORT}`
-//   );
+  console.log(
+    `Server is running on http://localhost:${process.env.PORT}`
+  );
 });
 
 
