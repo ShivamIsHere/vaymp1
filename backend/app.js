@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 app.use(cors({
-  origin: ['https://vaymp1-kwfw.vercel.app/'],
+  origin: 'https://vaymp1-kwfw.vercel.app/',
   credentials: true
 }));
 
@@ -16,7 +16,7 @@ app.use(cookieParser());
 // app.use("/test", (req, res) => {
 //   res.send("Hello world!");
 // });
-app.use("/", (req, res) => {
+app.use("/test", (req, res) => {
   res.send("Hello world!");
 });
 
