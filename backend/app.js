@@ -13,7 +13,10 @@ app.use(cors({
 // app.use(express.json());
 app.use(cookieParser());
 // app.use("/",express.static("uploads"));
-app.use("/test", (req, res) => {
+// app.use("/test", (req, res) => {
+//   res.send("Hello world!");
+// });
+app.use("/", (req, res) => {
   res.send("Hello world!");
 });
 
