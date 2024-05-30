@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { createProduct } from "../../redux/actions/product";
 import {
   categoriesData,
+  subCategory,
   sleeveType,
   neckType,
   color,
@@ -35,6 +36,8 @@ const CreateProduct = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
+
   const [tags, setTags] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
   const [ShopPrice, setShopPrice] = useState("");
@@ -139,6 +142,7 @@ const CreateProduct = () => {
     newForm.append("originalPrice", originalPrice);
     newForm.append("discountPrice", discountPrice);
     newForm.append("category", category);
+    newForm.append("subCategory", selectedSubCategory);
     newForm.append("neckType", selectedNeckType);
     newForm.append("sleeveType", selectedSleeveType);
     newForm.append("brand", selectedBrand);
@@ -161,6 +165,7 @@ const CreateProduct = () => {
           discountPrice,
           stock: stockData,
           category,
+          subCategory:selectedSubCategory,
           neckType: selectedNeckType,
           sleeveType: selectedSleeveType,
           brand: selectedBrand,
@@ -176,7 +181,7 @@ const CreateProduct = () => {
       );
     } 
 
-
+console.log("category",category)
   return (
 <div className="w-[90%] 800px:w-[50%] bg-blue-50 shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">     
  <h5 className="text-[30px] font-Poppins text-center">Create Product</h5>
@@ -264,7 +269,7 @@ const CreateProduct = () => {
           />
         </div>
         <br />
-        <div>
+        {category==="Cloths" && <div>
             <label className="pb-2">Size and Quantity</label>
             {sizesAndQuantities.map((item, index) => (
               <div key={index} className="flex mt-2">
@@ -313,7 +318,7 @@ const CreateProduct = () => {
                 )}
               </div>
             ))}
-          </div>
+          </div>}
           <br />
         <div>
           <label className="pb-2">
@@ -326,6 +331,23 @@ const CreateProduct = () => {
           >
             <option value="">Choose a category</option>
             {categoriesData.map((i) => (
+              <option value={i.title} key={i.title}>
+                {i.title}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="pb-2">
+            subCategory <span className="text-red-500">*</span>
+          </label>
+          <select
+            className="w-full mt-2 border h-[35px] rounded-[5px]"
+            value={selectedSubCategory}
+            onChange={(e) => setSelectedSubCategory(e.target.value)}
+          >
+            <option value="">Choose a sub-Category</option>
+            {subCategory.map((i) => (
               <option value={i.title} key={i.title}>
                 {i.title}
               </option>

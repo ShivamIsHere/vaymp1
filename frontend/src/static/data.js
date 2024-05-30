@@ -264,7 +264,47 @@ export const navItems = [
     },
   ];
 
-
+  export const subCategory = [
+    { id: 1, title: "T-shirts" },
+    { id: 2, title: "Blouses" },
+    { id: 3, title: "Shirts" },
+    { id: 4, title: "Tank tops" },
+    { id: 5, title: "Sweaters" },
+    { id: 6, title: "Hoodies" },
+    { id: 7, title: "Jeans" },
+    { id: 8, title: "Trousers" },
+    { id: 9, title: "Shorts" },
+    { id: 10, title: "Skirts" },
+    { id: 11, title: "Leggings" },
+    { id: 12, title: "Jackets" },
+    { id: 13, title: "Coats" },
+    { id: 14, title: "Blazers" },
+    { id: 15, title: "Vests" },
+    { id: 16, title: "Raincoats" },
+    { id: 17, title: "Casual dresses" },
+    { id: 18, title: "Formal dresses" },
+    { id: 19, title: "Maxi dresses" },
+    { id: 20, title: "Cocktail dresses" },
+    { id: 21, title: "Sundresses" },
+    { id: 22, title: "Sports bras" },
+    { id: 23, title: "Gym tops" },
+    { id: 24, title: "Yoga pants" },
+    { id: 25, title: "Track pants" },
+    { id: 26, title: "Running shorts" },
+    { id: 27, title: "Pajamas" },
+    { id: 28, title: "Robes" },
+    { id: 29, title: "Sweatpants" },
+    { id: 30, title: "Lounge tops" },
+    { id: 31, title: "Half pants" },
+    { id: 32, title: "Bras" },
+    { id: 33, title: "Panties" },
+    { id: 34, title: "Boxers" },
+    { id: 35, title: "Briefs" },
+    { id: 36, title: "Undershirts" },
+    { id: 37, title: "Suits" },
+    { id: 38, title: "Tuxedos" }
+  ];
+  
   export const sleeveType = [
     {
       id: 1,

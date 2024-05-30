@@ -35,7 +35,7 @@ router.post("/create-user", async (req, res, next) => {
 
     const activationToken = createActivationToken(user);
 
-    const activationUrl = `export const server ="https://vaymp1-kwfw.vercel.app/activation/${activationToken}`;
+    const activationUrl = `export const server ="http://localhost:3000/activation/${activationToken}`;
 
     try {
       await sendMail({
