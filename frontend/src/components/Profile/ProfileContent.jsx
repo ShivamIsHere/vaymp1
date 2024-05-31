@@ -272,8 +272,8 @@ const AllOrders = () => {
   // },
     {
       field: "status",
-      headerName: "Status99",
-      minWidth: 130,
+      headerName: "Status9999",
+      minWidth: 180,
       flex: 0.7,
       cellClassName: (params) => {
         return params.getValue(params.id, "status") === "Delivered"
@@ -316,83 +316,83 @@ const AllOrders = () => {
         );
       }
     },
-    {
-      field: "delete",
-      headerName: "Delete",
-      minWidth: 100,
-      flex: 0.7,
-      renderCell: (params) => (
-        params.row.status === "Delivered" ||params.row.status== "Returned"||params.row.status== "Return Request" ? (
-          <Button
-            variant="contained"
-            color="error"
-            disabled={params.row.status== "Returned"?true:params.row.return1}
-            onClick={async () => {
-              // Handle return logic here
-              console.log("================???????", params.row);
-              const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
-                return1:true, // Update the stock value in the request body
-                status:"Return Request"
-                });
+    // {
+    //   field: "delete",
+    //   headerName: "Delete",
+    //   minWidth: 100,
+    //   flex: 0.7,
+    //   renderCell: (params) => (
+    //     params.row.status === "Delivered" ||params.row.status== "Returned"||params.row.status== "Return Request" ? (
+    //       <Button
+    //         variant="contained"
+    //         color="error"
+    //         disabled={params.row.status== "Returned"?true:params.row.return1}
+    //         onClick={async () => {
+    //           // Handle return logic here
+    //           console.log("================???????", params.row);
+    //           const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
+    //             return1:true, // Update the stock value in the request body
+    //             status:"Return Request"
+    //             });
         
-                if (response.status >= 200 && response.status < 300) {
-                   console.log("Stock updated successfully");
-                } else {
-                  throw new Error(`Failed to update stock - Unexpected status code: ${response.status}`);
-                }
-                window.location.reload();
-            }}
-          >
-            Return
-          </Button>
-        ) : (
-          <Button
-            variant="contained"
-            color="error"
-            disabled={params.row.status== "Cancelled"?true:params.row.cancel}
-            // disabled={params.row.cancel}
-            onClick={async () => {
-              console.log("================???????", params.row);
-              // const id= params.row._id
-              const orderId = params.row.orderid;
-              const productId = params.row.productid;
-              const size = params.row.size;
-              const qty = 1;
-              const userId = params.row.userId;
-              const status = params.row.status;
-              const shopId = params.row.shopId;
-              const shopPrice = params.row.shopPrice;
-              const markedPrice = params.row.markedPrice;
-              const discountPrice = params.row.discountPrice;
-              const shippingAddress = params.row.address;
-              const refundStatus = params.row.refundStatus;
-              const user=params.row.user;
-              const paymentInfo=params.row.paymentInfo;
-              const productName=params.row.productName;
-              const product=params.row.product;
-              const cancel = params.row.cancel;
-              const delivered = params.row.delivered;
-              const img = params.row.image;
-              const kuchviId=params.row.kuchviId
-              const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
-                cancel:true, // Update the stock value in the request body
-                status:"cancel Request"
-                });
+    //             if (response.status >= 200 && response.status < 300) {
+    //                console.log("Stock updated successfully");
+    //             } else {
+    //               throw new Error(`Failed to update stock - Unexpected status code: ${response.status}`);
+    //             }
+    //             window.location.reload();
+    //         }}
+    //       >
+    //         Return
+    //       </Button>
+    //     ) : (
+    //       <Button
+    //         variant="contained"
+    //         color="error"
+    //         disabled={params.row.status== "Cancelled"?true:params.row.cancel}
+    //         // disabled={params.row.cancel}
+    //         onClick={async () => {
+    //           console.log("================???????", params.row);
+    //           // const id= params.row._id
+    //           const orderId = params.row.orderid;
+    //           const productId = params.row.productid;
+    //           const size = params.row.size;
+    //           const qty = 1;
+    //           const userId = params.row.userId;
+    //           const status = params.row.status;
+    //           const shopId = params.row.shopId;
+    //           const shopPrice = params.row.shopPrice;
+    //           const markedPrice = params.row.markedPrice;
+    //           const discountPrice = params.row.discountPrice;
+    //           const shippingAddress = params.row.address;
+    //           const refundStatus = params.row.refundStatus;
+    //           const user=params.row.user;
+    //           const paymentInfo=params.row.paymentInfo;
+    //           const productName=params.row.productName;
+    //           const product=params.row.product;
+    //           const cancel = params.row.cancel;
+    //           const delivered = params.row.delivered;
+    //           const img = params.row.image;
+    //           const kuchviId=params.row.kuchviId
+    //           const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
+    //             cancel:true, // Update the stock value in the request body
+    //             status:"cancel Request"
+    //             });
         
-                if (response.status >= 200 && response.status < 300) {
-                   console.log("Stock updated successfully");
-                } else {
-                  throw new Error(`Failed to update stock - Unexpected status code: ${response.status}`);
-                }
-                window.location.reload();
+    //             if (response.status >= 200 && response.status < 300) {
+    //                console.log("Stock updated successfully");
+    //             } else {
+    //               throw new Error(`Failed to update stock - Unexpected status code: ${response.status}`);
+    //             }
+    //             window.location.reload();
               
-            }}
-          >
-            Cancel
-          </Button>
-        )
-      ),
-    }
+    //         }}
+    //       >
+    //         Cancel
+    //       </Button>
+    //     )
+    //   ),
+    // }
     
 
   ]

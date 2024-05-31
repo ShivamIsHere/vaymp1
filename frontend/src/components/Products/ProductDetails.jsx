@@ -49,15 +49,15 @@ const ProductDetails =  ({ data }) => {
     }
   }, [data, wishlist, dispatch]);
 
-  // const incrementCount = () => {
-  //   setCount(count + 1);
-  // };
+  const incrementCount = () => {
+    setCount(count + 1);
+  };
 
-  // const decrementCount = () => {
-  //   if (count > 1) {
-  //     setCount(count - 1);
-  //   }
-  // };
+  const decrementCount = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    }
+  };
 
   const removeFromWishlistHandler = (data) => {
     setClick(!click);
@@ -93,7 +93,7 @@ const ProductDetails =  ({ data }) => {
         if (val.size === selectedSize) {
           val.isSelected = true;
           val.qty = count;
-          val.quantity=val.quantity-count;
+          // val.quantity=val.quantity-count;
         }
       });
       // newData.qty = count;
@@ -132,7 +132,7 @@ const ProductDetails =  ({ data }) => {
         if (val.size === selectedSize) {
           val.isSelected = true;
           val.qty = count;
-          val.quantity=val.quantity-count;
+          // val.quantity=val.quantity-count;
         } else {
           val.qty = 0;
         }
@@ -310,6 +310,25 @@ const ProductDetails =  ({ data }) => {
                     </h3>
                   </div>
                 </div>
+                {/* <div className="flex items-center mt-12 justify-between pr-3">
+                  <div>
+                    <button
+                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
+                      onClick={decrementCount}
+                    >
+                      -
+                    </button>
+                    <span className="bg-gray-200 text-gray-800 font-medium px-4 py-[11px]">
+                      {count}
+                    </span>
+                    <button
+                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
+                      onClick={incrementCount}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div> */}
 
                 {/* select size  */}
                 <div className="flex items-center pt-8">

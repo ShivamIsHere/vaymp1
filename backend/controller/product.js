@@ -251,6 +251,115 @@ if (req.query.sortBy === "priceHighToLow") {
 
 
 
+router.get(
+  '/get-all-searched-products',
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      // Pagination parameters
+      const page = parseInt(req.query.page) || 1;
+      const perPage = parseInt(req.query.perPage) || 30;
+      // console.log('Pagination Params:', { page, perPage }); // Log pagination params
+
+      // Sorting parameters
+      let sortBy = ""; // Initialize sortBy variable
+let sortOrder = -1; // Default sort order is descending (high to low)
+
+if (req.query.sortBy === "priceHighToLow") {
+  sortBy = "discountPrice"; // Sort by price (high to low)
+} else if (req.query.sortBy === "priceLowToHigh") {
+  sortBy = "discountPrice"; // Sort by price (low to high)
+  sortOrder = 1; // Change sort order to ascending (low to high)
+} else if (req.query.sortBy === "latest") {
+  sortBy = "-createdAt"; // Sort by latest
+} else {
+  sortBy = "originalPrice"; // Default sort by originalPrice
+}
+
+// Use sortBy and sortOrder in your database query or sorting logic
+
+      // console.log("req.query.sortBy",req.query.sortBy)
+      // console.log("req.query.sortOrder",req.query.sortOrder)
+      // console.log("req.query.sortBy",req.query)
+      // console.log("req.query.sortBy",req.params)
+
+      // console.log('Sorting Params:', { sortBy, sortOrder }); // Log sorting params
+
+      // Filtering parameters
+      const filters = {};
+      if (req.query.category) {
+        filters.category = { $in: req.query.category.split(',') };
+      }
+      if (req.query.subCategory) {
+        filters.subCategory = { $in: req.query.subCategory.split(',') };
+      }
+      if (req.query.sleeveType) {
+        filters.sleeveType = { $in: req.query.sleeveType.split(',') };
+      }
+      if (req.query.neckType) {
+        filters.neckType = { $in: req.query.neckType.split(',') };
+      }
+      if (req.query.color) {
+        filters.color = { $in: req.query.color.split(',') };
+      }
+      if (req.query.fit) {
+        filters.fit = { $in: req.query.fit.split(',') };
+      }
+      if (req.query.fabric) {
+        filters.fabric = { $in: req.query.fabric.split(',') };
+      }
+      if (req.query.gender) {
+        filters.gender = { $in: req.query.gender.split(',') };
+      }
+      if (req.query.occasion) {
+        filters.occasion = { $in: req.query.occasion.split(',') };
+      }
+      if (req.query.size) {
+        filters['stock.size'] = { $in: req.query.size.split(',') };
+      }
+      if (req.query.customerRating) {
+        const ratingRanges = req.query.customerRating.split(','); // Split multiple ranges
+        const ratingFilters = ratingRanges.map((range) => {
+          const [minRating, maxRating] = range.split('-').map(parseFloat);
+          return { ratings: { $gte: minRating, $lte: maxRating } };
+        });
+        filters.$or = ratingFilters;
+      }
+      
+      if (req.query.priceRange) {
+        const priceRanges = req.query.priceRange.split(','); // Split multiple ranges
+        let minPrice = Infinity;
+        let maxPrice = -Infinity;
+        priceRanges.forEach((range) => {
+          const [min, max] = range.split('-').map(parseFloat);
+          minPrice = Math.min(minPrice, min);
+          maxPrice = Math.max(maxPrice, max);
+        });
+        filters.discountPrice = { $gte: minPrice, $lte: maxPrice };
+      }
+
+      // Query products with filtering, sorting, and pagination
+      const products = await Product.find(filters)
+        .sort({ [sortBy]: sortOrder })
+        .skip((page - 1) * perPage)
+        .limit(perPage);
+
+      // Count total products for pagination
+      const totalCount = await Product.countDocuments(filters);
+
+      res.status(200).json({
+        success: true,
+        products,
+        totalCount,
+        totalPages: Math.ceil(totalCount / perPage),
+      });
+    } catch (error) {
+      console.error('Error:', error); // Log error
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+
 // review for a product
 router.put(
   "/create-new-review",

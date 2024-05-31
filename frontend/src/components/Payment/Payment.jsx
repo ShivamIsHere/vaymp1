@@ -57,7 +57,8 @@ const Payment = () => {
     user: user && user,
     totalPrice: orderData?.totalPrice,
   };
-
+console.log("    cart: orderData?.cart,",orderData?.cart,
+)
   const onApprove = async (data, actions) => {
     return actions.order.capture().then(function (details) {
       const { payer } = details;

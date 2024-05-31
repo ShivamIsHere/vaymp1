@@ -254,6 +254,17 @@ const Cart = ({ setOpenCart }) => {
 
   const dispatch = useDispatch();
   console.log("cartjj", cart);
+  let totalCount = 0;
+
+  cart.forEach(item => {
+    item.stock.forEach(stockItem => {
+      if (stockItem.isSelected) {
+        totalCount += 1;
+      }
+    });
+  });
+  
+  console.log(totalCount);
   const removeFromCartHandler = (data,selectedSize) => {
 
     console.log("removeFromCartHandler",selectedSize)
@@ -409,7 +420,7 @@ const Cart = ({ setOpenCart }) => {
         className="fixed top-0 right-0 h-full w-[80%] 800px:w-[25%] bg-white flex flex-col overflow-y-scroll justify-between shadow-sm"
         ref={cartRef}
       >
-        {cart && cart.length === 0 ? (
+        {totalCount === 0 ? (
           <div className="w-full h-screen flex items-center justify-center">
             <div className="flex w-full justify-end pt-5 pr-5 fixed top-3 right-3">
               <RxCross1
@@ -434,7 +445,7 @@ const Cart = ({ setOpenCart }) => {
               <div className={`${styles.noramlFlex} p-4`}>
                 <IoBagHandleOutline size={25} />
                 <h5 className="pl-2 text-[20px] font-[500]">
-                  {cart && cart.length} items
+                  {totalCount} items
                 </h5>
               </div>
 

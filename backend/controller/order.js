@@ -481,7 +481,7 @@ router.post(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const { cart, shippingAddress, user, totalPrice, paymentInfo } = req.body;
-      // console.log("order created req.body",cart)
+      // console.log("order created req.body",cart[0].stock)
 
       // Group cart items by shopId
       const shopItemsMap = new Map();
@@ -552,7 +552,7 @@ router.post(
         // console.log("item",item)
         await updateStockAfterOrderCreation(item); // Pass individual item to updateStockAfterOrderCreation
       }
-      console.log("lll",orders)
+      // console.log("lll",orders)
       res.status(201).json({
         success: true,
         orders,
@@ -569,15 +569,16 @@ async function updateStockAfterOrderCreation(item) {
   const productId = item._id;
   const newStock = item.stock; // Assuming item.stock contains the updated stock array
   // console.log("newStock", newStock);
+  console.log("newstock",newStock)
 
   try {
     for (const stockItem of newStock) {
       // Check if the item is selected and has quantity to update
       if (stockItem.isSelected && stockItem.qty > 0) {
-        //stockItem.quantity -= stockItem.qty; // Update the quantity based on item.qty
+        stockItem.quantity -= stockItem.qty; // Update the quantity based on item.qty
         stockItem.isSelected = false; // Set isSelected to false after updating stock
         stockItem.qty = 0; // Reset qty to 0
-
+console.log("newstock",newStock)
         // Make HTTP PUT request to update stock using Axios
         const response = await axios.patch(
           `http://localhost:8000/api/v2/product/update-stock/${productId}`,
@@ -777,7 +778,7 @@ router.put(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const order = await Order.findById(req.params.id);
-      console.log("lllllllllllllll3", req.body.itemList);
+      // console.log("lllllllllllllll3", req.body.itemList);
 
       if (!order) {
         return next(new ErrorHandler("Order not found with this id", 400));

@@ -39,10 +39,51 @@ const Header = ({ activeHeading }) => {
   const { orderId } = useParams();
   const searchInputRef = useRef(null);
   const mobileInputRef = useRef(null);
-
+  const [totalCount, setTotalCount] = useState(0);
+  useEffect(() => {
+    let count = 0;
+    cart.forEach(item => {
+      item.stock.forEach(stockItem => {
+        if (stockItem.isSelected) {
+          count += 1;
+        }
+      });
+    });
+    setTotalCount(count);
+  }, [cart]);
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
+
+
+    
+//     let totalCount = 0;
+// // console.log("cart",cart)
+//     cart.forEach(item => {
+//       item.stock.forEach(stockItem => {
+//         if (stockItem.isSelected) {
+//           totalCount += 1;
+//         }
+//       });
+//     });
+    
+//     console.log("totalCount",cart.length);
+
+    // console.log("allllll",term,allProducts)
+//  const filteredProducts =
+//       allProducts &&
+//       allProducts.filter((product) => {
+//         console.log("kkkk",product.occasion.toLowerCase)
+//         let p1 =
+//           product.name.toLowerCase().includes(term.toLowerCase()) ||
+//           product.category.toLowerCase().includes(term.toLowerCase()) ||
+//           product.occasion.toLowerCase().includes(term.toLowerCase()) ||
+//           product.tags.toLowerCase().includes(term.toLowerCase());
+//         return p1;
+//         // return true
+//       });
+      console.log("allllll",cart)
+      
 
     const filteredProducts =
       allProducts &&
@@ -50,7 +91,7 @@ const Header = ({ activeHeading }) => {
         let p1 =
           product.name.toLowerCase().includes(term.toLowerCase()) ||
           product.category.toLowerCase().includes(term.toLowerCase()) ||
-          product.description.toLowerCase().includes(term.toLowerCase()) ||
+          product?.occasion?.toLowerCase().includes(term.toLowerCase()) ||
           product.tags.toLowerCase().includes(term.toLowerCase());
         return p1;
       });
@@ -238,14 +279,16 @@ const Header = ({ activeHeading }) => {
               <div className={`${styles.noramlFlex}`}>
                 <div
                   className="relative cursor-pointer mr-[15px]"
-                  onClick={() => setOpenCart(true)}
+                  onClick={() => 
+                    {setOpenCart(true)}
+                  }
                 >
                   <AiOutlineShoppingCart
                     size={30}
                     color="rgb(255 255 255 / 83%)"
                   />
                   <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
-                    {cart && cart.length}
+                    {totalCount}
                   </span>
                 </div>
               </div>
