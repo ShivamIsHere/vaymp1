@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import SearchResults from "./pages/SearchResults.jsx";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   LoginPage,
@@ -120,7 +121,13 @@ const App = () => {
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/shop" element={<ShopsPage />} />
 
-        <Route
+
+          <Route 
+          path="/search/:query" 
+          element={<SearchResults />}
+          />
+          
+          <Route
           path="/checkout"
           element={
             <ProtectedRoute>

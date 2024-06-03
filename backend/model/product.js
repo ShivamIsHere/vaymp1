@@ -99,7 +99,7 @@ const productSchema = new mongoose.Schema({
       rating: {
         type: Number,
         min: 1, 
-        default: 1,
+        // default: 1,
       },
       
       comment: {
@@ -119,6 +119,8 @@ const productSchema = new mongoose.Schema({
   ],
   ratings: {
     type: Number,
+    default: 5,
+
   },
   adminCreated:{
     type: String,

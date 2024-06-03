@@ -47,7 +47,12 @@ const ProductsPage = () => {
   const [neckTypeExpanded, setNeckTypeExpanded] = useState(false);
   const [customerRatingExpanded, setCustomerRatingExpanded] = useState(false);
   const [priceRangeExpanded, setPriceRangeExpanded] = useState(false);
+  const [page, setPage] = useState(1);
+  const [perPage] = useState(5); // Or any default value you prefer
 
+  useEffect(() => {
+    applyFilters();
+  }, [filters, page]);
   useEffect(() => {
     if (categoriesParam === null) {
       setData(allProducts);
@@ -96,31 +101,16 @@ const ProductsPage = () => {
       updatedFilters[key] = value;
     }
     setFilters(updatedFilters);
+    setPage(1); // Reset to the first page when filters change
+
   };
 
   const applyFilters = () => {
     // Dispatch action to get filtered products
-    let categoryParam = "";
-    if (Array.isArray(filters.category)) {
-      categoryParam = filters.category.join(','); // Convert array to comma-separated string
-    } else if (typeof filters.category === "string") {
-      categoryParam = filters.category;
-    }
     const queryParams = {
-      category: categoryParam,
-      subCategory:filters.subCategory,
-      color: filters.color,
-      size: filters.size,
-      neckType: filters.neckType,
-      sleeveType: filters.sleeveType,
-      fabric: filters.fabric,
-      occasion: filters.occasion,
-      fit: filters.fit,
-      gender: filters.gender,
-      sortBy: filters.sortBy,
-      sortOrder: filters.sortOrder,
-      customerRating: filters.customerRating,
-      priceRange: filters.priceRange,
+      ...filters,
+      page,
+      perPage,
     };
     dispatch(getAllProducts(queryParams));
   };
@@ -128,9 +118,9 @@ const ProductsPage = () => {
   const [FilterisOpen, setFilterIsOpen] = useState(false);
   const [SortisOpen, setSortIsOpen] = useState(false);
 
-  useEffect(() => {
-    applyFilters();
-  }, [filters]);
+  // useEffect(() => {
+  //   applyFilters();
+  // }, [filters]);
 
 
   return (

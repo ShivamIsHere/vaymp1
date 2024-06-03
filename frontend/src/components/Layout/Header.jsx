@@ -7,7 +7,7 @@ import {
   AiOutlineShoppingCart,
 } from "react-icons/ai";
 import { FiChevronDown } from "react-icons/fi";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams,useLocation,useNavigate } from "react-router-dom";
 
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { BiMenuAltLeft } from "react-icons/bi";
@@ -18,6 +18,8 @@ import { useSelector } from "react-redux";
 import Cart from "../cart/Cart";
 import Wishlist from "../Wishlist/Wishlist";
 import { RxCross1 } from "react-icons/rx";
+import { server } from "../../server";
+import axios from "axios";
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -51,6 +53,20 @@ const Header = ({ activeHeading }) => {
     });
     setTotalCount(count);
   }, [cart]);
+  // const isActive = (path) => location.pathname === path;
+  const navigate = useNavigate();
+  // const logoutHandler = () => {
+  //   axios
+  //     .get(`${server}/user/logout`, { withCredentials: true })
+  //     .then((res) => {
+  //       toast.success(res.data.message);
+  //       window.location.reload(true);
+  //       navigate("/login");
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.response.data.message);
+  //     });
+  // };
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
@@ -112,6 +128,22 @@ const Header = ({ activeHeading }) => {
         return p1;
       });
     mobileSetSearchData(filteredProducts);
+  };
+
+  const handleSearchSubmit = (e) => {
+    if (e.key === "Enter" && searchTerm) {
+      navigate(`/search/${searchTerm}`);
+      setSearchTerm("");
+      setSearchData(null);
+    }
+  };
+
+  const handleMobileSearchSubmit = (e) => {
+    if (e.key === "Enter" && mobileSearchTerm) {
+      navigate(`/search/${mobileSearchTerm}`);
+      mobileSetSearchTerm("");
+      mobileSetSearchData(null);
+    }
   };
 
   useEffect(() => {
@@ -191,6 +223,7 @@ const Header = ({ activeHeading }) => {
                 placeholder="Search Product..."
                 value={searchTerm}
                 onChange={handleSearchChange}
+                onKeyDown={handleSearchSubmit}
                 className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
               />
               <AiOutlineSearch
@@ -497,6 +530,7 @@ const Header = ({ activeHeading }) => {
             placeholder="Search Product..."
             value={mobileSearchTerm}
             onChange={handlemobileSearchChange}
+            onKeyDown={handleMobileSearchSubmit}
             className="h-[40px] w-full px-2 border-[#3957db] border-[1px] rounded"
           />
           <AiOutlineSearch
