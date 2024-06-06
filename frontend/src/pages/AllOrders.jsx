@@ -26,6 +26,8 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { getAllOrdersOfUser } from "../redux/actions/order";
+import Header from "../components/Layout/Header";
+import Footer from "../components/Layout/Footer";
 // import AllOrdersComponent from '../Shop/AllOrders';
 
 
@@ -124,19 +126,23 @@ const AllOrders = () => {
           id: item._id,
          image: item.cart[0].images[0].url,
          name: item.cart[0].name,
-          itemsQty: item.cart.length,
-          total: "Rs$" + item.totalPrice,
+         itemsQty: item.cart.length,
+         total: "Rs" + item.totalPrice,
           status: item.status,
         });
       });
   
     return (
-      <div className="">
+        <>
+         <Header/>
+        <div className="">
         {orders &&
           orders.map((order) => (
             <OrderCard key={order._id} order={order} />
           ))}
       </div>
+      <Footer/>
+      </>
     );
   };
 

@@ -17,12 +17,12 @@ export const navItems = [
       url: "/events",
     },
     {
-      title: "FAQ",
-      url: "/faq",
-    },
-    {
       title: "Shops",     
       url:"/shop"
+    },
+    {
+      title: "FAQ",
+      url: "/faq",
     },
   ];
   
