@@ -493,6 +493,30 @@ const Header = ({ activeHeading }) => {
                 className={` ${isActive('/orders')? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
                 >
                 Orders
+                </Link>
+              <Link
+                to='/Address'
+                className={` ${isActive('/Address')? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
+                >
+                Address
+              </Link>
+              <Link
+                to='/inbox'
+                className={` ${isActive('/inbox')? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
+                >
+                Inbox
+              </Link>
+              <Link
+                to='/Refund'
+                className={` ${isActive('/Refund')? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
+                >
+                Refund
+              </Link>
+              <Link
+                to='/Track'
+                className={` ${isActive('/Track')? "text-[#17dd1f]" : "text-black 800px:text-[#fff]"} pb-[30px] 800px:pb-0 font-[500] px-6 cursor-pointer`}
+                >
+                TrackOrder
               </Link>
                </div>
               <div className={`${styles.button} ml-4 !rounded-[4px]`}>

@@ -20,6 +20,9 @@ import OrderDetailsPage from "../pages/OrderDetailsPage";
 import TrackOrderPage from "../pages/TrackOrderPage";
 import UserInbox from "../pages/UserInbox.jsx";
 import AllOrders from "../pages/AllOrders.jsx";
+import Address from "../pages/Address.jsx";
+import AllRefundOrders from "../pages/AllRefundOrders.jsx";
+import TrackOrderr from "../pages/TrackOrderr.jsx";
 
 export { 
     LoginPage,
@@ -35,6 +38,9 @@ export {
     OrderSuccessPage,
     ProductDetailsPage,
     ProfilePage,
+    AllRefundOrders,
+    TrackOrderr,
+    Address,
     ShopCreatePage,
     SellerActivationPage,
     ShopLoginPage,

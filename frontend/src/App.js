@@ -23,6 +23,9 @@ import {
   TrackOrderPage,
   UserInbox,
   AllOrders,
+  Address,
+  AllRefundOrders,
+  TrackOrderr,
   AllCoupons
 } from "./routes/Routes.js";
 import {
@@ -69,6 +72,7 @@ import { server } from "./server";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import ShopsPage from "./pages/Shop/ShopsPage.jsx";
+import TrackOrder from "./components/Profile/TrackOrder.jsx";
 // import AllOrders from "./pages/AllOrders.jsx";
 
 const App = () => {
@@ -157,6 +161,30 @@ const App = () => {
           element={
             <ProtectedRoute>
               <AllOrders />
+            </ProtectedRoute>
+          }
+          />
+         <Route
+          path="/Address"
+          element={
+            <ProtectedRoute>
+              <Address />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/Refund"
+          element={
+            <ProtectedRoute>
+              <AllRefundOrders />
+            </ProtectedRoute>
+          }
+        />
+         <Route
+          path="/Track"
+          element={
+            <ProtectedRoute>
+              <TrackOrderr/>
             </ProtectedRoute>
           }
         />
