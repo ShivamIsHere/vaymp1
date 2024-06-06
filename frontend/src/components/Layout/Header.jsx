@@ -20,6 +20,7 @@ import Wishlist from "../Wishlist/Wishlist";
 import { RxCross1 } from "react-icons/rx";
 import { server } from "../../server";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -56,8 +57,21 @@ const Header = ({ activeHeading }) => {
     });
     setTotalCount(count);
   }, [cart]);
-  // const isActive = (path) => location.pathname === path;
+
   const navigate = useNavigate();
+  const logoutHandler = () => {
+    axios
+      .get(`${server}/user/logout`, { withCredentials: true })
+      .then((res) => {
+        toast.success(res.data.message);
+        window.location.reload(true);
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+      });
+  };
+  // const isActive = (path) => location.pathname === path;
   // const logoutHandler = () => {
   //   axios
   //     .get(`${server}/user/logout`, { withCredentials: true })
@@ -329,69 +343,83 @@ const Header = ({ activeHeading }) => {
                 </div>
               </div>
 
-              {/* <div className={`${styles.noramlFlex}`}>
-              <div className="relative cursor-pointer mr-[15px]">
-                {isAuthenticated ? (
-                  <Link to="/profile">
-                    <img
-                      src={`${user?.avatar?.url}`}
-                      className="w-[35px] h-[35px] rounded-full"
-                      alt=""
-                    />
-                  </Link>
-                ) : (
-                  <Link to="/login">
-                    <CgProfile size={30} color="rgb(255 255 255 / 83%)" />
-                  </Link>
-                )} */}
               <div className={`${styles.noramlFlex}`}>
-                <div
-                  className="container mx-auto bg-blue p-2 rounded-lg shadow-lg flex items-center justify-between cursor-pointer"
-                  onMouseEnter={() => setIsDropdownOpen(true)}
-                  onMouseLeave={() => setIsDropdownOpen(false)}
-                >
-                  <div className="relative">
-                    {isAuthenticated ? (
-                      <div className="relative flex items-center">
-                        <div className="flex items-center cursor-pointer">
-                          <img
-                            src={`${user.avatar?.url}`}
-                            className="w-8 h-8 rounded-full"
-                            alt=""
-                          />
-                          <span className="ml-2 text-white">
-                            {user.firstName}
-                          </span>
-                        </div>
-                        <FiChevronDown className="ml-2 text-white" />{" "}
-                        {/* Dropdown icon */}
-                        {isDropdownOpen && (
-                          <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-md z-20">
-                            {/* Dropdown content */}
-                            <Link
-                              to="/profile"
-                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                            >
-                              Profile
-                            </Link>
-                            <Link
-                              to={`/orders`}
-                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                            >
-                              Orders
-                            </Link>{" "}
-                            {/* Add Orders link */}
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <Link to="/login">
-                        <CgProfile size={30} color="rgb(255 255 255 / 83%)" />
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </div>
+  <div
+    className="container mx-auto bg-blue p-2 rounded-lg shadow-lg flex items-center justify-between cursor-pointer"
+    onMouseEnter={() => setIsDropdownOpen(true)}
+    onMouseLeave={() => setIsDropdownOpen(false)}
+  >
+    <div className="relative">
+      {isAuthenticated ? (
+        <div className="relative flex items-center">
+          <div className="flex items-center cursor-pointer">
+            <img
+              src={`${user.avatar?.url}`}
+              className="w-8 h-8 rounded-full"
+              alt=""
+            />
+            <span className="ml-2 text-white">
+            {`${user.name.split(' ')[0]}`}
+            </span>
+          </div>
+          <FiChevronDown className="ml-2 text-white" /> {/* Dropdown icon */}
+          {isDropdownOpen && (
+            <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-md z-20">
+              {/* Dropdown content */}
+              <Link
+                to="/profile"
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+              >
+                Profile
+              </Link>
+              <Link
+                to={`/orders`}
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+              >
+                Orders
+              </Link>
+              <Link
+                 onClick={logoutHandler}
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+              >
+                LogOut
+              </Link>
+               {/* Add Orders link */}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="relative flex items-center">
+          <div className="flex items-center cursor-pointer">
+            <CgProfile size={30} color="rgb(255 255 255 / 83%)" />
+            <span className="ml-2 text-white">
+              Login
+            </span>
+          </div>
+          <FiChevronDown className="ml-2 text-white" /> {/* Dropdown icon */}
+          {isDropdownOpen && (
+            <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-md z-20">
+              {/* Dropdown content */}
+              <Link
+                to="/login"
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+              >
+                Login
+              </Link>
+              <Link
+                to="/sign-up"
+                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+              >
+                Register
+              </Link> {/* Add Register link */}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
 
               {/* cart popup */}
               {openCart ? <Cart setOpenCart={setOpenCart} /> : null}
@@ -528,36 +556,7 @@ const Header = ({ activeHeading }) => {
               </div>
               <br />
               <br />
-              <br />
-
-              <div className="flex w-full justify-center">
-                {isAuthenticated ? (
-                  <div>
-                    <Link to="/profile">
-                      <img
-                        src={`${user.avatar?.url}`}
-                        alt=""
-                        className="w-[60px] h-[60px] rounded-full border-[3px] border-[#0eae88]"
-                      />
-                    </Link>
-                  </div>
-                ) : (
-                  <>
-                    <Link
-                      to="/login"
-                      className="text-[18px] pr-[10px] text-[#000000b7]"
-                    >
-                      Login /
-                    </Link>
-                    <Link
-                      to="/sign-up"
-                      className="text-[18px] text-[#000000b7]"
-                    >
-                      Sign up
-                    </Link>
-                  </>
-                )}
-              </div>
+              
             </div>
           </div>
         )}
