@@ -30,7 +30,7 @@ const Footer = () => {
         <ul className="px-5 text-center sm:text-start flex sm:block flex-col items-center">
         <h1 style={{ color: '#142337', fontSize: '44px', fontWeight: 'bold' }}>vaymp</h1>
           <br />
-          <p>The home and elements needeed to create beatiful products.</p>
+          <p>All your city stores at your fingertips.</p>
           <div className="flex items-center mt-[15px]">
             <AiFillFacebook size={25} className="cursor-pointer" />
             <AiOutlineTwitter

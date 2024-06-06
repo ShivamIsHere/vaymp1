@@ -410,7 +410,7 @@ const AllOrders = () => {
             size: val.size,
             image: val.img, // Replace with actual image URL if available
             itemsQty: 1,
-            total: "US$ " + val.markedPrice,
+            total: "Rs " + val.markedPrice,
             status: val.status,
             address: val.shippingAddress,
             userId:val.userId,
@@ -614,7 +614,7 @@ const TrackOrder = () => {
       row.push({
         id: item._id,
         itemsQty: item.cart.length,
-        total: "US$ " + item.totalPrice,
+        total: "Rs " + item.totalPrice,
         status: item.status,
       });
     });

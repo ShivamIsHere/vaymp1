@@ -138,7 +138,7 @@ const UserOrderDetails = () => {
           size: val.size,
           image: val.img,
           itemsQty: 1,
-          total: "US$ " + val.markedPrice,
+          total: "Rs" + val.markedPrice,
           status: val.status,
           user:val.user,
           paymentInfo:val.paymentInfo,

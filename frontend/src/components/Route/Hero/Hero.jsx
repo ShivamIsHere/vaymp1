@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import styles from "../../../styles/styles";
 const Hero = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const backgroundImageUrls = ["./banner.jpeg", "./banner1.jpeg", "./banner.jpeg"];
-    // Function to handle next slide
+  const [currentSlide, setCurrentSlide] = useState(0);  
+  const backgroundImageUrls = ["./banner.jpeg", "./carouselcover222.jpg", "/caroselcover33.jpg"];
+  // Function to handle next slide
     const touchStartX = useRef(null);
   const touchEndX = useRef(null);
 
@@ -65,7 +65,7 @@ const handleTouchEnd = () => {
         <h1
           className={`text-[2.5rem] sm:text-[2rem] md:text-[2.5rem] lg:text-[3.5rem] xl:text-[4rem] leading-[1.2] 800px:text-[60px] text-[#3d3a3a] font-[600] capitalize`}
         >
-          {/* All your city stores <br /> at your fingertips */}
+          All your city stores <br /> at your fingertips
         </h1>
         <p className="pt-5 text-[16px] sm:text-[14px] md:text-[16px] lg:text-[18px] font-[Poppins] font-[400] text-[#000000ba]">
           {/* Now shop from your city from the convenience of your home.Find the latest Phagwara collection and info about sales, experience hassle-free delivery, try the clothes from your home without worrying about returns. */}
