@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../../styles/styles";
 import { useEffect } from "react";
+import { Circles, RotatingLines } from "react-loader-spinner";
 import {
   CardNumberElement,
   CardCvcElement,
@@ -22,6 +23,7 @@ const Payment = () => {
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const stripe = useStripe();
+  const [loading, setLoading] = useState(false); // Loading state for PayPal and Cash on Delivery
   const elements = useElements();
 
   useEffect(() => {
@@ -83,10 +85,13 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
       status: "succeeded",
       type: "Paypal",
     };
+    setLoading(true);
+
 
     await axios
       .post(`${server}/order/create-order`, order, config)
       .then((res) => {
+        setLoading(false);
         setOpen(false);
         navigate("/order/success");
         toast.success("Order successful!");
@@ -102,6 +107,7 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
 
   const paymentHandler = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading state for Credit Card
     try {
       const config = {
         headers: {
@@ -128,7 +134,7 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
         toast.error(result.error.message);
       } else {
         if (result.paymentIntent.status === "succeeded") {
-          order.paymnentInfo = {
+          order.paymentInfo = {
             id: result.paymentIntent.id,
             status: result.paymentIntent.status,
             type: "Credit Card",
@@ -138,6 +144,7 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
             .post(`${server}/order/create-order`, order, config)
             .then((res) => {
               setOpen(false);
+              setLoading(false);
               navigate("/order/success");
               toast.success("Order successful!");
               localStorage.setItem("cartItems", JSON.stringify([]));
@@ -147,7 +154,9 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
         }
       }
     } catch (error) {
-      toast.error(error);
+      // toast.error(error);
+      toast.error(error.message);
+      setLoading(false);
     }
   };
 
@@ -166,14 +175,15 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
 
     await axios
     .post(`${server}/order/create-order`, order, config)
-    .then((res) => {
-      setOpen(false);
-      navigate("/order/success");
-      toast.success("Order successful!");
-      localStorage.setItem("cartItems", JSON.stringify([]));
-      localStorage.setItem("latestOrder", JSON.stringify([]));
-      window.location.reload();
-    });
+      .then((res) => {
+        setLoading(false);
+        setOpen(false);
+        navigate("/order/success");
+        toast.success("Order successful!");
+        localStorage.setItem("cartItems", JSON.stringify([]));
+        localStorage.setItem("latestOrder", JSON.stringify([]));
+        window.location.reload();
+      });
   };
 
   return (
@@ -188,6 +198,7 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
             createOrder={createOrder}
             paymentHandler={paymentHandler}
             cashOnDeliveryHandler={cashOnDeliveryHandler}
+            loading={loading}
           />
         </div>
         <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
@@ -206,6 +217,7 @@ const PaymentInfo = ({
   createOrder,
   paymentHandler,
   cashOnDeliveryHandler,
+  loading,
 }) => {
   const [select, setSelect] = useState(1);
 
@@ -311,11 +323,22 @@ const PaymentInfo = ({
                   />
                 </div>
               </div>
-              <input
-                type="submit"
-                value="Submit"
-                className={`${styles.button} !bg-[#f63b60] text-[#fff] h-[45px] rounded-[5px] cursor-pointer text-[18px] font-[600]`}
-              />
+              {loading ? (
+                <div className="w-full flex justify-center">
+                  <RotatingLines
+                    height={50}
+                    width={50}
+                    strokeColor="#2563EB" 
+                    ariaLabel="circles-loading"
+                  />
+                </div>
+              ) : (
+                <input
+                  type="submit"
+                  value="Submit"
+                  className={`${styles.button} !bg-[#f63b60] text-[#fff] h-[45px] rounded-[5px] cursor-pointer text-[18px] font-[600]`}
+                />
+              )}
             </form>
           </div>
         ) : null}
@@ -323,7 +346,7 @@ const PaymentInfo = ({
 
       <br />
       {/* paypal payment */}
-      <div>
+      {/* <div>
         <div className="flex w-full pb-5 border-b mb-2">
           <div
             className="w-[25px] h-[25px] rounded-full bg-transparent border-[3px] border-[#1d1a1ab4] relative flex items-center justify-center"
@@ -336,10 +359,10 @@ const PaymentInfo = ({
           <h4 className="text-[18px] pl-2 font-[600] text-[#000000b1]">
             Pay with Paypal
           </h4>
-        </div>
+        </div> */}
 
         {/* pay with payement */}
-        {select === 2 ? (
+        {/* {select === 2 ? (
           <div className="w-full flex border-b">
             <div
               className={`${styles.button} !bg-[#f63b60] text-white h-[45px] rounded-[5px] cursor-pointer text-[18px] font-[600]`}
@@ -374,7 +397,7 @@ const PaymentInfo = ({
             )}
           </div>
         ) : null}
-      </div>
+      </div> */}
 
       <br />
       {/* cash on delivery */}
@@ -397,11 +420,22 @@ const PaymentInfo = ({
         {select === 3 ? (
           <div className="w-full flex">
             <form className="w-full" onSubmit={cashOnDeliveryHandler}>
-              <input
-                type="submit"
-                value="Confirm5"
-                className={`${styles.button} !bg-[#f63b60] text-[#fff] h-[45px] rounded-[5px] cursor-pointer text-[18px] font-[600]`}
-              />
+            {loading ? (
+                <div className="w-full flex justify-center">
+                  <RotatingLines
+                    height={50}
+                    width={50}
+                    strokeColor="#2563EB" 
+                    ariaLabel="circles-loading"
+                  />
+                </div>
+              ) : (
+                <input
+                  type="submit"
+                  value="Confirm"
+                  className={`${styles.button} !bg-[#f63b60] text-[#fff] h-[45px] rounded-[5px] cursor-pointer text-[18px] font-[600]`}
+                />
+              )}
             </form>
           </div>
         ) : null}
@@ -416,8 +450,7 @@ const CartData = ({ orderData }) => {
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">subtotal:</h3>
-        <h5 className="text-[18px] font-[600]">Rs{orderData?.subTotalPrice}</h5>
-      </div>
+        <h5 className="text-[18px] font-[600]">{orderData?.discountPrice ? "Rs " + orderData.discountPrice : "-"}</h5>      </div>
       <br />
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">shipping:</h3>

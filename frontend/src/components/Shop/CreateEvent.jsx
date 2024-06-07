@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { categoriesData } from "../../static/data";
 import { toast } from "react-toastify";
 import { createevent } from "../../redux/actions/event";
-import { Circles } from "react-loader-spinner";
+import { Hourglass } from "react-loader-spinner";
 import { useParams } from "react-router-dom";
 
 const CreateEvent = () => {
@@ -416,7 +416,7 @@ const CreateEvent = () => {
                 alignItems: "center",
               }}
             >
-                <Circles
+                <Hourglass
                       height={50}
                       width={50}
                       color="cyan"
