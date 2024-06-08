@@ -10,13 +10,25 @@ const FeaturedProduct = () => {
     <div>
       <div className={`${styles.section}`}>
         <div className={`${styles.heading}`}>
-          <h1>Featured Products</h1>
+        <h1 className="text center mb-2">Featured Products</h1>
         </div>
-        <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px] mb-12 border-0">
-        {
-            allProducts && allProducts.length !== 0 &&(
-              <>
-               {allProducts && allProducts.map((i, index) => <ProductCard data={i} key={index} />)}
+        <div
+          // className="flex overflow-x-auto scroll-snap-x snap-mandatory gap-5 mb-12 border-0"
+          className="flex overflow-x-auto overflow-y-hidden scroll-snap-x snap-mandatory gap-5 mb-12 border-0"
+          style={{
+            scrollbarWidth: 'none',   /* Firefox */
+           msOverflowStyle: 'none',  /* Internet Explorer 10+ */
+            WebkitOverflowScrolling: 'touch',  /* Smooth scrolling for mobile devices */
+            '&::-webkit-scrollbar': { display: 'none' }  /* Hide scrollbar for WebKit browsers */
+          }}
+        >
+          {allProducts && allProducts.length !== 0 && (
+            <>
+              {allProducts.map((product, index) => (
+                <div className="snap-center shrink-0" key={index}>
+                  <ProductCard data={product} />
+                </div>
+              ))}
               </>
             )
            }

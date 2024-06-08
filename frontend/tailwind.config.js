@@ -8,6 +8,12 @@ module.exports = {
       Poppins: ['Poppins', "sans-serif"],
     },
     extend: {
+      scrollSnapType: {
+        'x': 'x mandatory',
+      },
+      scrollSnapAlign: {
+        'start': 'start',
+      },
       screens: {
         "1000px": "1050px",
         "1100px": "1110px",
@@ -17,5 +23,6 @@ module.exports = {
       },
     },
   },
+  variants: {},
   plugins: [],
 };

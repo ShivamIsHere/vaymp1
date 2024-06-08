@@ -18,16 +18,28 @@ const BestDeals = () => {
     <div>
       <div className={`${styles.section}`}>
         <div className={`${styles.heading}`}>
-          <h1>Best Deals</h1>
+        <h1 className="text-center mb-2">Best Deals</h1>
         </div>
-        <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px] mb-12 border-0">
-           {
-            data && data.length !== 0 &&(
-              <>
-               {data && data.map((i, index) => <ProductCard data={i} key={index} />)}
-              </>
-            )
-           }
+        <div
+          className="flex overflow-x-auto scroll-snap-x snap-mandatory gap-5 mb-12 border-0"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }} // Hide scrollbar for Firefox and IE
+        >
+          <style>
+            {`
+              .scroll-container::-webkit-scrollbar {
+                display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+              }
+            `}
+          </style>
+          {data && data.length !== 0 && (
+            <>
+              {data.map((i, index) => (
+                <div key={index} className="flex-shrink-0 snap-start">
+                  <ProductCard data={i} />
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </div>
     </div>
