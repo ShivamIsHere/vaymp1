@@ -16,7 +16,7 @@ router.post("/create-user", async (req, res, next) => {
     const userEmail = await User.findOne({ email });
 
     if (userEmail) {
-      return next(new ErrorHandler("User already exists", 400));
+      return next(new ErrorHandler("User already exists!", 400));
     }
 
     const myCloud = await cloudinary.v2.uploader.upload(avatar, {
@@ -82,6 +82,9 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
+        return next(new ErrorHandler("User already exists", 400));
+      }
+      if (avatar==='') {
         return next(new ErrorHandler("User already exists", 400));
       }
       user = await User.create({

@@ -128,7 +128,7 @@ router.post(
 
       if (!isPasswordValid) {
         return next(
-          new ErrorHandler("Please provide the correct information", 400)
+          new ErrorHandler("Please provide the correct Password", 400)
         );
       }
 

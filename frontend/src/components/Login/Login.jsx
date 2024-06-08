@@ -18,7 +18,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(""); // Clear any previous error messages
+    setError({ message: "", field: "" });
 
     try {
       const res = await axios.post(
@@ -43,7 +43,7 @@ const Login = () => {
 
   const handleInputChange = (setter) => (e) => {
     setter(e.target.value);
-    setError(""); // Clear any previous error messages
+    setError({ message: "", field: "" });
   };
 
   return (
@@ -78,7 +78,7 @@ const Login = () => {
                   className={`appearance-none block w-full px-3 py-2 border ${
                     error.field === "email" ? "border-red-500" : "border-gray-300"
                   } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-                />
+                  />
                 {error.message === "User doesn't exists!" && (
                   <div className="text-red-600 text-sm mt-1">{error.message}</div>
                 )}
@@ -145,6 +145,9 @@ const Login = () => {
                 </a>
               </div>
             </div>
+            {error.message === "Check your Internet Connection" && ( // Conditionally render the error message
+              <div className="text-red-600 text-sm">{error.message}</div>
+            )}
             <div>
               {loading ? (
                 <div

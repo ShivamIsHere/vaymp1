@@ -65,6 +65,23 @@ app.use("/api/v2/kuchvi", kuchvi);
 
 
 // it's for ErrorHandling
-app.use(ErrorHandler);
+// app.use(ErrorHandler);
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log the error stack for debugging purposes
 
+  if (err.code === 'ENOTFOUND') {
+    // Handle specific MongoDB connection error
+    err.message = 'Check your Internet Connection';
+    err.statusCode = 500;
+  }
+
+  const statusCode = err.statusCode || 500;
+  const message = statusCode === 500 ? 'Check your Internet Connection' : err.message;
+
+  res.status(statusCode).json({
+    success: false,
+    message: message,
+    field: err.field || null,
+  });
+});
 module.exports = app;
