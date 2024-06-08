@@ -65,22 +65,22 @@ app.use("/api/v2/kuchvi", kuchvi);
 
 
 // it's for ErrorHandling
-// app.use(ErrorHandler);
-app.use((err, req, res, next) => {
-  console.error(err.stack); // Log the error stack for debugging purposes
+app.use(ErrorHandler);
+// app.use((err, req, res, next) => {
+//   console.error(err.stack); // Log the error stack for debugging purposes
 
-  if (err.code === 'ENOTFOUND') {
-    // Handle specific MongoDB connection error
- err.message = 'Connection error. Please check your internet or try again later.';
-     err.statusCode = 500;
-  }
+//   if (err.code === 'ENOTFOUND') {
+//     // Handle specific MongoDB connection error
+//  err.message = 'Connection error. Please check your internet or try again later.';
+//      err.statusCode = 500;
+//   }
 
-  const statusCode = err.statusCode || 500;
-  const message = statusCode === 500 ? 'Connection error. Please check your internet or try again later.' : err.message;
-  res.status(statusCode).json({
-    success: false,
-    message: message,
-    field: err.field || null,
-  });
-});
+//   const statusCode = err.statusCode || 500;
+//   const message = statusCode === 500 ? 'Connection error. Please check your internet or try again later.' : err.message;
+//   res.status(statusCode).json({
+//     success: false,
+//     message: message,
+//     field: err.field || null,
+//   });
+// });
 module.exports = app;
