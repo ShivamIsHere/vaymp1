@@ -64,6 +64,8 @@ const ShopCreate = () => {
     reader.onload = () => {
       if (reader.readyState === 2) {
         setAvatar(reader.result);
+        setError("");
+
       }
     };
 
@@ -96,7 +98,7 @@ const ShopCreate = () => {
                   name="name"
                   required
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={handleInputChange(setName)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -115,7 +117,7 @@ const ShopCreate = () => {
                   name="phone-number"
                   required
                   value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={handleInputChange(setPhoneNumber)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -135,7 +137,7 @@ const ShopCreate = () => {
                   autoComplete="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleInputChange(setEmail)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -154,7 +156,7 @@ const ShopCreate = () => {
                   name="address"
                   required
                   value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  onChange={handleInputChange(setAddress)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -173,7 +175,7 @@ const ShopCreate = () => {
                   name="zipcode"
                   required
                   value={zipCode}
-                  onChange={(e) => setZipCode(e.target.value)}
+                  onChange={handleInputChange(setZipCode)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
@@ -193,7 +195,7 @@ const ShopCreate = () => {
                   autoComplete="current-password"
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={handleInputChange(setPassword)}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
                 {visible ? (
