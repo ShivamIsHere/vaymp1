@@ -247,10 +247,9 @@ const ShopCreate = () => {
                   />
                 </label>
               </div>
-              {error === "Missing required parameter - file" && (
-                  <div className="text-red-600 text-sm mt-1">{error}</div>
-
-                )}
+              {(error !=="User already exists") && (error !=="Missing required parameter - file")  && ( 
+              <div className="text-red-600 text-sm">{error}</div>
+            )}
             </div>
 
             <div>

@@ -145,8 +145,8 @@ const Login = () => {
                 </a>
               </div>
             </div>
-            {error.message === "Check your Internet Connection" && ( // Conditionally render the error message
-              <div className="text-red-600 text-sm">{error.message}</div>
+            {(error.message !=="User doesn't exists!") && (error.message !=="Please provide the correct password!")  && (               
+            <div className="text-red-600 text-sm">{error.message}</div>
             )}
             <div>
               {loading ? (

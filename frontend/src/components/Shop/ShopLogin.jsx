@@ -131,7 +131,7 @@ setLoading(false);      });
                 </a>
               </div>
             </div>
-            {error && ( 
+            {(error !=="User doesn't exists!") && (error !=="Please provide the correct Password")  && ( 
               <div className="text-red-600 text-sm">{error}</div>
             )}
             <div>

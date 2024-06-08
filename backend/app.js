@@ -71,13 +71,12 @@ app.use((err, req, res, next) => {
 
   if (err.code === 'ENOTFOUND') {
     // Handle specific MongoDB connection error
-    err.message = 'Check your Internet Connection';
-    err.statusCode = 500;
+ err.message = 'Connection error. Please check your internet or try again later.';
+     err.statusCode = 500;
   }
 
   const statusCode = err.statusCode || 500;
-  const message = statusCode === 500 ? 'Check your Internet Connection' : err.message;
-
+  const message = statusCode === 500 ? 'Connection error. Please check your internet or try again later.' : err.message;
   res.status(statusCode).json({
     success: false,
     message: message,
