@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { BsCartPlus } from "react-icons/bs";
 import styles from "../../styles/styles";
@@ -9,11 +9,20 @@ import { addTocart } from "../../redux/actions/cart";
 
 const Wishlist = ({ setOpenWishlist }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
+  const wishlistRef = useRef(null);
   const dispatch = useDispatch();
+
+  const handleCloseClick = (event) => {
+    // Check if the click target is the overlay (wishlistRef) itself
+    if (wishlistRef.current === event.target) {
+      setOpenWishlist(false);
+    }
+  };
 
   const removeFromWishlistHandler = (data) => {
     dispatch(removeFromWishlist(data));
   };
+
 
   const addToCartHandler = (data) => {
     const newData = {...data, qty:1};
@@ -22,8 +31,12 @@ const Wishlist = ({ setOpenWishlist }) => {
   }
 
   return (
-    <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
-      <div className="fixed top-0 right-0 h-full w-[80%] overflow-y-scroll 800px:w-[25%] bg-white flex flex-col justify-between shadow-sm">
+    <div
+      ref={wishlistRef}
+      className="fixed top-0 left-0 w-full h-screen z-20 flex items-center justify-center bg-[#0000004b]"
+      onClick={handleCloseClick}
+    >
+      <div className="fixed top-0 right-0 h-full w-[80%] overflow-y-scroll 800px:w-[25%] bg-white flex flex-col justify-between shadow-sm" ref={wishlistRef}>
         {wishlist && wishlist.length === 0 ? (
           <div className="w-full h-screen flex items-center justify-center">
             <div className="flex w-full justify-end pt-5 pr-5 fixed top-3 right-3">
@@ -70,7 +83,7 @@ const Wishlist = ({ setOpenWishlist }) => {
 };
 
 const CartSingle = ({ data,removeFromWishlistHandler,addToCartHandler }) => {
-  const [value, setValue] = useState(1);
+  const [value] = useState(1);
   const totalPrice = data.discountPrice * value;
 
   return (
@@ -88,7 +101,7 @@ const CartSingle = ({ data,removeFromWishlistHandler,addToCartHandler }) => {
         <div className="pl-[5px]">
           <h1>{data.name}</h1>
           <h4 className="font-[600] pt-3 800px:pt-[3px] text-[17px] text-[#d02222] font-Roboto">
-            Rs{totalPrice}
+            US${totalPrice}
           </h4>
         </div>
         <div>

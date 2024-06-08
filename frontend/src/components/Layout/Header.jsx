@@ -447,11 +447,9 @@ const Header = ({ activeHeading }) => {
       </div>
 
 
-<div className="mt-[88px] bg-white w-full md:block hidden">
-    <div className="container mx-auto p-4">
-       
-    </div>
-</div>
+      <div className="mt-[88px] bg-white w-full md:block hidden">
+        <div className="container mx-auto p-4"></div>
+      </div>
 
       {/* mobile header */}
       <div
@@ -479,14 +477,22 @@ const Header = ({ activeHeading }) => {
             </Link>
           </div>
           <div>
-            <div
-              className="relative mr-[20px]"
-              onClick={() => setOpenCart(true)}
-            >
-              <AiOutlineShoppingCart size={30} />
-              <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
-                {cart && cart.length}
-              </span>
+          <div className="flex items-center justify-start space-x-6">
+              <div className="relative" onClick={() => setOpenWishlist(true)}>
+                <AiOutlineHeart size={30} />
+                <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
+                  {wishlist && wishlist.length}
+                </span>
+              </div>
+              <div
+                className="relative right-2"
+                onClick={() => setOpenCart(true)}
+              >
+                <AiOutlineShoppingCart size={30} />
+                <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
+                  {cart && cart.length}
+                </span>
+              </div>
             </div>
           </div>
           {/* cart popup */}
@@ -500,10 +506,9 @@ const Header = ({ activeHeading }) => {
           <div
             className={`fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0`}
           >
-            <div className="fixed w-[70%] bg-[#fff] h-screen top-0 left-0 z-10 overflow-y-scroll header-sidebar">
-              <div className="w-full justify-between flex pr-3">
+<div className="fixed w-[70%] bg-[#fff] h-screen top-0 left-0 z-30 overflow-y-scroll header-sidebar">              <div className="w-full justify-between flex pr-3">
                 <div>
-                  <div
+                  {/* <div
                     className="relative mr-[15px]"
                     onClick={() => setOpenWishlist(true) || setOpen(false)}
                   >
@@ -511,7 +516,7 @@ const Header = ({ activeHeading }) => {
                     <span class="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
                       {wishlist && wishlist.length}
                     </span>
-                  </div>
+                  </div> */}
                 </div>
                 <RxCross1
                   size={30}
