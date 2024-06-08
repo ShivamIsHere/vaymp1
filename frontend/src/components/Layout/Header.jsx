@@ -162,6 +162,19 @@ const Header = ({ activeHeading }) => {
       mobileSetSearchData(null);
     }
   };
+  const handleMobileSearchClick = () => {
+    if (mobileSearchTerm) {
+      navigate(`/search/${mobileSearchTerm}`);
+      setSearchTerm("");
+    }
+  };
+
+  const handleSearchClick = () => {
+    if (searchTerm) {
+      navigate(`/search/${searchTerm}`);
+      setSearchTerm("");
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -245,8 +258,8 @@ const Header = ({ activeHeading }) => {
               />
               <AiOutlineSearch
                 size={30}
-                className="absolute right-2 top-1.5 cursor-pointer"
-              />
+                className="absolute right-2 top-1.5 cursor-pointer" onClick={handleSearchClick}
+                />
               {searchData && searchData.length !== 0 ? (
                 <div className="absolute min-h-[5vh] bg-slate-50 shadow-sm-2 z-[9] p-4">
                   {searchData &&
@@ -575,7 +588,7 @@ const Header = ({ activeHeading }) => {
           />
           <AiOutlineSearch
             size={30}
-            className="absolute right-2 top-1.5 cursor-pointer"
+            className="absolute right-2 top-1.5 cursor-pointer" onClick={handleMobileSearchClick}
           />
 
           {mobileSearchData && mobileSearchData.length > 0 && (
