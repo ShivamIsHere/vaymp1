@@ -5,16 +5,20 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
+import { FidgetSpinner } from "react-loader-spinner";
 
 const ShopLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
+    setError("");
     await axios
       .post(
         `${server}/shop/login-shop`,
@@ -30,8 +34,9 @@ const ShopLogin = () => {
         window.location.reload(true); 
       })
       .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+// toast.error(err.response.data.message);
+setError(err.response.data.message); 
+setLoading(false);      });
   };
 
   return (
@@ -44,6 +49,9 @@ const ShopLogin = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
+          {error && ( // Conditionally render the error message
+              <div className="text-red-600 text-sm">{error}</div>
+            )}
             <div>
               <label
                 htmlFor="email"
@@ -120,12 +128,33 @@ const ShopLogin = () => {
               </div>
             </div>
             <div>
+            <div>
+              {loading ? (
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <FidgetSpinner
+                    height={50}
+                    width={50}
+                    backgroundColor="#2563EB"
+                    ballColors="white"
+                    ariaLabel="circles-loading"
+                  />
+                </div>
+              ) : (
               <button
                 type="submit"
                 className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
               >
                 Submit
               </button>
+              )}
+              </div>
             </div>
             <div className={`${styles.noramlFlex} w-full`}>
               <h4>Not have any account?</h4>
