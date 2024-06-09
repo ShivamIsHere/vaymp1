@@ -4,50 +4,50 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const { isAuthenticated, isSeller, isAdmin } = require("./middleware/auth");
 
-app.use(cors({
-  origin: ['https://vaymp1-kwfw.vercel.app'],
-  credentials: true
-}));
+// CORS configuration
+const corsOptions = {
+  origin: ['https://vaymp1-kwfw.vercel.app'], // Allowed origin
+  credentials: true, // Allow credentials (cookies)
+};
+
+app.use(cors(corsOptions));
+
+// Ensure preflight requests are handled
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser());
-// Protect user routes
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+// Protected routes
 app.get("/api/v2/user/protected", isAuthenticated, (req, res) => {
   res.send(`Hello, ${req.user.name}`);
 });
 
-// Protect seller routes
 app.get("/api/v2/shop/protected", isSeller, (req, res) => {
   res.send(`Hello, ${req.seller.name}`);
 });
 
-// Protect admin routes
 app.get("/api/v2/admin/protected", isAuthenticated, isAdmin('Admin'), (req, res) => {
   res.send(`Hello, Admin ${req.user.name}`);
 });
 
-// app.use("/",express.static("uploads"));
-// app.use("/test", (req, res) => {
-//   res.send("Hello world!");
-// });
+// Test route
 app.use("/test", (req, res) => {
   res.send("Hello world!");
 });
 
-// app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-app.use(express.json());
-
-// config
+// Config
 if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config({
     path: "config/.env",
   });
 }
 
-// import routes
+// Import routes
 const user = require("./controller/user");
 const shop = require("./controller/shop");
 const product = require("./controller/product");
@@ -78,8 +78,7 @@ app.use("/api/v2/notification", notification);
 app.use("/api/v2/refund", refund);
 app.use("/api/v2/kuchvi", kuchvi);
 
-
-// it's for ErrorHandling
+// Error handling
 app.use(ErrorHandler);
 
 module.exports = app;
