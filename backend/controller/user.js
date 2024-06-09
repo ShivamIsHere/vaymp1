@@ -164,7 +164,7 @@ router.get(
       res.cookie("token", null, {
         expires: new Date(Date.now()),
         httpOnly: true,
-        sameSite: "None",
+        sameSite: "Strict",  // Use Strict or Lax
         secure: true,
       });
       res.status(201).json({

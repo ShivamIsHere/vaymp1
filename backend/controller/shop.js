@@ -169,7 +169,7 @@ router.get(
       res.cookie("seller_token", null, {
         expires: new Date(Date.now()),
         httpOnly: true,
-        sameSite: "None",
+        sameSite: "Strict",  // Use Strict or Lax
         secure: true,
       });
       res.status(201).json({

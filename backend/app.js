@@ -14,8 +14,6 @@ const corsOptions = {
   allowedHeaders: 'Content-Type,Authorization',
 };
 
-
-
 app.use(cors(corsOptions));
 
 // Ensure preflight requests are handled
