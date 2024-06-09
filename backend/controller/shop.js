@@ -169,8 +169,8 @@ router.get(
       res.cookie("seller_token", null, {
         expires: new Date(Date.now()),
         httpOnly: true,
-        sameSite: "Strict",  // Use Strict or Lax
-        secure: true,
+        sameSite: "None",  // Use Strict or Lax
+        secure: process.env.NODE_ENV === "PRODUCTION" // Ensure cookies are sent over HTTPS in production
       });
       res.status(201).json({
         success: true,
