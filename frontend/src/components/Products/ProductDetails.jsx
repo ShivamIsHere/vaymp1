@@ -374,9 +374,8 @@ const ProductDetails =  ({ data }) => {
                 </div>
                 
                 {/* Button container */}
-                <div className="relative" style={{ zIndex: 1 }}>
-                <div className="sm:hidden fixed bottom-0 left-0 w-full bg-white shadow-lg p-2" style={{ zIndex: 0 }}>                  
-                <div className="flex justify-between items-center">
+                <div className="sm:hidden fixed bottom-0 left-0 w-full bg-white shadow-lg p-2 z-10">
+                  <div className="flex justify-between items-center">
                     {/* Add to Cart Button */}
                     <div
                       className={`${styles.button} !mt-6 !rounded !h-11 flex items-center mr-10`}
@@ -430,7 +429,6 @@ const ProductDetails =  ({ data }) => {
                     </div>
                   </div>
                 </div>
-              </div>
 
                 {/* for large screen */}
                 <div className=" hidden md:block items-center mt-6">
