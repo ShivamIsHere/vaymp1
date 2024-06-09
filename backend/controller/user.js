@@ -165,7 +165,7 @@ router.get(
         expires: new Date(Date.now()),
         httpOnly: true,
         sameSite: "None",
-        secure: process.env.NODE_ENV === "PRODUCTION" // Ensure cookies are sent over HTTPS in production
+        secure: true,
       });
       res.status(201).json({
         success: true,
