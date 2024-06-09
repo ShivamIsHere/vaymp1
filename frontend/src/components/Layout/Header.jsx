@@ -506,7 +506,8 @@ const Header = ({ activeHeading }) => {
           <div
             className={`fixed w-full bg-[#0000005f] z-20 h-full top-0 left-0`}
           >
-<div className="fixed w-[70%] bg-[#fff] h-screen top-0 left-0 z-30 overflow-y-scroll header-sidebar">              <div className="w-full justify-between flex pr-3">
+<div className="fixed w-[70%] bg-[#fff] h-screen top-0 left-0 z-30 overflow-y-scroll header-sidebar">              
+<div className="w-full justify-between flex pr-3">
                 <div>
                   {/* <div
                     className="relative mr-[15px]"
@@ -526,7 +527,41 @@ const Header = ({ activeHeading }) => {
               </div>
 
               {/* navbar */}
+              <br></br>
+              <div className="flex w-full justify-center">
+                {isAuthenticated ? (
+                  <div>
+                    <Link to="/profile">
+                      <img
+                        src={`${user.avatar?.url}`}
+                        alt=""
+                        className="w-[60px] h-[60px] rounded-full border-[3px] border-[#0eae88]"
+                      />
+                    </Link>
+                  </div>
+                ) : (
+                  <>
+                  <div className="inline-block bg-gray-200 px-4 py-2 rounded-md shadow-md cursor-pointer" >
+                    <Link
+                      to="/login"
+                      className="text-[18px] pr-[10px] text-[#000000b7]"
+                    >
+                      Login /
+                    </Link>
+                    <Link
+                      to="/sign-up"
+                      className="text-[18px] text-[#000000b7]"
+                    >
+                      Sign up
+                    </Link>
+                    </div>
+                  </>
+                )}
+              </div>
+ <br></br>
+              {/* navbar */}
               <Navbar active={activeHeading} />
+  
               <div className="flex flex-col">
               <Link
                 to="/profile"

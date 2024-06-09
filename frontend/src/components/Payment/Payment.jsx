@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../../styles/styles";
-import { useEffect } from "react";
 import { Circles, RotatingLines } from "react-loader-spinner";
 import {
   CardNumberElement,
@@ -20,10 +19,10 @@ import { RxCross1 } from "react-icons/rx";
 const Payment = () => {
   const [orderData, setOrderData] = useState([]);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false); // Loading state for PayPal and Cash on Delivery
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const stripe = useStripe();
-  const [loading, setLoading] = useState(false); // Loading state for PayPal and Cash on Delivery
   const elements = useElements();
 
   useEffect(() => {
@@ -43,7 +42,6 @@ const Payment = () => {
             },
           },
         ],
-        // not needed if a shipping address is actually needed
         application_context: {
           shipping_preference: "NO_SHIPPING",
         },
@@ -59,14 +57,11 @@ const Payment = () => {
     user: user && user,
     totalPrice: orderData?.totalPrice,
   };
-console.log("    cart: orderData?.cart,",orderData?.cart,
-)
+
   const onApprove = async (data, actions) => {
     return actions.order.capture().then(function (details) {
       const { payer } = details;
-
       let paymentInfo = payer;
-
       if (paymentInfo !== undefined) {
         paypalPaymentHandler(paymentInfo);
       }
@@ -85,9 +80,8 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
       status: "succeeded",
       type: "Paypal",
     };
+
     setLoading(true);
-
-
     await axios
       .post(`${server}/order/create-order`, order, config)
       .then((res) => {
@@ -132,6 +126,7 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
 
       if (result.error) {
         toast.error(result.error.message);
+        setLoading(false);
       } else {
         if (result.paymentIntent.status === "succeeded") {
           order.paymentInfo = {
@@ -143,8 +138,8 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
           await axios
             .post(`${server}/order/create-order`, order, config)
             .then((res) => {
-              setOpen(false);
               setLoading(false);
+              setOpen(false);
               navigate("/order/success");
               toast.success("Order successful!");
               localStorage.setItem("cartItems", JSON.stringify([]));
@@ -154,7 +149,6 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
         }
       }
     } catch (error) {
-      // toast.error(error);
       toast.error(error.message);
       setLoading(false);
     }
@@ -162,7 +156,7 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
 
   const cashOnDeliveryHandler = async (e) => {
     e.preventDefault();
-
+    setLoading(true); // Set loading state for Cash on Delivery
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -174,7 +168,7 @@ console.log("    cart: orderData?.cart,",orderData?.cart,
     };
 
     await axios
-    .post(`${server}/order/create-order`, order, config)
+      .post(`${server}/order/create-order`, order, config)
       .then((res) => {
         setLoading(false);
         setOpen(false);
@@ -380,6 +374,16 @@ const PaymentInfo = ({
                       onClick={() => setOpen(false)}
                     />
                   </div>
+                  {loading ? (
+                    <div className="w-full flex justify-center">
+                      <Circles
+                        height={50}
+                        width={50}
+                        color="cyan"
+                        ariaLabel="circles-loading"
+                      />
+                    </div>
+                  ) : (
                     <PayPalScriptProvider
                       options={{
                         "client-id":
@@ -392,6 +396,7 @@ const PaymentInfo = ({
                         createOrder={createOrder}
                       />
                     </PayPalScriptProvider>
+                  )}
                 </div>
               </div>
             )}
@@ -420,7 +425,7 @@ const PaymentInfo = ({
         {select === 3 ? (
           <div className="w-full flex">
             <form className="w-full" onSubmit={cashOnDeliveryHandler}>
-            {loading ? (
+              {loading ? (
                 <div className="w-full flex justify-center">
                   <RotatingLines
                     height={50}
@@ -450,19 +455,20 @@ const CartData = ({ orderData }) => {
     <div className="w-full bg-[#fff] rounded-md p-5 pb-8">
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">subtotal:</h3>
-        <h5 className="text-[18px] font-[600]">{orderData?.discountPrice ? "Rs " + orderData.discountPrice : "-"}</h5>      </div>
+        <h5 className="text-[18px] font-[600]">Rs {orderData?.subTotalPrice}</h5>
+      </div>
       <br />
       <div className="flex justify-between">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">shipping:</h3>
-        <h5 className="text-[18px] font-[600]">Rs{shipping}</h5>
+        <h5 className="text-[18px] font-[600]">Rs {shipping}</h5>
       </div>
       <br />
       <div className="flex justify-between border-b pb-3">
         <h3 className="text-[16px] font-[400] text-[#000000a4]">Discount:</h3>
-        <h5 className="text-[18px] font-[600]">{orderData?.discountPrice? "Rs" + orderData.discountPrice : "-"}</h5>
+        <h5 className="text-[18px] font-[600]">{orderData?.discountPrice ? "Rs " + orderData.discountPrice : "-"}</h5>
       </div>
       <h5 className="text-[18px] font-[600] text-end pt-3">
-        Rs{orderData?.totalPrice}
+        Rs {orderData?.totalPrice}
       </h5>
       <br />
     </div>

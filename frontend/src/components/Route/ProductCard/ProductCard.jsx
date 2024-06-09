@@ -65,7 +65,8 @@ const ProductCard = ({ data, isEvent }) => {
 
   return (
     <>
-      <div className="w-full h-[320px] bg-white rounded-lg shadow-sm p-2 relative cursor-pointer" style={{width:'200px'}}>        <div className="flex justify-end"></div>
+      <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
+        <div className="flex justify-end"></div>
         <Link
           to={`${
             isEvent === true
@@ -76,7 +77,7 @@ const ProductCard = ({ data, isEvent }) => {
           <img
             src={`${data.images && data.images[0]?.url}`}
             alt=""
-            className="w-full h-[170px] object-contain mt-1"
+            className="w-full h-[170px] object-contain"
           />
         </Link>
         <Link to={`/shop/preview/${data?.shop._id}`}>
@@ -89,7 +90,7 @@ const ProductCard = ({ data, isEvent }) => {
               : `/product/${data._id}`
           }`}
         >
-          <h4 className="pb-1 font-[500]">
+          <h4 className="pb-3 font-[500]">
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>
 
@@ -97,7 +98,7 @@ const ProductCard = ({ data, isEvent }) => {
             <Ratings rating={data?.ratings} />
           </div>
 
-          <div className="py-1 flex items-center justify-between">
+          <div className="py-2 flex items-center justify-between">
             <div className="flex">
               <h5 className={`${styles.productDiscountPrice}`}>
               Rs{data.originalPrice === 0
@@ -149,13 +150,13 @@ const ProductCard = ({ data, isEvent }) => {
             color="#333"
             title="Quick view"
           />
-          {/* <AiOutlineShoppingCart
+          <AiOutlineShoppingCart
             size={25}
             className="cursor-pointer absolute right-2 top-24"
             onClick={addToCartHandler}
             color="#444"
             title="Add to cart"
-          /> */}
+          />
           {open ? <ProductDetailsCard setOpen={setOpen} data={data} /> : null}
         </div>
       </div>
