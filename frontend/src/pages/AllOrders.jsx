@@ -40,7 +40,7 @@ const AllOrders = () => {
     const {allProducts,isLoading} = useSelector((state) => state.products);
   
     const dispatch = useDispatch();
-  console.log("orders",orders,user)
+  console.log("orders",orders.user)
     useEffect(() => {
       dispatch(getAllOrdersOfUser(user._id));
     }, [dispatch, user._id]);
@@ -124,7 +124,7 @@ const AllOrders = () => {
         console.log()
         row.push({
           id: item._id,
-         image: item.cart[0].images[0].url,
+        //  image: item.cart[0].images[0].url,
          name: item.cart[0].name,
          itemsQty: item.cart.length,
          total: "Rs" + item.totalPrice,
