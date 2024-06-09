@@ -62,20 +62,7 @@ app.use("/api/v2/admin", admin);
 app.use("/api/v2/notification", notification);
 app.use("/api/v2/refund", refund);
 app.use("/api/v2/kuchvi", kuchvi);
-// Protect user routes
-app.get("/api/v2/user/protected", isAuthenticated, (req, res) => {
-  res.send(`Hello, ${req.user.name}`);
-});
 
-// Protect seller routes
-app.get("/api/v2/shop/protected", isSeller, (req, res) => {
-  res.send(`Hello, ${req.seller.name}`);
-});
-
-// Protect admin routes
-app.get("/api/v2/admin/protected", isAuthenticated, isAdmin('Admin'), (req, res) => {
-  res.send(`Hello, Admin ${req.user.name}`);
-});
 
 // it's for ErrorHandling
 app.use(ErrorHandler);
