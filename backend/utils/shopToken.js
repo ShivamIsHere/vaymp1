@@ -5,10 +5,10 @@ const sendShopToken = (user, statusCode, res) => {
   const options = {
     expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days
     httpOnly: true, // Only accessible by the web server
-    sameSite: "None",  // Use Strict or Lax
-    secure: process.env.NODE_ENV === "PRODUCTION" // Ensure cookies are sent over HTTPS in production
+    // sameSite: "None", // CSRF protection
+    // secure: process.env.NODE_ENV === "PRODUCTION" // Ensure cookies are sent over HTTPS in production
   };
-
+if((process.env.NODE_ENV === "PRODUCTION")) options.secure=true;
   res.status(statusCode).cookie("seller_token", token, options).json({
     success: true,
     user,
