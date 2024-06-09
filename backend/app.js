@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: ['https://vaymp1-kwfw.vercel.app'],
   credentials: true
 }));
 
@@ -62,25 +62,22 @@ app.use("/api/v2/admin", admin);
 app.use("/api/v2/notification", notification);
 app.use("/api/v2/refund", refund);
 app.use("/api/v2/kuchvi", kuchvi);
+// Protect user routes
+app.get("/api/v2/user/protected", isAuthenticated, (req, res) => {
+  res.send(`Hello, ${req.user.name}`);
+});
 
+// Protect seller routes
+app.get("/api/v2/shop/protected", isSeller, (req, res) => {
+  res.send(`Hello, ${req.seller.name}`);
+});
+
+// Protect admin routes
+app.get("/api/v2/admin/protected", isAuthenticated, isAdmin('Admin'), (req, res) => {
+  res.send(`Hello, Admin ${req.user.name}`);
+});
 
 // it's for ErrorHandling
 app.use(ErrorHandler);
-// app.use((err, req, res, next) => {
-//   console.error(err.stack); // Log the error stack for debugging purposes
 
-//   if (err.code === 'ENOTFOUND') {
-//     // Handle specific MongoDB connection error
-//  err.message = 'Connection error. Please check your internet or try again later.';
-//      err.statusCode = 500;
-//   }
-
-//   const statusCode = err.statusCode || 500;
-//   const message = statusCode === 500 ? 'Connection error. Please check your internet or try again later.' : err.message;
-//   res.status(statusCode).json({
-//     success: false,
-//     message: message,
-//     field: err.field || null,
-//   });
-// });
 module.exports = app;
