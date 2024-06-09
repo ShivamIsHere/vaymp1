@@ -101,10 +101,10 @@ const Footer = () => {
         <span>© Vaymp. All rights reserved.</span>
         <span>Terms · Privacy Policy</span>
         <div className="sm:block flex items-center justify-center w-full">
-          <img
+          {/* <img
             src="http://localhost:3000/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Ffooter-payment.a37c49ac.png&w=640&q=75"
             alt=""
-          />
+          /> */}
         </div>
       </div>
     </div>

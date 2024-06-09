@@ -436,7 +436,7 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",data.orderid)
             onClick={async () => {
               // Handle return logic here
               console.log("================???????", data);
-              const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${data.kuchviId}`, {
+              const response=await axios.patch(`${server}/kuchvi/update-kuchvi/${data.kuchviId}`, {
                 return1:true, // Update the stock value in the request body
                 status:"Return Request"
                 });
@@ -480,7 +480,7 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",data.orderid)
               const delivered = data.delivered;
               const img = data.image;
               const kuchviId=data.kuchviId
-              const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${data.kuchviId}`, {
+              const response=await axios.patch(`${server}/kuchvi/update-kuchvi/${data.kuchviId}`, {
                 cancel:true, // Update the stock value in the request body
                 status:"cancel Request"
                 });

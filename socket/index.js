@@ -1,9 +1,9 @@
 const socketIO = require("socket.io");
-const http = require("http");
+const https = require("https");
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const server = http.createServer(app);
+const server = https.createServer(app);
 const io = socketIO(server);
 
 require("dotenv").config({
