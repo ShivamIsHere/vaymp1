@@ -12,6 +12,21 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
+// Protect user routes
+// app.get("/api/v2/user/protected", isAuthenticated, (req, res) => {
+//   res.send(`Hello, ${req.user.name}`);
+// });
+
+// // Protect seller routes
+// app.get("/api/v2/shop/protected", isSeller, (req, res) => {
+//   res.send(`Hello, ${req.seller.name}`);
+// });
+
+// // Protect admin routes
+// app.get("/api/v2/admin/protected", isAuthenticated, isAdmin('Admin'), (req, res) => {
+//   res.send(`Hello, Admin ${req.user.name}`);
+// });
+
 // app.use("/",express.static("uploads"));
 // app.use("/test", (req, res) => {
 //   res.send("Hello world!");
