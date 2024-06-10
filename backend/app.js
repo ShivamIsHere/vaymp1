@@ -4,35 +4,52 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const { isAuthenticated, isSeller, isAdmin } = require("./middleware/auth");
 
-app.use(cors({
-  origin: ['http://localhost:3000'],
-  credentials: true
-}));
+// CORS configuration
+const corsOptions = {
+  origin: ['http://localhost:3000'], // Allowed origin
+  credentials: true, // Allow credentials (cookies)
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: 'Content-Type,Authorization',
+};
 
-app.use(express.json());
+app.use(cors(corsOptions));
+
+// Ensure preflight requests are handled
+app.options('*', cors(corsOptions));
+
+// app.use(express.json());
 app.use(cookieParser());
-// app.use("/",express.static("uploads"));
-// app.use("/test", (req, res) => {
-//   res.send("Hello world!");
-// });
-app.use("/test", (req, res) => {
-  res.send("Hello world!");
-});
-
-// app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(express.json());
 
-// config
+app.get("/api/v2/user/protected", isAuthenticated, (req, res) => {
+  res.send(`Hello, ${req.user.name}`);
+});
+
+app.get("/api/v2/shop/protected", isSeller, (req, res) => {
+  res.send(`Hello, ${req.seller.name}`);
+});
+
+app.get("/api/v2/admin/protected", isAuthenticated, isAdmin('Admin'), (req, res) => {
+  res.send(`Hello, Admin ${req.user.name}`);
+});
+
+// Test route
+app.use("/test", (req, res) => {
+  res.send("Hello world!");
+});
+
+// Config
 if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config({
     path: "config/.env",
   });
 }
 
-// import routes
+// Import routes
 const user = require("./controller/user");
 const shop = require("./controller/shop");
 const product = require("./controller/product");
@@ -63,24 +80,7 @@ app.use("/api/v2/notification", notification);
 app.use("/api/v2/refund", refund);
 app.use("/api/v2/kuchvi", kuchvi);
 
-
-// it's for ErrorHandling
+// Error handling
 app.use(ErrorHandler);
-// app.use((err, req, res, next) => {
-//   console.error(err.stack); // Log the error stack for debugging purposes
 
-//   if (err.code === 'ENOTFOUND') {
-//     // Handle specific MongoDB connection error
-//  err.message = 'Connection error. Please check your internet or try again later.';
-//      err.statusCode = 500;
-//   }
-
-//   const statusCode = err.statusCode || 500;
-//   const message = statusCode === 500 ? 'Connection error. Please check your internet or try again later.' : err.message;
-//   res.status(statusCode).json({
-//     success: false,
-//     message: message,
-//     field: err.field || null,
-//   });
-// });
 module.exports = app;
