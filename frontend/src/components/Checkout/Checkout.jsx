@@ -12,6 +12,7 @@ const Checkout = () => {
   const { user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
   const [country, setCountry] = useState("");
+  const [phoneNumber,setPhoneNumber]=useState("");
   const [city, setCity] = useState("");
   const [userInfo, setUserInfo] = useState(false);
   const [address1, setAddress1] = useState("");
@@ -30,14 +31,14 @@ useEffect(()=>{
   }, []);
 
   const paymentSubmit = () => {
-   if(address1 === "" || address2 === "" || zipCode === null || country === "" || city === ""){
+   if(address1 === "" || zipCode === null || phoneNumber === "" || city === ""){
       toast.error("Please choose your delivery address!")
    } else{
     const shippingAddress = {
       address1,
       address2,
       zipCode,
-      country,
+      phoneNumber,
       city,
     };
 
@@ -117,8 +118,8 @@ useEffect(()=>{
         <div className="w-full 800px:w-[65%]">
           <ShippingInfo
             user={user}
-            country={country}
-            setCountry={setCountry}
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
             city={city}
             setCity={setCity}
             userInfo={userInfo}
@@ -155,8 +156,6 @@ useEffect(()=>{
 
 const ShippingInfo = ({
   user,
-  country,
-  setCountry,
   city,
   setCity,
   userInfo,
@@ -165,6 +164,8 @@ const ShippingInfo = ({
   setAddress1,
   address2,
   setAddress2,
+  phoneNumber,
+  setPhoneNumber,
   zipCode,
   setZipCode,
 }) => {
@@ -175,7 +176,7 @@ const ShippingInfo = ({
       setAddress1(item.address1);
       setAddress2(item.address2);
       setZipCode(item.zipCode);
-      setCountry(item.country);
+      setPhoneNumber(item.phoneNumber);
       setCity(item.city);
     };
   return (
@@ -193,13 +194,23 @@ const ShippingInfo = ({
               className={`${styles.input} !w-[95%]`}
             />
           </div>
-          <div className="w-[50%]">
+          {/* <div className="w-[50%]">
             <label className="block pb-2">Email Address</label>
             <input
               type="email"
               value={user && user.email}
               required
               className={`${styles.input}`}
+            />
+          </div> */}
+          <div className="w-[50%]">
+            <label className="block pb-2">City</label>
+            <input
+              type="city"
+              required
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              className={`${styles.input} !w-[95%]`}
             />
           </div>
         </div>
@@ -211,6 +222,8 @@ const ShippingInfo = ({
               type="number"
               required
               value={user && user.phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+
               className={`${styles.input} !w-[95%]`}
             />
           </div>
@@ -226,7 +239,7 @@ const ShippingInfo = ({
           </div>
         </div>
 
-        <div className="w-full flex pb-3">
+        {/* <div className="w-full flex pb-3">
           <div className="w-[50%]">
             <label className="block pb-2">Country</label>
             <select
@@ -263,9 +276,10 @@ const ShippingInfo = ({
                 ))}
             </select>
           </div>
-        </div>
+        </div> */}
 
         <div className="w-full flex pb-3">
+  
           <div className="w-[50%]">
             <label className="block pb-2">Address1</label>
             <input
@@ -277,7 +291,7 @@ const ShippingInfo = ({
             />
           </div>
           <div className="w-[50%]">
-            <label className="block pb-2">Address2</label>
+            <label className="block pb-2">Landmark</label>
             <input
               type="address"
               value={address2}

@@ -22,9 +22,6 @@ const userSchema = new mongoose.Schema({
   },
   addresses:[
     {
-      country: {
-        type: String,
-      },
       city:{
         type: String,
       },
@@ -33,12 +30,17 @@ const userSchema = new mongoose.Schema({
       },
       address2:{
         type: String,
+        default:"",
       },
       zipCode:{
         type: Number,
       },
+      phoneNumber:{
+        type:Number,
+      },
       addressType:{
-        type: String,
+        type: [String], // assuming addressType can be an array of strings
+      default: [],
       },
     }
   ],
