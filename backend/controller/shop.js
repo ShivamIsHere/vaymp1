@@ -9,6 +9,7 @@ const cloudinary = require("cloudinary");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHandler = require("../utils/ErrorHandler");
 const sendShopToken = require("../utils/shopToken");
+const crypto = require("crypto");
 
 // create shop
 router.post("/create-shop", catchAsyncErrors(async (req, res, next) => {
@@ -138,6 +139,106 @@ router.post(
     }
   })
 );
+
+
+// Route for handling shop forgot password
+router.post(
+  "/shop-forgot-password",
+  catchAsyncErrors(async (req, res, next) => {
+    const { email } = req.body;
+
+    // Find the shop by email
+    const shop = await Shop.findOne({ email });
+
+    // If shop not found, return error
+    if (!shop) {
+      return next(new ErrorHandler("Shop not found with this email", 404));
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(20).toString("hex");
+
+    // Hash and set resetPasswordToken and resetPasswordTime fields
+    shop.resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+    shop.resetPasswordTime = Date.now() + 30 * 60 * 1000; // 30 minutes
+
+    await shop.save({ validateBeforeSave: false });
+
+    // Create reset password URL
+    const resetUrl = `http://localhost:3000/shop-password/reset/${resetToken}`;
+
+    
+    // Send email with reset URL
+    const message = `Your password reset token is as follows:\n\n${resetUrl}\n\nIf you have not requested this email, please ignore it.`;
+
+    try {
+      await sendMail({
+        email: shop.email,
+        subject: "Shop Password Recovery",
+        message,
+      });
+
+      res.status(200).json({
+        success: true,
+        message: `Email sent to: ${shop.email}`,
+      });
+    } catch (error) {
+      shop.resetPasswordToken = undefined;
+      shop.resetPasswordTime = undefined;
+
+      await shop.save({ validateBeforeSave: false });
+
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+
+// Route for handling shop reset password
+router.put(
+  "/shop-password/reset/:token",
+  catchAsyncErrors(async (req, res, next) => {
+    // Hash URL token
+    const resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+
+    // Find the shop by reset token and check expiry
+    const shop = await Shop.findOne({
+      resetPasswordToken,
+      resetPasswordTime: { $gt: Date.now() },
+    });
+
+    // If shop not found or token expired, return error
+    if (!shop) {
+      return next(new ErrorHandler("Password reset token is invalid or has expired", 400));
+    }
+
+    // Check if passwords match
+    if (req.body.password !== req.body.confirmPassword) {
+      return next(new ErrorHandler("Passwords do not match", 400));
+    }
+
+    // Set new password
+    shop.password = req.body.password;
+
+    // Clear reset token fields
+    shop.resetPasswordToken = undefined;
+    shop.resetPasswordTime = undefined;
+
+    await shop.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successful",
+    });
+  })
+);
+
 
 // load shop
 router.get(

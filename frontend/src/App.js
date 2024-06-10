@@ -26,7 +26,9 @@ import {
   Address,
   AllRefundOrders,
   TrackOrderr,
-  AllCoupons
+  AllCoupons,
+  ForgotPassword,
+  PasswordReset
 } from "./routes/Routes.js";
 import {
   ShopDashboardPage,
@@ -73,6 +75,8 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import ShopsPage from "./pages/Shop/ShopsPage.jsx";
 import TrackOrder from "./components/Profile/TrackOrder.jsx";
+import ShopResetPassword from "./components/Shop/ShopResetPassword.jsx";
+import ShopForgotPassword from "./components/Shop/ShopForgotPassword.jsx";
 // import AllOrders from "./pages/AllOrders.jsx";
 
 const App = () => {
@@ -109,6 +113,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/password/reset/:token" element={<PasswordReset />} />
         <Route path="/sign-up" element={<SignupPage />} />
         <Route
           path="/activation/:activation_token"
@@ -124,7 +130,6 @@ const App = () => {
         <Route path="/events" element={<EventsPage />} />
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/shop" element={<ShopsPage />} />
-
 
           <Route 
           path="/search/:query" 
@@ -208,6 +213,14 @@ const App = () => {
         {/* shop Routes */}
         <Route path="/shop-create" element={<ShopCreatePage />} />
         <Route path="/shop-login" element={<ShopLoginPage />} />
+        <Route 
+              path="/shop-password/reset/:token"
+              element={<ShopResetPassword />}
+            />
+        <Route 
+              path="/shop-forgot-password"
+              element={<ShopForgotPassword />}
+            />
         <Route
           path="/shop/:id"
           element={

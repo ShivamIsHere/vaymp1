@@ -7,6 +7,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const sendToken = require("../utils/jwtToken");
+const crypto = require("crypto");
 const { isAuthenticated, isAdmin } = require("../middleware/auth");
 
 // create user
@@ -24,9 +25,9 @@ router.post("/create-user", async (req, res, next) => {
     });
 
     const user = {
-      name: name,
-      email: email,
-      password: password,
+      name,
+      email,
+      password,
       avatar: {
         public_id: myCloud.public_id,
         url: myCloud.secure_url,
@@ -35,7 +36,7 @@ router.post("/create-user", async (req, res, next) => {
 
     const activationToken = createActivationToken(user);
 
-    const activationUrl = `export const server ="http://localhost:3000/activation/${activationToken}`;
+    const activationUrl = `http://localhost:3000/activation/${activationToken}`;
 
     try {
       await sendMail({
@@ -84,9 +85,7 @@ router.post(
       if (user) {
         return next(new ErrorHandler("User already exists", 400));
       }
-      if (avatar==='') {
-        return next(new ErrorHandler("User already exists", 400));
-      }
+
       user = await User.create({
         name,
         email,
@@ -138,21 +137,16 @@ router.get(
   "/getuser",
   isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
-    // console.log("klmn",req.user)
-    try {
-      const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id);
 
-      if (!user) {
-        return next(new ErrorHandler("User doesn't exists", 400));
-      }
-
-      res.status(200).json({
-        success: true,
-        user,
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
+    if (!user) {
+      return next(new ErrorHandler("User doesn't exists", 400));
     }
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
   })
 );
 
@@ -160,20 +154,16 @@ router.get(
 router.get(
   "/logout",
   catchAsyncErrors(async (req, res, next) => {
-    try {
-      res.cookie("token", null, {
-        expires: new Date(Date.now()),
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-      });
-      res.status(201).json({
-        success: true,
-        message: "Log out successful!",
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
-    }
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+      sameSite: "None",
+      secure: true,
+    });
+    res.status(201).json({
+      success: true,
+      message: "Log out successful!",
+    });
   })
 );
 
@@ -182,36 +172,30 @@ router.put(
   "/update-user-info",
   isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
-    try {
-      const { email, password, phoneNumber, name } = req.body;
+    const { email, password, phoneNumber, name } = req.body;
 
-      const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select("+password");
 
-      if (!user) {
-        return next(new ErrorHandler("User not found", 400));
-      }
-
-      const isPasswordValid = await user.comparePassword(password);
-
-      if (!isPasswordValid) {
-        return next(
-          new ErrorHandler("Please provide the correct password", 400)
-        );
-      }
-
-      user.name = name;
-      user.email = email;
-      user.phoneNumber = phoneNumber;
-
-      await user.save();
-
-      res.status(201).json({
-        success: true,
-        user,
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
+    if (!user) {
+      return next(new ErrorHandler("User not found", 400));
     }
+
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid) {
+      return next(new ErrorHandler("Please provide the correct password", 400));
+    }
+
+    user.name = name;
+    user.email = email;
+    user.phoneNumber = phoneNumber;
+
+    await user.save();
+
+    res.status(201).json({
+      success: true,
+      user,
+    });
   })
 );
 
@@ -220,33 +204,29 @@ router.put(
   "/update-avatar",
   isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
-    try {
-      let existsUser = await User.findById(req.user.id);
-      if (req.body.avatar !== "") {
-        const imageId = existsUser.avatar.public_id;
+    let existsUser = await User.findById(req.user.id);
+    if (req.body.avatar !== "") {
+      const imageId = existsUser.avatar.public_id;
 
-        await cloudinary.v2.uploader.destroy(imageId);
+      await cloudinary.v2.uploader.destroy(imageId);
 
-        const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-          folder: "avatars",
-          width: 150,
-        });
-
-        existsUser.avatar = {
-          public_id: myCloud.public_id,
-          url: myCloud.secure_url,
-        };
-      }
-
-      await existsUser.save();
-
-      res.status(200).json({
-        success: true,
-        user: existsUser,
+      const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "avatars",
+        width: 150,
       });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
+
+      existsUser.avatar = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      };
     }
+
+    await existsUser.save();
+
+    res.status(200).json({
+      success: true,
+      user: existsUser,
+    });
   })
 );
 
@@ -255,38 +235,34 @@ router.put(
   "/update-user-addresses",
   isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
-    try {
-      const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user.id);
 
-      const sameTypeAddress = user.addresses.find(
-        (address) => address.addressType === req.body.addressType
+    const sameTypeAddress = user.addresses.find(
+      (address) => address.addressType === req.body.addressType
+    );
+    if (sameTypeAddress) {
+      return next(
+        new ErrorHandler(`${req.body.addressType} address already exists`)
       );
-      if (sameTypeAddress) {
-        return next(
-          new ErrorHandler(`${req.body.addressType} address already exists`)
-        );
-      }
-
-      const existsAddress = user.addresses.find(
-        (address) => address._id === req.body._id
-      );
-
-      if (existsAddress) {
-        Object.assign(existsAddress, req.body);
-      } else {
-        // add the new address to the array
-        user.addresses.push(req.body);
-      }
-
-      await user.save();
-
-      res.status(200).json({
-        success: true,
-        user,
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
     }
+
+    const existsAddress = user.addresses.find(
+      (address) => address._id === req.body._id
+    );
+
+    if (existsAddress) {
+      Object.assign(existsAddress, req.body);
+    } else {
+      // add the new address to the array
+      user.addresses.push(req.body);
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
   })
 );
 
@@ -295,23 +271,19 @@ router.delete(
   "/delete-user-address/:id",
   isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
-    try {
-      const userId = req.user._id;
-      const addressId = req.params.id;
+    const userId = req.user._id;
+    const addressId = req.params.id;
 
-      await User.updateOne(
-        {
-          _id: userId,
-        },
-        { $pull: { addresses: { _id: addressId } } }
-      );
+    await User.updateOne(
+      {
+        _id: userId,
+      },
+      { $pull: { addresses: { _id: addressId } } }
+    );
 
-      const user = await User.findById(userId);
+    const user = await User.findById(userId);
 
-      res.status(200).json({ success: true, user });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
-    }
+    res.status(200).json({ success: true, user });
   })
 );
 
@@ -320,50 +292,40 @@ router.put(
   "/update-user-password",
   isAuthenticated,
   catchAsyncErrors(async (req, res, next) => {
-    try {
-      const user = await User.findById(req.user.id).select("+password");
+    const user = await User.findById(req.user.id).select("+password");
 
-      const isPasswordMatched = await user.comparePassword(
-        req.body.oldPassword
-      );
+    const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
 
-      if (!isPasswordMatched) {
-        return next(new ErrorHandler("Old password is incorrect!", 400));
-      }
-
-      if (req.body.newPassword !== req.body.confirmPassword) {
-        return next(
-          new ErrorHandler("Password doesn't matched with each other!", 400)
-        );
-      }
-      user.password = req.body.newPassword;
-
-      await user.save();
-
-      res.status(200).json({
-        success: true,
-        message: "Password updated successfully!",
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
+    if (!isPasswordMatched) {
+      return next(new ErrorHandler("Old password is incorrect!", 400));
     }
+
+    if (req.body.newPassword !== req.body.confirmPassword) {
+      return next(
+        new ErrorHandler("Password doesn't matched with each other!", 400)
+      );
+    }
+    user.password = req.body.newPassword;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password updated successfully!",
+    });
   })
 );
 
-// find user infoormation with the userId
+// find user information with the userId
 router.get(
   "/user-info/:id",
   catchAsyncErrors(async (req, res, next) => {
-    try {
-      const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id);
 
-      res.status(201).json({
-        success: true,
-        user,
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
-    }
+    res.status(201).json({
+      success: true,
+      user,
+    });
   })
 );
 
@@ -373,17 +335,13 @@ router.get(
   isAuthenticated,
   isAdmin("Admin"),
   catchAsyncErrors(async (req, res, next) => {
-    try {
-      const users = await User.find().sort({
-        createdAt: -1,
-      });
-      res.status(201).json({
-        success: true,
-        users,
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message, 500));
-    }
+    const users = await User.find().sort({
+      createdAt: -1,
+    });
+    res.status(201).json({
+      success: true,
+      users,
+    });
   })
 );
 
@@ -393,29 +351,129 @@ router.delete(
   isAuthenticated,
   isAdmin("Admin"),
   catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return next(new ErrorHandler("User is not available with this id", 400));
+    }
+
+    const imageId = user.avatar.public_id;
+
+    await cloudinary.v2.uploader.destroy(imageId);
+
+    await User.findByIdAndDelete(req.params.id);
+
+    res.status(201).json({
+      success: true,
+      message: "User deleted successfully!",
+    });
+  })
+);
+
+// Forgot password
+
+router.post(
+  "/forgot-password",
+  catchAsyncErrors(async (req, res, next) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return next(new ErrorHandler("User not found with this email", 404));
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(20).toString("hex");
+
+    // Hash and set resetPasswordToken and resetPasswordTime fields
+    user.resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+    user.resetPasswordTime = Date.now() + 30 * 60 * 1000; // 30 minutes
+
+    // Log the generated reset token and expiration time
+    console.log("Generated reset token:", resetToken);
+    console.log("Expiration time:", new Date(user.resetPasswordTime).toLocaleString());
+
+    await user.save({ validateBeforeSave: false });
+
+    // Create reset password URL
+    const resetUrl = `http://localhost:3000/password/reset/${resetToken}`;
+
+    // Send email
+    const message = `Your password reset token is as follows:\n\n${resetUrl}\n\nIf you have not requested this email, please ignore it.`;
+
     try {
-      const user = await User.findById(req.params.id);
+      await sendMail({
+        email: user.email,
+        subject: "Password Recovery",
+        message,
+      });
 
-      if (!user) {
-        return next(
-          new ErrorHandler("User is not available with this id", 400)
-        );
-      }
-
-      const imageId = user.avatar.public_id;
-
-      await cloudinary.v2.uploader.destroy(imageId);
-
-      await User.findByIdAndDelete(req.params.id);
-
-      res.status(201).json({
+      res.status(200).json({
         success: true,
-        message: "User deleted successfully!",
+        message: `Email sent to: ${user.email}`,
       });
     } catch (error) {
+      user.resetPasswordToken = undefined;
+      user.resetPasswordTime = undefined;
+
+      await user.save({ validateBeforeSave: false });
+
       return next(new ErrorHandler(error.message, 500));
     }
   })
 );
+
+// Reset Password API
+router.put(
+  "/password/reset/:token",
+  catchAsyncErrors(async (req, res, next) => {
+    // Hash URL token
+    const resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(req.params.token)
+      .digest("hex");
+
+    console.log('Token received in URL:', req.params.token); // Debugging statement
+    console.log('Hashed token for DB lookup:', resetPasswordToken); // Debugging statement
+
+    const user = await User.findOne({
+      resetPasswordToken,
+      resetPasswordTime: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      console.log('No user found or token expired'); // Debugging statement
+      return next(new ErrorHandler("Password reset token is invalid or has expired", 400));
+    }
+
+    if (req.body.password !== req.body.confirmPassword) {
+      console.log('Passwords do not match'); // Debugging statement
+      return next(new ErrorHandler("Password does not match", 400));
+    }
+
+    // Set new password
+    user.password = req.body.password;
+
+    // Clear reset token fields
+    user.resetPasswordToken = undefined;
+    user.resetPasswordTime = undefined;
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successful",
+    });
+  })
+);
+
+
+
+
+
+
 
 module.exports = router;

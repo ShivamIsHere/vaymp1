@@ -1,4 +1,6 @@
 import LoginPage from "../pages/Login";
+import ForgotPassword from "../pages/ForgotPassword";
+import PasswordReset from "../pages/PasswordReset";
 import SignupPage from "../pages/SignupPage";
 import ActivationPage from "../pages/ActivationPage";
 import HomePage from "../pages/HomePage";
@@ -23,9 +25,12 @@ import AllOrders from "../pages/AllOrders.jsx";
 import Address from "../pages/Address.jsx";
 import AllRefundOrders from "../pages/AllRefundOrders.jsx";
 import TrackOrderr from "../pages/TrackOrderr.jsx";
-
+import ShopForgotPassword from "../components/Shop/ShopForgotPassword.jsx";
+import ShopResetPassword from "../components/Shop/ShopResetPassword.jsx";
 export { 
     LoginPage,
+    ForgotPassword,
+    PasswordReset,
     SignupPage,
     ActivationPage,
     HomePage,
@@ -50,5 +55,6 @@ export {
     UserInbox,
     AllOrders,
     AllCoupons,
-
+    ShopForgotPassword,
+    ShopResetPassword
 };
