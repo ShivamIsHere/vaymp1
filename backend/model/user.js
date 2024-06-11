@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
         type:Number,
       },
       addressType:{
-        type: [String], // assuming addressType can be an array of strings
+        type: [String],
       default: [],
       },
     }
