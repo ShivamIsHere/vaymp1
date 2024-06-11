@@ -24,16 +24,20 @@ const Checkout = () => {
   const [discountPrice, setDiscountPrice] = useState(null);
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(null);
   const navigate = useNavigate();
-  useEffect(()=>{
-    console.log("checkout cart data",cart)
-  },[cart])
-
+  useEffect(() => {
+    console.log("checkout cart data", cart);
+  }, [cart]);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const paymentSubmit = async () => {
-    if (address1 === "" || zipCode === null || phoneNumber === "" || city === "") {
+    if (
+      address1 === "" ||
+      zipCode === null ||
+      phoneNumber === "" ||
+      city === ""
+    ) {
       toast.error("Please choose your delivery address!");
     } else {
       const shippingAddress = {
@@ -41,7 +45,7 @@ const Checkout = () => {
         address2,
         zipCode,
         phoneNumber,
-        city,
+        city
       };
 
       const orderData = {
@@ -51,13 +55,25 @@ const Checkout = () => {
         shipping,
         discountPrice,
         shippingAddress,
-        user,
+        user
       };
 
       if (selectedAddressIndex === null) {
-        dispatch(updatUserAddress(phoneNumber, city, address1, address2, zipCode, "Other")); // Dispatch action
+        dispatch(
+          updatUserAddress(
+            phoneNumber,
+            city,
+            address1,
+            address2,
+            zipCode,
+            "Other"
+          )
+        ); // Dispatch action
         localStorage.setItem("latestOrder", JSON.stringify(orderData));
-          }
+      }
+      else{
+        localStorage.setItem("latestOrder", JSON.stringify(orderData));
+      }
 
       navigate("/payment");
     }
@@ -172,7 +188,7 @@ const ShippingInfo = ({
   zipCode,
   setZipCode,
   selectedAddressIndex,
-  setSelectedAddressIndex,
+  setSelectedAddressIndex
 }) => {
   const handleSavedAddressClick = (index, item) => {
     setSelectedAddressIndex(index);
@@ -285,20 +301,29 @@ const ShippingInfo = ({
           </div>
         </div> */}
 
-        <h5 className="text-[18px] font-[500] pb-2">Choose From Saved Address</h5>
-        {user &&
-          user.addresses.map((item, index) => (
-            <div className="w-full flex mt-1" key={index}>
-              <input
-                type="checkbox"
-                className="mr-3"
-                checked={selectedAddressIndex === index}
-                onChange={() => handleSavedAddressClick(index, item)}
-              />
-              <h2>{`${item.addressType} ${item.address1} ${item.address2}`}</h2>
-            </div>
-          ))}
-
+        <button
+          className="text-[18px] cursor-pointer inline-block bg-gradient-to-r from-purple-400 to-blue-500 text-white px-4 py-2 rounded-md shadow-lg hover:from-blue-500 hover:to-purple-400 transition duration-300"
+          onClick={() => setUserInfo(!userInfo)}
+        >
+          Choose From saved address
+        </button>
+        {userInfo && (
+          <div>
+            {user &&
+              user.addresses.map((item, index) => (
+                <div className="w-full flex mt-1" key={index}>
+                  <input
+                    type="checkbox"
+                    className="mr-3"
+                    value={item.addressType}
+                    checked={selectedAddressIndex === index}
+                    onChange={() => handleSavedAddressClick(index, item)}
+                  />
+                  <h2>{`${item.addressType} ${item.address1} ${item.address2}`}</h2>
+                </div>
+              ))}
+          </div>
+        )}
         <br />
       </form>
     </div>
@@ -312,7 +337,7 @@ const CartData = ({
   subTotalPrice,
   couponCode,
   setCouponCode,
-  discountPercentenge,
+  discountPercentenge
 }) => {
   return (
     <div className="w-full bg-white rounded-md p-5">
@@ -332,10 +357,7 @@ const CartData = ({
             onChange={(e) => setCouponCode(e.target.value)}
             className={`${styles.input} !w-[60%]`}
           />
-          <button
-            type="submit"
-            className={`${styles.button} !w-[30%] ml-3`}
-          >
+          <button type="submit" className={`${styles.button} !w-[30%] ml-3`}>
             Apply
           </button>
         </div>
