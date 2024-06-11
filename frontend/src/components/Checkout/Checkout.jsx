@@ -24,13 +24,10 @@ const Checkout = () => {
   const [discountPrice, setDiscountPrice] = useState(null);
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(null);
   const navigate = useNavigate();
-<<<<<<< HEAD
   useEffect(()=>{
     console.log("checkout cart data",cart)
   },[cart])
-=======
 
->>>>>>> d2f1be96eda3f7ffe5cfb0735c9336d2ce3be8a1
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -60,7 +57,7 @@ const Checkout = () => {
       if (selectedAddressIndex === null) {
         dispatch(updatUserAddress(phoneNumber, city, address1, address2, zipCode, "Other")); // Dispatch action
         localStorage.setItem("latestOrder", JSON.stringify(orderData));
-            }
+          }
 
       navigate("/payment");
     }
