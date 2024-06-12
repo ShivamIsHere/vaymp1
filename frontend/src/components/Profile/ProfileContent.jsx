@@ -624,6 +624,7 @@ const ChangePassword = () => {
 
 const Address = () => {
   const [open, setOpen] = useState(false);
+  const [name, setName] = useState(""); // New state for name
   const [phoneNumber, setPhoneNumber] = useState("");
   const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState("");
@@ -642,11 +643,12 @@ const Address = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (addressType === "" || phoneNumber === "" || city === "") {
+    if (name===""||addressType === "" || phoneNumber === "" || city === "") {
       toast.error("Please fill all the fields!");
-    }  else {
+    } else {
       dispatch(
         updatUserAddress(
+          name,
           phoneNumber,
           city,
           address1,
@@ -654,8 +656,9 @@ const Address = () => {
           zipCode,
           addressType
         )
-      );      
+      );
       setOpen(false);
+      setName(""); // Reset name state
       setPhoneNumber("");
       setCity("");
       setAddress1("");
@@ -671,7 +674,9 @@ const Address = () => {
   };
 
   return (
-    <div className="w-full px-5">
+<>
+{/* <Header/>     */}
+<div className="w-full px-5">
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-25 z-50">
           <div className="bg-white w-full max-w-xl p-4 md:p-8 rounded-lg shadow-lg relative overflow-y-scroll">
@@ -685,6 +690,16 @@ const Address = () => {
             </div>
             <h1 className="text-center text-2xl font-bold my-4">Add New Address</h1>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block pb-2">Name</label>
+                <input
+                  type="text"
+                  className="border h-[40px] rounded-[5px] w-full"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
               <div>
                 <label className="block pb-2">Address 1</label>
                 <input
@@ -788,6 +803,7 @@ const Address = () => {
               <p>{item.phoneNumber}</p>
               <p>{item.city}</p>
               <p>{item.zipCode}</p>
+              <p>{item.name}</p> {/* Display the name */}
             </div>
           </div>
         </div>
@@ -798,7 +814,8 @@ const Address = () => {
         </h5>
       )}
     </div>
-  );
+{/* <Footer/> */}
+</>  );
 };
 
 

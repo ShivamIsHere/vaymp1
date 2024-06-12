@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../styles/styles";
-// import { Country, State } from "country-state-city";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -12,7 +11,7 @@ const Checkout = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
-  // const [country, setCountry] = useState("");
+  const [username, setUsername] = useState(""); // Added state for username
   const [phoneNumber, setPhoneNumber] = useState("");
   const [city, setCity] = useState("");
   const [userInfo, setUserInfo] = useState(false);
@@ -24,15 +23,18 @@ const Checkout = () => {
   const [discountPrice, setDiscountPrice] = useState(null);
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     console.log("checkout cart data", cart);
   }, [cart]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const paymentSubmit = async () => {
     if (
+      username===""||
       address1 === "" ||
       zipCode === null ||
       phoneNumber === "" ||
@@ -41,6 +43,7 @@ const Checkout = () => {
       toast.error("Please choose your delivery address!");
     } else {
       const shippingAddress = {
+        username,
         address1,
         address2,
         zipCode,
@@ -55,12 +58,13 @@ const Checkout = () => {
         shipping,
         discountPrice,
         shippingAddress,
-        user
+        user// Updated to use the new username
       };
 
       if (selectedAddressIndex === null) {
         dispatch(
           updatUserAddress(
+            username,
             phoneNumber,
             city,
             address1,
@@ -70,8 +74,7 @@ const Checkout = () => {
           )
         ); // Dispatch action
         localStorage.setItem("latestOrder", JSON.stringify(orderData));
-      }
-      else{
+      } else {
         localStorage.setItem("latestOrder", JSON.stringify(orderData));
       }
 
@@ -135,6 +138,8 @@ const Checkout = () => {
         <div className="w-full 800px:w-[65%]">
           <ShippingInfo
             user={user}
+            username={username} // Pass username state
+            setUsername={setUsername} // Pass setUsername function
             phoneNumber={phoneNumber}
             setPhoneNumber={setPhoneNumber}
             city={city}
@@ -175,6 +180,8 @@ const Checkout = () => {
 
 const ShippingInfo = ({
   user,
+  username,
+  setUsername,
   city,
   setCity,
   userInfo,
@@ -192,6 +199,7 @@ const ShippingInfo = ({
 }) => {
   const handleSavedAddressClick = (index, item) => {
     setSelectedAddressIndex(index);
+    setUsername(item.userName)
     setAddress1(item.address1);
     setAddress2(item.address2);
     setZipCode(item.zipCode);
@@ -209,7 +217,8 @@ const ShippingInfo = ({
             <label className="block pb-2">Full Name</label>
             <input
               type="text"
-              value={user && user.name}
+              value={username} // Use the username state
+              onChange={(e) => setUsername(e.target.value)} // Update username state on change
               required
               className={`${styles.input} !w-[95%]`}
             />
@@ -272,35 +281,7 @@ const ShippingInfo = ({
           </div>
         </div>
 
-        {/* <div className="w-full flex pb-3">
-          <div className="w-[50%]">
-            <label className="block pb-2">Country</label>
-            <select
-              className={`${styles.input} !w-[95%]`}
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-            >
-              <option value="">Select Country</option>
-              {Country.getAllCountries().map((item) => (
-                <option key={item.isoCode} value={item.isoCode}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="w-[50%]">
-            <label className="block pb-2">State</label>
-            <select className={`${styles.input} !w-[95%]`}>
-              <option value="">Select State</option>
-              {State.getStatesOfCountry(country).map((item) => (
-                <option key={item.isoCode} value={item.isoCode}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div> */}
-
+        <br />
         <button
           className="text-[18px] cursor-pointer inline-block bg-gradient-to-r from-purple-400 to-blue-500 text-white px-4 py-2 rounded-md shadow-lg hover:from-blue-500 hover:to-purple-400 transition duration-300"
           onClick={() => setUserInfo(!userInfo)}
@@ -324,7 +305,6 @@ const ShippingInfo = ({
               ))}
           </div>
         )}
-        <br />
       </form>
     </div>
   );
@@ -381,5 +361,4 @@ const CartData = ({
     </div>
   );
 };
-
 export default Checkout;

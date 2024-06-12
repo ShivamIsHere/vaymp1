@@ -81,7 +81,7 @@ export const updateUserInformation =
 
 // update user address
 export const updatUserAddress =
-  (phoneNumber, city, address1, address2, zipCode, addressType) =>
+  (userName,phoneNumber, city, address1, address2, zipCode, addressType) =>
   async (dispatch) => {
     try {
       dispatch({
@@ -90,7 +90,7 @@ export const updatUserAddress =
 
       const { data } = await axios.put(
         `${server}/user/update-user-addresses`,
-        {
+        {userName,
           phoneNumber,
           city,
           address1,
