@@ -11,7 +11,7 @@ const Checkout = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
-  const [username, setUsername] = useState(""); // Added state for username
+  const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [city, setCity] = useState("");
   const [userInfo, setUserInfo] = useState(false);
@@ -34,7 +34,7 @@ const Checkout = () => {
 
   const paymentSubmit = async () => {
     if (
-      username===""||
+      username === "" ||
       address1 === "" ||
       zipCode === null ||
       phoneNumber === "" ||
@@ -49,7 +49,7 @@ const Checkout = () => {
         zipCode,
         phoneNumber,
         city,
-        isLastUsed:true
+        isLastUsed: true,
       };
 
       const orderData = {
@@ -59,28 +59,37 @@ const Checkout = () => {
         shipping,
         discountPrice,
         shippingAddress,
-        user// Updated to use the new username
+        user,
       };
 
       if (selectedAddressIndex === null) {
         dispatch(
           updatUserAddress(
-            username,
-            phoneNumber,
-            city,
-            address1,
-            address2,
-            zipCode,
-            "Other",
-            true
-
+            {
+              username,
+              phoneNumber,
+              city,
+              address1,
+              address2,
+              zipCode,
+              addressType: "Home",
+              isLastUsed: true
+            }
           )
         ); // Dispatch action
-        localStorage.setItem("latestOrder", JSON.stringify(orderData));
       } else {
-        localStorage.setItem("latestOrder", JSON.stringify(orderData));
+        const selectedAddress = user.addresses[selectedAddressIndex];
+        dispatch(
+          updatUserAddress(
+            {
+              ...selectedAddress,
+              isLastUsed: true
+            }
+          )
+        );
       }
 
+      localStorage.setItem("latestOrder", JSON.stringify(orderData));
       navigate("/payment");
     }
   };
@@ -103,8 +112,7 @@ const Checkout = () => {
       const shopId = res.data.couponCode?.shopId;
       const couponCodeValue = res.data.couponCode?.value;
       if (res.data.couponCode !== null) {
-        const isCouponValid =
-          cart && cart.filter((item) => item.shopId === shopId);
+        const isCouponValid = cart && cart.filter((item) => item.shopId === shopId);
 
         if (isCouponValid.length === 0) {
           toast.error("Coupon code is not valid for this shop");
@@ -119,8 +127,8 @@ const Checkout = () => {
           setCouponCodeData(res.data.couponCode);
           setCouponCode("");
         }
-      }
-      if (res.data.couponCode === null) {
+      } 
+      if (res.data.couponCode === null) {       
         toast.error("Coupon code doesn't exist!");
         setCouponCode("");
       }
@@ -141,8 +149,8 @@ const Checkout = () => {
         <div className="w-full 800px:w-[65%]">
           <ShippingInfo
             user={user}
-            username={username} // Pass username state
-            setUsername={setUsername} // Pass setUsername function
+            username={username}
+            setUsername={setUsername}
             phoneNumber={phoneNumber}
             setPhoneNumber={setPhoneNumber}
             city={city}
@@ -202,7 +210,7 @@ const ShippingInfo = ({
 }) => {
   const handleSavedAddressClick = (index, item) => {
     setSelectedAddressIndex(index);
-    setUsername(item.userName)
+    setUsername(item.userName);
     setAddress1(item.address1);
     setAddress2(item.address2);
     setZipCode(item.zipCode);
@@ -220,8 +228,8 @@ const ShippingInfo = ({
             <label className="block pb-2">Full Name</label>
             <input
               type="text"
-              value={username} // Use the username state
-              onChange={(e) => setUsername(e.target.value)} // Update username state on change
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
               className={`${styles.input} !w-[95%]`}
             />
@@ -253,17 +261,17 @@ const ShippingInfo = ({
             <label className="block pb-2">Zip Code</label>
             <input
               type="number"
+              required
               value={zipCode}
               onChange={(e) => setZipCode(e.target.value)}
-              required
-              className={`${styles.input}`}
+              className={`${styles.input} !w-[95%]`}
             />
           </div>
         </div>
 
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
-            <label className="block pb-2">Address1</label>
+            <label className="block pb-2">Address 1</label>
             <input
               type="address"
               required
@@ -272,11 +280,11 @@ const ShippingInfo = ({
               className={`${styles.input} !w-[95%]`}
             />
           </div>
+
           <div className="w-[50%]">
             <label className="block pb-2">Landmark</label>
             <input
               type="address"
-              required
               value={address2}
               onChange={(e) => setAddress2(e.target.value)}
               className={`${styles.input} !w-[95%]`}
@@ -284,7 +292,8 @@ const ShippingInfo = ({
           </div>
         </div>
 
-        <br />
+        
+      <br />
         <button
           className="text-[18px] cursor-pointer inline-block bg-gradient-to-r from-purple-400 to-blue-500 text-white px-4 py-2 rounded-md shadow-lg hover:from-blue-500 hover:to-purple-400 transition duration-300"
           onClick={() => setUserInfo(!userInfo)}

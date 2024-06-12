@@ -81,7 +81,7 @@ export const updateUserInformation =
 
 // update user address
 export const updatUserAddress =
-  (userName,phoneNumber, city, address1, address2, zipCode, addressType,isLastUsed) =>
+  ({ userName, phoneNumber, city, address1, address2, zipCode, addressType, isLastUsed, _id }) =>
   async (dispatch) => {
     try {
       dispatch({
@@ -90,7 +90,8 @@ export const updatUserAddress =
 
       const { data } = await axios.put(
         `${server}/user/update-user-addresses`,
-        {userName,
+        {
+          userName,
           phoneNumber,
           city,
           address1,
@@ -98,6 +99,7 @@ export const updatUserAddress =
           zipCode,
           addressType,
           isLastUsed,
+          _id, // pass _id for existing address
         },
         { withCredentials: true }
       );
@@ -105,7 +107,7 @@ export const updatUserAddress =
       dispatch({
         type: "updateUserAddressSuccess",
         payload: {
-          successMessage: "User address updated succesfully!",
+          successMessage: "User address updated successfully!",
           user: data.user,
         },
       });
@@ -116,6 +118,7 @@ export const updatUserAddress =
       });
     }
   };
+
 
 // delete user address
 export const deleteUserAddress = (id) => async (dispatch) => {

@@ -55,13 +55,16 @@ const Address = () => {
     } else {
       dispatch(
         updatUserAddress(
-          name,
-          phoneNumber,
-          city,
-          address1,
-          address2,
-          zipCode,
-          addressType
+          {
+            name,
+            phoneNumber,
+            city,
+            address1,
+            address2,
+            zipCode,
+            addressType: "Home",
+            isLastUsed: true
+          }
         )
       );
       
