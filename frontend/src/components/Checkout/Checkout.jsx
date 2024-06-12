@@ -48,7 +48,8 @@ const Checkout = () => {
         address2,
         zipCode,
         phoneNumber,
-        city
+        city,
+        isLastUsed:true
       };
 
       const orderData = {
@@ -70,7 +71,9 @@ const Checkout = () => {
             address1,
             address2,
             zipCode,
-            "Other"
+            "Other",
+            true
+
           )
         ); // Dispatch action
         localStorage.setItem("latestOrder", JSON.stringify(orderData));

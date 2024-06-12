@@ -45,6 +45,10 @@ const userSchema = new mongoose.Schema({
         type: [String],
       default: [],
       },
+      isLastUsed: {
+        type: Boolean,
+        default: false,
+      },    
     }
   ],
   role:{

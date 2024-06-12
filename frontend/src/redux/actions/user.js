@@ -81,7 +81,7 @@ export const updateUserInformation =
 
 // update user address
 export const updatUserAddress =
-  (userName,phoneNumber, city, address1, address2, zipCode, addressType) =>
+  (userName,phoneNumber, city, address1, address2, zipCode, addressType,isLastUsed) =>
   async (dispatch) => {
     try {
       dispatch({
@@ -97,6 +97,7 @@ export const updatUserAddress =
           address2,
           zipCode,
           addressType,
+          isLastUsed,
         },
         { withCredentials: true }
       );
