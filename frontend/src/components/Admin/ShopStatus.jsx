@@ -4,28 +4,27 @@ import React, { useEffect } from "react";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getNewShopStatus } from "../../redux/actions/sellers";
+import { getNewStockshopIsActive } from "../../redux/actions/sellers";
 import Loader from "../Layout/Loader";
 import axios from "axios";
 import { server } from "../../server";
 import { useState } from "react";
 
-const NewStock = () => {
+const ShopStatus = () => {
     const [shops, setShops] = useState([]);
     const [isLoading, setIsLoading] = useState(true);  
     useEffect(() => {
         axios
-          .get(`${server}/notification/admin-new-stock-notifications`, { withCredentials: true })
+          .get(`${server}/shopIsActive/admin-shopIsActives`, { withCredentials: true })
           .then((res) => {
-            setShops(res.data.notifications);
+            setShops(res.data.shopIsActives);
             setIsLoading(false);
           })
           .catch((error) => {
-            console.error("Error fetching new stock notifications:", error);
+            console.error("Error fetching new stock shopIsActives:", error);
             setIsLoading(false);
           });
       }, []);
-   
 
   const columns = [
     { field: "images", headerName: "Image", minWidth: 150, minHeight: 300, flex: 0.7,
@@ -33,7 +32,7 @@ const NewStock = () => {
         <img src={params.value} alt="Shop Image" style={{ width: 100, height: 100 }} />
       ),
     },
-    { field: "shopId", headerName: "Shop Id", minWidth: 250, flex: 0.7 },
+    { field: "shopId", headerName: "Shop Id", minWidth: 150, flex: 0.7 },
     {
       field: "name",
       headerName: "Name",
@@ -41,15 +40,8 @@ const NewStock = () => {
       flex: 1.4,
     },
     {
-        field: "phoneNumber",
-        headerName: "Phone Number",
-        type: "string", // Change type to "string"
-        minWidth: 180,
-        flex: 0.8,
-      },
-    {
-        field: "newStock",
-        headerName: "New Stock",
+        field: "shopStatus",
+        headerName: "Shop Status",
         type: "boolean",
         minWidth: 80,
         flex: 1.4,
@@ -67,14 +59,14 @@ const NewStock = () => {
       field: "email",
       headerName: "Email",
       type: "text",
-      minWidth: 250,
+      minWidth: 130,
       flex: 0.7,
     },
     {
       field: "address",
       headerName: "Seller Address",
       type: "text",
-      minWidth: 500,
+      minWidth: 130,
       flex: 0.7,
     },
 
@@ -85,9 +77,9 @@ const NewStock = () => {
       minWidth: 130,
       flex: 0.8,
     },
-    
 
-    
+
+
     {
         field: "Preview Shop",
         flex: 1,
@@ -98,7 +90,7 @@ const NewStock = () => {
         renderCell: (params) => {
           return (
             <>
-            <Link to={`/shop/preview/${params.row.shopId}`}>
+            <Link to={`/shop/preview/${params.id}`}>
             <Button>
                 <AiOutlineEye size={20} />
               </Button>
@@ -107,10 +99,11 @@ const NewStock = () => {
           );
         },
       },
-    
+
   ];
 
   const row = [];
+
   shops &&
     shops.forEach((item, index) => {
       row.push({
@@ -118,8 +111,7 @@ const NewStock = () => {
         images: item.images,
         shopId: item.shopId, // Renaming shopId to id
         name: item.name,
-        phoneNumber: item.phoneNumber,
-        newStock: item.notification, // Assuming notification indicates new stock status
+        newStock: item.shopIsActive, // Assuming shopIsActive indicates new stock status
         email: item.email,
         address: item.address,
         joinedAt: item.joinedAt.slice(0, 10),
@@ -141,4 +133,4 @@ const NewStock = () => {
   );
 };
 
-export default NewStock;
+export default ShopStatus;

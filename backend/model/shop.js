@@ -82,6 +82,10 @@ const shopSchema = new mongoose.Schema({
   type: Boolean,
   default:true,
 },
+shopIsActive: { 
+  type: Boolean,
+  default:false,
+},
 
 });
 

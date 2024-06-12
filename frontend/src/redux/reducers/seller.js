@@ -3,6 +3,8 @@ import { createReducer } from "@reduxjs/toolkit";
 const initialState = {
   isLoading: true,
   newStockNotification: false, // Add this field
+  newShopStatus:true,
+  
 
 };
 
@@ -56,6 +58,30 @@ export const sellerReducer = createReducer(initialState, {
     state.newStockNotification = action.payload.newStock; // Access the correct property
   },
   updateNewStockNotificationFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+
+
+  getNewShopStatusRequest: (state) => {
+    state.isLoading = true;
+  },
+  getNewShopStatusSuccess: (state, action) => {
+    state.isLoading = false;
+    state.products = action.payload;
+  },
+  getNewShopStatusFailed: (state, action) => {
+    state.isLoading = false;
+    state.error = action.payload;
+  },
+  updateShopStatusRequest: (state) => {
+    state.isLoading = true;
+  },
+  updateShopStatusSuccess: (state, action) => {
+    state.isLoading = false;
+    state.newShopStatus = action.payload.shopStatus; // Access the correct property
+  },
+  updateShopStatusFailed: (state, action) => {
     state.isLoading = false;
     state.error = action.payload;
   },

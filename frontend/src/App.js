@@ -57,7 +57,8 @@ import {
   AdminDashboardRefund,
   AdminDashboardAllReturn,
   AdminDashboardUndeliveredItems,
-  AdminDashboardStockNotification
+  AdminDashboardStockNotification,
+  AdminDashboardShopIsActive
 } from "./routes/AdminRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -361,6 +362,14 @@ const App = () => {
           element={
             <ProtectedAdminRoute>
               <AdminDashboardStockNotification />
+            </ProtectedAdminRoute>
+          }
+          />
+          <Route
+          path="/dashboard-shop-not-active"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardShopIsActive />
             </ProtectedAdminRoute>
           }
           />

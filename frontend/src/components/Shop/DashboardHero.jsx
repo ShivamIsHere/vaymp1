@@ -9,6 +9,7 @@ import { getAllOrdersOfShop } from "../../redux/actions/order";
 
 import { getAllProductsShop } from "../../redux/actions/product";
 import {  updateNewStockNotification } from "../../redux/actions/sellers";
+import {  updateShopStatus } from "../../redux/actions/sellers";
 
 import { Button } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
@@ -27,8 +28,9 @@ const DashboardHero = () => {
   // console.log("Id",products)
 
   const [showNewStock, setShowNewStock] = useState(seller.notification); // Initialize showNewStock with false
+  const [showShopStatus, setShowShopStatus] = useState(seller.shopIsActive); // Initialize showNewStock with false
 
-  // Ensure that shopId and newStockValue are correctly passed to updateNewStockNotification
+  // Ensure that shopId and newShopStatus are correctly passed to updateNewStockNotification
   const handleStockNotification = async () => {
     try {
       const newStockValue = !showNewStock; // Toggle the new stock value
@@ -42,6 +44,28 @@ const DashboardHero = () => {
     }
   };
   
+
+   // Ensure that shopId and newStockValue are correctly passed to updateNewStockNotification
+   const handleShopStatus = async () => {
+    try {
+      const newShopStatus = !showShopStatus; // Toggle the new stock value
+      setShowShopStatus(newShopStatus); // Update the local state if the backend update is successful
+      window.location.reload();
+      // Make a request to update the new stock notification in the backend
+      const response = await dispatch(updateShopStatus(seller._id, newShopStatus));
+
+    } catch (error) {
+      console.error(`Error updating new stock notification:`, error);
+    }
+  };
+
+
+
+
+  useEffect(() => {
+    dispatch(getAllOrdersOfShop(id));
+    dispatch(getAllProductsShop(id));
+  }, [dispatch, id]); // Include id in the dependency array
   
 
 
@@ -120,6 +144,14 @@ const DashboardHero = () => {
         onClick={handleStockNotification}
       >
         {showNewStock ? "No New Stock" : "New Stock"}
+      </button>
+      <button
+        className={`py-2 px-4 rounded ${
+          showShopStatus ? "bg-blue-500 text-white" : "bg-red-500 text-white"
+        }`}
+        onClick={handleShopStatus}
+      >
+        {showShopStatus ? "Shop Open" : "Shop Closed"}
       </button>
       <br></br>
       <div className="w-full block 800px:flex items-center justify-between">

@@ -68,3 +68,51 @@ export const getNewStockNotification = (shopId, newStock) => async (dispatch) =>
     });
   }
 };
+
+
+
+
+
+export const updateShopStatus = (shopId, shopStatus) => async (dispatch) => {
+  try {
+    dispatch({ type: "updateShopStatusRequest" });
+
+    const response = await axios.patch(
+      `${server}/shopIsActive/shopIsActive`,
+      { shopId, shopStatus }, // Send shopId and shopStatus in the request body
+      { withCredentials: true }
+    );
+
+    dispatch({
+      type: "updateShopStatusSuccess",
+      payload: { shopStatus },
+    });
+  } catch (error) {
+    dispatch({
+      type: "updateShopStatusFailed",
+      payload: error.response.data.message,
+    });
+  }
+};
+
+
+export const getNewShopStatus = (shopId, shopStatus) => async (dispatch) => {
+  try {
+    dispatch({
+      type: "getNewShopStatusRequest"
+    });
+
+    const { data } = await axios.get(
+      `${server}/shopIsActive/admin-shopIsActives`
+    );
+    dispatch({
+      type: "getNewShopStatusSuccess",
+      payload: data.products
+    });
+  } catch (error) {
+    dispatch({
+      type: "getNewShopStatusFailed",
+      payload: error.response.data.message
+    });
+  }
+};

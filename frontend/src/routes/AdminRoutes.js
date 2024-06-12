@@ -10,7 +10,7 @@ import AdminDashboardAllOrders from "../pages/AdminDashboardAllOrders";
 import AdminDashboardRefund from "../pages/AdminDashboardRefund";
 import AdminDashboardAllReturn from "../pages/AdminDashboardAllReturn";
 import AdminDashboardUndeliveredItems from "../pages/AdminDashboardUndeliveredItems";
-
+import AdminDashboardShopIsActive from "../pages/AdminDashboardShopIsActive";
 
 export {
   AdminDashboardPage,
@@ -23,6 +23,7 @@ export {
   AdminDashboardAllOrders,
   AdminDashboardRefund,
   AdminDashboardAllReturn,
+  AdminDashboardShopIsActive,
   AdminDashboardStockNotification,
   AdminDashboardUndeliveredItems,
 };

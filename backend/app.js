@@ -62,6 +62,7 @@ const message = require("./controller/message");
 const withdraw = require("./controller/withdraw");
 const admin = require("./controller/admin");
 const notification = require("./controller/notification");
+const shopIsActive = require("./controller/shopIsActive");
 const refund = require("./controller/refund");
 const kuchvi = require("./controller/kuchvi");
 
@@ -76,6 +77,7 @@ app.use("/api/v2/coupon", coupon);
 app.use("/api/v2/payment", payment);
 app.use("/api/v2/withdraw", withdraw);
 app.use("/api/v2/admin", admin);
+app.use("/api/v2/shopIsActive", shopIsActive);
 app.use("/api/v2/notification", notification);
 app.use("/api/v2/refund", refund);
 app.use("/api/v2/kuchvi", kuchvi);
