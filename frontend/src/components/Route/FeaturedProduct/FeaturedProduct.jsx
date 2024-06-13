@@ -25,7 +25,7 @@ const FeaturedProduct = () => {
           {allProducts && allProducts.length !== 0 && (
             <>
               {allProducts.map((product, index) => (
-                <div className="snap-center shrink-0" key={index}>
+                  <div className="snap-center shrink-0 w-1/2 md:w-1/4 lg:w-1/6 xl:w-1/6" key={index}>                  
                   <ProductCard data={product} />
                 </div>
               ))}

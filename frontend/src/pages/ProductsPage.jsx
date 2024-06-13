@@ -136,12 +136,12 @@ const ProductsPage = () => {
         <div>
           <Header activeHeading={3} />
           {categoriesParam === "Cloths" && (
-            <div className="flex mb-4 sticky top-28 z-10">
+            <div className="flex mb-4 sticky top-28 z-10" style={{ zIndex: 1 }}>
               <div className="w-1/2">
                 <button
                   onClick={() => setFilterDrawerOpen(true)}
-                  className="w-full bg-yellow-500 p-4 flex items-center justify-between font-bold text-lg rounded-lg tracking-wider border-4 border-transparent hover:border-blue-500 duration-300 hover:text-blue-600"
-                >
+                  className="w-full bg-yellow-500 p-2 flex items-center justify-between font-bold text-lg rounded-lg tracking-wider border-4 border-transparent hover:border-blue-500 duration-300 hover:text-blue-600"
+                  >
                   Filter
                   <AiOutlineCaretDown className="h-6" />
                 </button>
@@ -149,8 +149,8 @@ const ProductsPage = () => {
               <div className="w-1/2">
                 <button
                   onClick={() => setSortDrawerOpen(true)}
-                  className="w-full bg-yellow-500 p-4 flex items-center justify-between font-bold text-lg rounded-lg tracking-wider border-4 border-transparent hover:border-blue-500 duration-300 hover:text-blue-600"
-                >
+                  className="w-full bg-yellow-500 p-2 flex items-center justify-between font-bold text-lg rounded-lg tracking-wider border-4 border-transparent hover:border-blue-500 duration-300 hover:text-blue-600"
+                  >
                   Sort By
                   <AiOutlineCaretDown className="h-6" />
                 </button>

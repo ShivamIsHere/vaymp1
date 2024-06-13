@@ -34,7 +34,7 @@ const BestDeals = () => {
           {data && data.length !== 0 && (
             <>
               {data.map((i, index) => (
-                <div key={index} className="flex-shrink-0 snap-start">
+                <div key={index} className="snap-center shrink-0 w-1/2 md:w-1/4 lg:w-1/6 xl:w-1/6">
                   <ProductCard data={i} />
                 </div>
               ))}

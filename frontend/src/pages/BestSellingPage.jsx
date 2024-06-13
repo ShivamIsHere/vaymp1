@@ -155,7 +155,7 @@ const BestSellingPage = () => {
       ) : (
         <div>
           <Header activeHeading={2} />
-          <div className="flex ">
+          <div className="flex mb-2 sticky top-28 z-10" style={{ zIndex: 1 }}>
           <div className="w-1/2 relative" ref={filterRef}>
               <div>
                 <button onClick={() => setFilterIsOpen((prev) => !prev)} className="w-full bg-yellow-400 p-1 mt-1 flex items-left justify-between font-bold text-lg rounded-2xl tracking-wider border-4 border-transparent active:border-blue-100 duration-300 active:text-blue-500">

@@ -36,7 +36,7 @@ const Categories = () => {
               };
               return (
                 <div
-                className="w-full md:w-2/5 lg:w-1/4 xl:w-1/5 cursor-pointer"
+                className="w-1/4 md:-1/4 lg:w-1/4 xl:w-1/5 cursor-pointer"
                 key={i.id}
                 onClick={handleSubmit}
                 >
@@ -48,10 +48,10 @@ const Categories = () => {
                   />
                 </div> */}
               <div className="overflow-hidden relative">
-                    <h5 className="leading-1.3 absolute top-0 left-0 right-0 text-center font-bold text-black shadow p-4" style={{ fontSize: "24px" }}>{i.title}</h5>
-                    <img
+              <h5 className="leading-1.3 absolute top-0 left-0 right-0 text-center font-bold text-black shadow p-4 text-[13px] sm:text-[15px] md:text-[24px]">{i.title}</h5>
+                      <img
                       src={i.image_Url}
-                      className="w-full h-auto mt-24" // Adjusted margin-top from 16 to 8
+                      className="w-full lg:w-70% h-auto mt-24 lg:rounded-full lg:border lg:border-gray-300"
                       alt={i.title}
                     />
                   </div>
