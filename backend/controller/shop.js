@@ -4,6 +4,8 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const Shop = require("../model/shop");
+const Product = require("../model/product");
+const Event = require("../model/event");
 const { isAuthenticated, isSeller, isAdmin } = require("../middleware/auth");
 const cloudinary = require("cloudinary");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
@@ -343,7 +345,7 @@ router.put(
     try {
       const { name, description, address, phoneNumber, zipCode } = req.body;
 
-      const shop = await Shop.findOne(req.seller._id);
+      const shop = await Shop.findById(req.seller._id);
 
       if (!shop) {
         return next(new ErrorHandler("User not found", 400));
@@ -356,6 +358,31 @@ router.put(
       shop.zipCode = zipCode;
 
       await shop.save();
+
+      await Product.updateMany(
+        { "shop._id": req.seller._id },
+        {
+          $set: {
+            "shop.name": name,
+            "shop.description": description,
+            "shop.address": address,
+            "shop.phoneNumber": phoneNumber,
+            "shop.zipCode": zipCode
+          }
+        }
+      );
+      await Event.updateMany(
+        { "shop._id": req.seller._id },
+        {
+          $set: {
+            "shop.name": name,
+            "shop.description": description,
+            "shop.address": address,
+            "shop.phoneNumber": phoneNumber,
+            "shop.zipCode": zipCode
+          }
+        }
+      );
 
       res.status(201).json({
         success: true,
