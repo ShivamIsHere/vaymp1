@@ -56,17 +56,23 @@ router.post(
 );
 
 // get all events
-router.get("/get-all-events", async (req, res, next) => {
+router.get("/get-all-events", catchAsyncErrors(async (req, res, next) => {
   try {
-    const events = await Event.find();
-    res.status(201).json({
+    // Define the filter to include only events with inactive shops
+    const filters = {
+      'shop.shopIsActive': false,
+    };
+
+    const events = await Event.find(filters);
+
+    res.status(200).json({
       success: true,
       events,
     });
   } catch (error) {
-    return next(new ErrorHandler(error, 400));
+    return next(new ErrorHandler(error.message, 400));
   }
-});
+}));
 
 // get all events of a shop
 router.get(

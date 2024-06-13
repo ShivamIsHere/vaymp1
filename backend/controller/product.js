@@ -175,7 +175,9 @@ if (req.query.sortBy === "priceHighToLow") {
       // console.log('Sorting Params:', { sortBy, sortOrder }); // Log sorting params
 
       // Filtering parameters
-      const filters = {};
+      const filters = {
+        'shop.shopIsActive': false, // Filter to include only products with inactive shops
+      };
       if (req.query.category) {
         filters.category = { $in: req.query.category.split(',') };
       }
@@ -271,9 +273,10 @@ router.get(
       words = words.filter(word => word !== "for");
       const quer = words.join(" ");
       console.log("req.query", req.query);
+      
 
       // Fetch all products
-      let filteredProducts = await Product.find().sort({ createdAt: -1 });
+      let filteredProducts = await Product.find({ 'shop.shopIsActive': false }).sort({ createdAt: -1 });
 
       // Apply gender filter
       if (quer.includes("female") || quer.includes("females") || quer.includes("women") || quer.includes("woman") ||
