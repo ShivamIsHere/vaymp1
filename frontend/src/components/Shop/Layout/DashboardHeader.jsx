@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { useParams } from "react-router-dom";
+import { BsShop } from "react-icons/bs";
+
 const DashboardHeader = () => {
   const { seller } = useSelector((state) => state.seller);
   console.log("llll",seller)
@@ -53,11 +55,14 @@ const DashboardHeader = () => {
             />
           </Link>
           <Link to={`/shop/${seller}`}>
-            <img
-              src={`${seller?.avatar?.url}`}
-              alt=""
-              className="w-[50px] h-[50px] rounded-full object-cover"
-            />
+          <div className="w-[50px] h-[50px] flex items-center justify-center rounded-full bg-slate-200">
+                
+                  <BsShop
+                    className="w-[35px] h-[35px] text-black-500 object-contain"
+                  />
+
+        </div>
+
             {/* <h1>klmn</h1> */}
           </Link>
         </div>

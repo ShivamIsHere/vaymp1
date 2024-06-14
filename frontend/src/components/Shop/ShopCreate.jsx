@@ -1,5 +1,6 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { BsShop } from "react-icons/bs";
 import styles from "../../styles/styles";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -25,7 +26,6 @@ const ShopCreate = () => {
     setLoading(true);
     setError("");
 
-
     axios
       .post(`${server}/shop/create-shop`, {
         name,
@@ -50,13 +50,14 @@ const ShopCreate = () => {
       })
       .catch((error) => {
         setError(error.response.data.message);
-        setLoading(false);      });
-  };
-  const handleInputChange = (setter) => (e) => {
-    setter(e.target.value);
-    setError(""); 
+        setLoading(false);
+      });
   };
 
+  const handleInputChange = (setter) => (e) => {
+    setter(e.target.value);
+    setError("");
+  };
 
   const handleFileInputChange = (e) => {
     const reader = new FileReader();
@@ -65,7 +66,6 @@ const ShopCreate = () => {
       if (reader.readyState === 2) {
         setAvatar(reader.result);
         setError("");
-
       }
     };
 
@@ -82,17 +82,16 @@ const ShopCreate = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-[35rem]">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
-          
             <div>
               <label
-                htmlFor="email"
+                htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
                 Shop Name
               </label>
               <div className="mt-1">
                 <input
-                  type="name"
+                  type="text"
                   name="name"
                   required
                   value={name}
@@ -104,7 +103,7 @@ const ShopCreate = () => {
 
             <div>
               <label
-                htmlFor="email"
+                htmlFor="phone-number"
                 className="block text-sm font-medium text-gray-700"
               >
                 Phone Number
@@ -140,21 +139,20 @@ const ShopCreate = () => {
                 />
                 {error === "User already exists" && (
                   <div className="text-red-600 text-sm mt-1">{error}</div>
-
                 )}
               </div>
             </div>
 
             <div>
               <label
-                htmlFor="email"
+                htmlFor="address"
                 className="block text-sm font-medium text-gray-700"
               >
                 Address
               </label>
               <div className="mt-1">
                 <input
-                  type="address"
+                  type="text"
                   name="address"
                   required
                   value={address}
@@ -166,7 +164,7 @@ const ShopCreate = () => {
 
             <div>
               <label
-                htmlFor="email"
+                htmlFor="zipcode"
                 className="block text-sm font-medium text-gray-700"
               >
                 Zip Code
@@ -222,18 +220,16 @@ const ShopCreate = () => {
                 className="block text-sm font-medium text-gray-700"
               ></label>
               <div className="mt-2 flex items-center">
-                <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
-                  {avatar ? (
-                    <img
-                      src={avatar}
-                      alt="avatar"
-                      className="h-full w-full object-cover rounded-full"
-                    />
-                  ) : (
-                    <RxAvatar className="h-8 w-8" />
-                  )}
-                </span>
-                <label
+                {/* <span className="inline-block h-8 w-8 rounded-full overflow-hidden"> */}
+                <div className="w-[50px] h-[50px] flex items-center justify-center rounded-full bg-slate-200">
+                
+                <BsShop
+                  className="w-[35px] h-[35px] text-black-500 object-contain"
+                />
+
+      </div>
+                {/* </span> */}
+                {/* <label
                   htmlFor="file-input"
                   className="ml-5 flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                 >
@@ -245,14 +241,13 @@ const ShopCreate = () => {
                     onChange={handleFileInputChange}
                     className="sr-only"
                   />
-                </label>
+                </label> */}
               </div>
-              {(error !=="User already exists") && (error !=="Missing required parameter - file")  && ( 
-              <div className="text-red-600 text-sm">{error}</div>
-            )}
+              {/* {error !== "User already exists" && error !== "Missing required parameter - file" && (
+                <div className="text-red-600 text-sm">{error}</div>
+              )} */}
             </div>
 
-            <div>
             <div>
               {loading ? (
                 <div
@@ -272,14 +267,13 @@ const ShopCreate = () => {
                   />
                 </div>
               ) : (
-              <button
-                type="submit"
-                className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-              >
-                Submit
-              </button>
-                )}
-                </div>
+                <button
+                  type="submit"
+                  className="group relative w-full h-[40px] flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                >
+                  Submit
+                </button>
+              )}
             </div>
             <div className={`${styles.noramlFlex} w-full`}>
               <h4>Already have an account?</h4>

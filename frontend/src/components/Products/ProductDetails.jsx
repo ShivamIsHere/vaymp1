@@ -15,6 +15,7 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "../../redux/actions/wishlist";
+import { BsShop } from "react-icons/bs";
 import { addTocart, updateTocart } from "../../redux/actions/cart";
 import { toast } from "react-toastify";
 import Ratings from "./Ratings";
@@ -48,6 +49,7 @@ const ProductDetails =  ({ data }) => {
       setClick(false);
     }
   }, [data, wishlist, dispatch]);
+
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -490,11 +492,14 @@ const ProductDetails =  ({ data }) => {
                 <div className=" hidden md:block items-center pt-8">
                   <div className="flex pt-5">
                   <Link to={`/shop/preview/${data?.shop._id}`}>
-                    <img
-                      src={`${data?.shop?.avatar?.url}`}
-                      alt=""
-                      className="w-[50px] h-[50px] rounded-full mr-2"
-                    />
+                  <div className="w-[80px] h-[80px] flex items-center justify-center rounded-full bg-slate-200">
+                
+                  <BsShop
+                    className="w-[50px] h-[50px] text-black-500 object-contain"
+                  />
+
+        </div>
+
                   </Link>
                   
                    {/*<img
@@ -637,12 +642,14 @@ const ProductDetailsInfo = ({
           <div className="w-full 800px:w-[50%]">
             <Link to={`/shop/preview/${data.shop._id}`}>
               <div className="flex items-center">
-                <img
-                  src={`${data?.shop?.avatar?.url}`}
-                  className="w-[50px] h-[50px] rounded-full"
-                  alt=""
+              <div className="w-[80px] h-[80px] flex items-center justify-center rounded-full bg-slate-200">
+                
+                <BsShop
+                  className="w-[50px] h-[50px] text-black-500 object-contain"
                 />
-                <div className="pl-3">
+
+      </div>
+              <div className="pl-3">
                   <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
                   <h5 className="pb-2 text-[15px]">
                     ({averageRating}/5) Ratings
@@ -670,7 +677,7 @@ const ProductDetailsInfo = ({
                 Total Reviews:{" "}
                 <span className="font-[500]">{totalReviewsLength}</span>
               </h5>
-              <Link to="/">
+              <Link to={`/shop/preview/${data.shopId}`}>
                 <div
                   className={`${styles.button} !rounded-[4px] !h-[39.5px] mt-3`}
                 >

@@ -6,6 +6,7 @@ import styles from "../../styles/styles";
 import axios from "axios";
 import { loadSeller } from "../../redux/actions/user";
 import { toast } from "react-toastify";
+import { BsShop } from "react-icons/bs";
 
 const ShopSettings = () => {
   const { seller } = useSelector((state) => state.seller);
@@ -76,12 +77,16 @@ const ShopSettings = () => {
       <div className="flex w-full 800px:w-[80%] flex-col justify-center my-5">
         <div className="w-full flex items-center justify-center">
           <div className="relative">
-            <img
-              src={avatar ? avatar : `${seller.avatar?.url}`}
-              alt=""
-              className="w-[200px] h-[200px] rounded-full cursor-pointer"
-            />
-            <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[10px] right-[15px]">
+          <div className="w-[200px] h-[200px] flex items-center justify-center rounded-full bg-slate-200">
+                
+                  <BsShop
+                    className="w-[125px] h-[125px] text-black-500 object-contain"
+                  />
+
+        </div>
+          {/* <BsShop /> */}
+
+            {/* <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[10px] right-[15px]">
               <input
                 type="file"
                 id="image"
@@ -91,7 +96,7 @@ const ShopSettings = () => {
               <label htmlFor="image">
                 <AiOutlineCamera />
               </label>
-            </div>
+            </div> */}
           </div>
         </div>
 

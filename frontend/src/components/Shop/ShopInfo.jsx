@@ -6,6 +6,7 @@ import styles from "../../styles/styles";
 import Loader from "../Layout/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsShop } from "../../redux/actions/product";
+import { BsShop } from "react-icons/bs";
 
 const ShopInfo = ({ isOwner }) => {
   const [data,setData] = useState({});
@@ -51,11 +52,15 @@ const ShopInfo = ({ isOwner }) => {
       <div>
       <div className="w-full py-5">
         <div className="w-full flex item-center justify-center">
-          <img
-            src={`${data.avatar?.url}`}
-            alt=""
-            className="w-[150px] h-[150px] object-cover rounded-full"
-          />
+        <div className="w-[150px] h-[150px] flex items-center justify-center rounded-full bg-slate-200">
+                
+                  <BsShop
+                    className="w-[85px] h-[85px] text-black-500 object-contain"
+                  />
+
+        </div>
+        
+
         </div>
         <h3 className="text-center py-2 text-[20px]">{data.name}</h3>
         <p className="text-[16px] text-[#000000a6] p-[10px] flex items-center">

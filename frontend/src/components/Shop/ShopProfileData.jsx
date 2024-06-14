@@ -20,6 +20,25 @@ const ShopProfileData = ({ isOwner }) => {
 
   const [active, setActive] = useState(1);
 
+
+   // Function to calculate duration in days
+   // Function to calculate duration in a human-readable format
+const calculateDuration = (createdAt) => {
+  const currentDate = new Date();
+  const reviewDate = new Date(createdAt);
+  const differenceInTime = currentDate.getTime() - reviewDate.getTime();
+  const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
+  
+  if (differenceInDays >= 30) {
+    const months = Math.floor(differenceInDays / 30);
+    return `${months} ${months === 1 ? 'month' : 'months'} ago`;
+  } else if (differenceInDays === 1) {
+    return '1 day ago';
+  } else {
+    return `${differenceInDays} days ago`;
+  }
+};
+
   const allReviews =
     products && products.map((product) => product.reviews).flat();
 
@@ -72,18 +91,23 @@ const ShopProfileData = ({ isOwner }) => {
       <br />
       {active === 1 && (
         <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
-          {products &&
-            products.map((i, index) => (
+        {products &&
+          products
+            .filter(product => product.shop.shopIsActive === false)
+            .map((i, index) => (
               <ProductCard data={i} key={index} isShop={true} />
             ))}
-        </div>
+      </div>
+      
       )}
 
       {active === 2 && (
         <div className="w-full">
           <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
             {events &&
-              events.map((i, index) => (
+              events
+              .filter(event => event.shop.shopIsActive === false)
+              .map((i, index) => (
                 <ProductCard
                   data={i}
                   key={index}
@@ -92,11 +116,12 @@ const ShopProfileData = ({ isOwner }) => {
                 />
               ))}
           </div>
-          {events && events.length === 0 && (
-            <h5 className="w-full text-center py-5 text-[18px]">
-              No Events have for this shop!
-            </h5>
-          )}
+          {events &&
+    events.filter(event => event.shop.shopIsActive === false).length === 0 && (
+      <h5 className="w-full text-center py-5 text-[18px]">
+        No Events for this shop!
+      </h5>
+    )}
         </div>
       )}
 
@@ -116,8 +141,8 @@ const ShopProfileData = ({ isOwner }) => {
                     <Ratings rating={item.rating} />
                   </div>
                   <p className="font-[400] text-[#000000a7]">{item?.comment}</p>
-                  <p className="text-[#000000a7] text-[14px]">{"2days ago"}</p>
-                </div>
+                  <p className="text-[#000000a7] text-[14px]">{calculateDuration(item.createdAt)}</p>
+              </div>
               </div>
             ))}
           {allReviews && allReviews.length === 0 && (
