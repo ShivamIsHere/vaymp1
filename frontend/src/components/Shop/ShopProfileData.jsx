@@ -17,7 +17,10 @@ const ShopProfileData = ({ isOwner }) => {
     dispatch(getAllProductsShop(id));
     dispatch(getAllEventsShop(id));
   }, [dispatch]);
-
+  const getFirstLetter = (name) => {
+    if (!name) return '';
+    return name.charAt(0).toUpperCase();
+}
   const [active, setActive] = useState(1);
 
 
@@ -130,11 +133,11 @@ const calculateDuration = (createdAt) => {
           {allReviews &&
             allReviews.map((item, index) => (
               <div className="w-full flex my-4">
-                <img
-                  src={`${item.user.avatar?.url}`}
-                  className="w-[50px] h-[50px] rounded-full"
-                  alt=""
-                />
+                <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-slate-200">
+            <div className="w-[50px] h-[50px] flex items-center justify-center text-blue-300 text-3xl font-bold">
+              {getFirstLetter(item?.user?.name)}
+            </div>          
+          </div>
                 <div className="pl-2">
                   <div className="flex w-full items-center">
                     <h1 className="font-[600] pr-2">{item.user.name}</h1>

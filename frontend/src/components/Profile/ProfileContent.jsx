@@ -38,7 +38,10 @@ const ProfileContent = ({ active }) => {
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(null);
   const dispatch = useDispatch();
-
+  const getFirstLetter = (name) => {
+    if (!name) return '';
+    return name.charAt(0).toUpperCase();
+}
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -55,32 +58,32 @@ const ProfileContent = ({ active }) => {
     dispatch(updateUserInformation(name, email, phoneNumber, password));
   };
 
-  const handleImage = async (e) => {
-    const reader = new FileReader();
+  // const handleImage = async (e) => {
+  //   const reader = new FileReader();
 
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setAvatar(reader.result);
-        axios
-          .put(
-            `${server}/user/update-avatar`,
-            { avatar: reader.result },
-            {
-              withCredentials: true,
-            }
-          )
-          .then((response) => {
-            dispatch(loadUser());
-            toast.success("avatar updated successfully!");
-          })
-          .catch((error) => {
-            toast.error(error);
-          });
-      }
-    };
+  //   reader.onload = () => {
+  //     if (reader.readyState === 2) {
+  //       setAvatar(reader.result);
+  //       axios
+  //         .put(
+  //           `${server}/user/update-avatar`,
+  //           { avatar: reader.result },
+  //           {
+  //             withCredentials: true,
+  //           }
+  //         )
+  //         .then((response) => {
+  //           dispatch(loadUser());
+  //           toast.success("avatar updated successfully!");
+  //         })
+  //         .catch((error) => {
+  //           toast.error(error);
+  //         });
+  //     }
+  //   };
 
-    reader.readAsDataURL(e.target.files[0]);
-  };
+  //   reader.readAsDataURL(e.target.files[0]);
+  // };
 
   return (
     <div className="w-full ml-5">
@@ -89,12 +92,12 @@ const ProfileContent = ({ active }) => {
         <>
           <div className="flex justify-center w-full">
             <div className="relative">
-              <img
-                src={`${user?.avatar?.url}`}
-                className="w-[150px] h-[150px] rounded-full object-cover border-[3px] border-[#3ad132]"
-                alt=""
-              />
-              <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
+            <div className="w-[150px] h-[150px] flex items-center justify-center rounded-full bg-slate-200 border-[3px] border-[#3ad132]">
+            <div className="w-[50px] h-[50px] flex items-center justify-center text-blue-300 text-3xl font-bold">
+              {getFirstLetter(user?.name)}
+            </div>          
+          </div>
+              {/* <div className="w-[30px] h-[30px] bg-[#E3E9EE] rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
                 <input
                   type="file"
                   id="image"
@@ -102,9 +105,8 @@ const ProfileContent = ({ active }) => {
                   onChange={handleImage}
                 />
                 <label htmlFor="image">
-                  <AiOutlineCamera />
                 </label>
-              </div>
+              </div> */}
             </div>
           </div>
           <br />

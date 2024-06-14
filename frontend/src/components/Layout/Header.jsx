@@ -43,7 +43,10 @@ const Header = ({ activeHeading }) => {
   const searchInputRef = useRef(null);
   const mobileInputRef = useRef(null);
   const location = useLocation();
-
+  const getFirstLetter = (name) => {
+    if (!name) return '';
+    return name.charAt(0).toUpperCase();
+}
   const isActive = (path) => location.pathname === path;
   const [totalCount, setTotalCount] = useState(0);
   useEffect(() => {
@@ -366,11 +369,11 @@ const Header = ({ activeHeading }) => {
       {isAuthenticated ? (
         <div className="relative flex items-center">
           <div className="flex items-center cursor-pointer">
-            <img
-              src={`${user.avatar?.url}`}
-              className="w-8 h-8 rounded-full"
-              alt=""
-            />
+          <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-slate-200">
+            <div className="w-8 h-8 flex items-center justify-center text-blue-300 text-3xl font-bold">
+              {getFirstLetter(user?.name)}
+            </div>          
+          </div>
             <span className="ml-2 text-white">
             {`${user.name.split(' ')[0]}`}
             </span>
@@ -532,11 +535,12 @@ const Header = ({ activeHeading }) => {
                 {isAuthenticated ? (
                   <div>
                     <Link to="/profile">
-                      <img
-                        src={`${user.avatar?.url}`}
-                        alt=""
-                        className="w-[60px] h-[60px] rounded-full border-[3px] border-[#0eae88]"
-                      />
+                    <div className="w-[50px] h-[50px] flex items-center justify-center rounded-full bg-slate-200 border-[3px] border-[#0eae88]">
+                      <div className="w-[60px] h-[60px] flex items-center justify-center text-blue-300 text-3xl font-bold">
+                        {getFirstLetter(user?.name)}
+                      </div>          
+                    </div>
+                      
                     </Link>
                   </div>
                 ) : (

@@ -50,7 +50,6 @@ const ProductDetails =  ({ data }) => {
     }
   }, [data, wishlist, dispatch]);
 
-
   const incrementCount = () => {
     setCount(count + 1);
   };
@@ -377,7 +376,8 @@ const ProductDetails =  ({ data }) => {
                 
                 {/* Button container */}
                 <div className="relative" style={{ zIndex: 1 }}>
-                <div className="sm:hidden fixed bottom-0 left-0 w-full bg-white shadow-lg p-2" style={{ zIndex: 0 }}>                  <div className="flex justify-between items-center">
+                <div className="sm:hidden fixed bottom-0 left-0 w-full bg-white shadow-lg p-2" style={{ zIndex: 0 }}>                  
+                  <div className="flex justify-between items-center">
                     {/* Add to Cart Button */}
                     <div
                       className={`${styles.button} !mt-6 !rounded !h-11 flex items-center mr-10`}
@@ -557,7 +557,10 @@ const ProductDetailsInfo = ({
   averageRating,
 }) => {
   const [active, setActive] = useState(1);
-
+  const getFirstLetter = (name) => {
+    if (!name) return '';
+    return name.charAt(0).toUpperCase();
+}
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded">
       <div className="w-full flex justify-between border-b pt-10 pb-2">
@@ -614,11 +617,11 @@ const ProductDetailsInfo = ({
           {data &&
             data.reviews.map((item, index) => (
               <div className="w-full flex my-2">
-                <img
-                  src={`${item.user.avatar?.url}`}
-                  alt=""
-                  className="w-[50px] h-[50px] rounded-full"
-                />
+                <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-slate-200">
+                      <div className="w-[50px] h-[50px] flex items-center justify-center text-blue-300 text-3xl font-bold">
+                        {getFirstLetter(item?.user?.name)}
+                      </div>          
+                    </div>
                 <div className="pl-2 ">
                   <div className="w-full flex items-center">
                     <h1 className="font-[500] mr-3">{item.user.name}</h1>

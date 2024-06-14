@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/Layout/Header";
 import { useSelector } from "react-redux";
 import socketIO from "socket.io-client";
+import { RiCustomerService2Fill } from "react-icons/ri";
 // import { format } from "timeago.js";
 import { server } from "../server";
 import axios from "axios";
@@ -282,7 +283,6 @@ const MessageList = ({
     setOpen(true);
     setcurrTitle(data?.groupTitle)
   };
-
   useEffect(() => {
     setActiveStatus(online);
     const userId = data.members.find((user) => user !== me);
@@ -316,12 +316,9 @@ const MessageList = ({
         setActiveStatus(online)
       }
     >
-      <div className="relative">
-        <img
-          src={`${user?.avatar?.url}`}
-          alt=""
-          className="w-[50px] h-[50px] rounded-full"
-        />
+      <div className="w-[50px] h-[50px] flex items-center justify-center rounded-full bg-slate-200 relative">
+      <RiCustomerService2Fill className="w-[50px] h-[50px] flex items-center justify-center text-blue-300 text-3xl font-bold"/>
+            
         {online ? (
           <div className="w-[12px] h-[12px] bg-green-400 rounded-full absolute top-[2px] right-[2px]" />
         ) : (
@@ -329,7 +326,7 @@ const MessageList = ({
         )}
       </div>
       <div className="pl-3">
-        <h1 className="text-[18px]">{user?.name} {"#"}{data?.groupTitle.split(' ')[0].substring(15)}</h1>
+        <h1 className="text-[18px]">{"Help Regarding"} {"#"}{data?.groupTitle.split(' ')[0].substring(15)}</h1>
         {/* <p className="text-[16px] text-[#000c]">
           {!loading && data?.lastMessageId !== userData?._id
             ? "You:"
@@ -367,14 +364,11 @@ const SellerInbox = ({
       {/* message header */}
       <div className="w-full flex p-3 items-center justify-between bg-slate-200">
         <div className="flex">
-          <img
-            src={`${userData?.avatar?.url}`}
-            alt=""
-            className="w-[60px] h-[60px] rounded-full"
-          />
+        <RiCustomerService2Fill className="w-[50px] h-[50px] flex items-center justify-center text-blue-300 text-3xl font-bold"/>
+
           <div className="pl-3">
           <h1 className="text-[18px] font-[600]">
-    {userData?.name} {loginuser.role === "Admin" && currTitle? currTitle : currTitle.split(' ')[1]}
+          {loginuser.role === "Admin" && userData?.name? userData?.name : ""}  {loginuser.role === "Admin" && userData?.name? "" : "Help regarding"}  {loginuser.role === "Admin" && currTitle? currTitle : currTitle.split(' ')[1]}
   </h1>
   <h1>{activeStatus ? "Active Now" : ""}</h1>
           </div>
@@ -397,10 +391,8 @@ const SellerInbox = ({
               ref={scrollRef}
             >
               {item.sender !== sellerId && (
-                <img
-                  src={`${userData?.avatar?.url}`}
-                  className="w-[40px] h-[40px] rounded-full mr-3"
-                  alt=""
+                <RiCustomerService2Fill  
+                  className="w-[30px] h-[30px] rounded-full mr-3 text-blue-300"
                 />
               )}
               {item.images && (

@@ -343,9 +343,9 @@ const App = () => {
         <Route
           path="/dashboard-messages"
           element={
-            <SellerProtectedRoute>
-              <ShopInboxPage />
-            </SellerProtectedRoute>
+            <ProtectedAdminRoute>
+              <UserInbox />
+            </ProtectedAdminRoute>
           }
         />
         {/* Admin Routes */}

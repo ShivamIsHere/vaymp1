@@ -10,7 +10,10 @@ import { Link } from 'react-router-dom'
 
 const AdminHeader = () => {
     const {user} = useSelector((state) => state.user);
-
+    const getFirstLetter = (name) => {
+      if (!name) return '';
+      return name.charAt(0).toUpperCase();
+  }
   return (
          <div className="w-full h-[80px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
@@ -52,7 +55,8 @@ const AdminHeader = () => {
               className="mx-4 cursor-pointer"
             />
           </Link>
-          <Link to="/admin-orders" className="800px:block hidden">            <FiShoppingBag
+          <Link to="/admin-orders" className="800px:block hidden">            
+          <FiShoppingBag
               color="#555"
               size={30}
               className="mx-4 cursor-pointer"
@@ -67,12 +71,13 @@ const AdminHeader = () => {
               size={30}
               className="mx-4 cursor-pointer"
             />
+
           </Link>
-            <img
-              src={`${user?.avatar?.url}`}
-              alt=""
-              className="w-[50px] h-[50px] rounded-full object-cover"
-            />
+          <div className="w-[50px] h-[50px] flex items-center justify-center rounded-full bg-slate-200">
+            <div className="w-[50px] h-[50px] flex items-center justify-center text-blue-300 text-3xl font-bold">
+              {getFirstLetter(user?.name)}
+            </div>          
+          </div>
         </div>
       </div>
     </div>

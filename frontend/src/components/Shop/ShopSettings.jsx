@@ -21,32 +21,32 @@ const ShopSettings = () => {
 
   const dispatch = useDispatch();
 
-  const handleImage = async (e) => {
-    const reader = new FileReader();
+  // const handleImage = async (e) => {
+  //   const reader = new FileReader();
 
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setAvatar(reader.result);
-        axios
-          .put(
-            `${server}/shop/update-shop-avatar`,
-            { avatar: reader.result },
-            {
-              withCredentials: true,
-            }
-          )
-          .then((res) => {
-            dispatch(loadSeller());
-            toast.success("Avatar updated successfully!");
-          })
-          .catch((error) => {
-            toast.error(error.response.data.message);
-          });
-      }
-    };
+  //   reader.onload = () => {
+  //     if (reader.readyState === 2) {
+  //       setAvatar(reader.result);
+  //       axios
+  //         .put(
+  //           `${server}/shop/update-shop-avatar`,
+  //           { avatar: reader.result },
+  //           {
+  //             withCredentials: true,
+  //           }
+  //         )
+  //         .then((res) => {
+  //           dispatch(loadSeller());
+  //           toast.success("Avatar updated successfully!");
+  //         })
+  //         .catch((error) => {
+  //           toast.error(error.response.data.message);
+  //         });
+  //     }
+  //   };
 
-    reader.readAsDataURL(e.target.files[0]);
-  };
+  //   reader.readAsDataURL(e.target.files[0]);
+  // };
 
   const updateHandler = async (e) => {
     e.preventDefault();

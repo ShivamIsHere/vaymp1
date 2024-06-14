@@ -13,25 +13,25 @@ const { isAuthenticated, isAdmin } = require("../middleware/auth");
 // create user
 router.post("/create-user", async (req, res, next) => {
   try {
-    const { name, email, password, avatar } = req.body;
+    const { name, email, password } = req.body;
     const userEmail = await User.findOne({ email });
 
     if (userEmail) {
       return next(new ErrorHandler("User already exists!", 400));
     }
 
-    const myCloud = await cloudinary.v2.uploader.upload(avatar, {
-      folder: "avatars",
-    });
+    // const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+    //   folder: "avatars",
+    // });
 
     const user = {
       name,
       email,
       password,
-      avatar: {
-        public_id: myCloud.public_id,
-        url: myCloud.secure_url,
-      },
+      // avatar: {
+      //   public_id: myCloud.public_id,
+      //   url: myCloud.secure_url,
+      // },
     };
 
     const activationToken = createActivationToken(user);
@@ -78,7 +78,7 @@ router.post(
       if (!newUser) {
         return next(new ErrorHandler("Invalid token", 400));
       }
-      const { name, email, password, avatar } = newUser;
+      const { name, email, password } = newUser;
 
       let user = await User.findOne({ email });
 
@@ -89,7 +89,6 @@ router.post(
       user = await User.create({
         name,
         email,
-        avatar,
         password,
       });
 
@@ -200,35 +199,35 @@ router.put(
 );
 
 // update user avatar
-router.put(
-  "/update-avatar",
-  isAuthenticated,
-  catchAsyncErrors(async (req, res, next) => {
-    let existsUser = await User.findById(req.user.id);
-    if (req.body.avatar !== "") {
-      const imageId = existsUser.avatar.public_id;
+// router.put(
+//   "/update-avatar",
+//   isAuthenticated,
+//   catchAsyncErrors(async (req, res, next) => {
+//     let existsUser = await User.findById(req.user.id);
+//     if (req.body.avatar !== "") {
+//       const imageId = existsUser.avatar.public_id;
 
-      await cloudinary.v2.uploader.destroy(imageId);
+//       await cloudinary.v2.uploader.destroy(imageId);
 
-      const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-        folder: "avatars",
-        width: 150,
-      });
+//       const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+//         folder: "avatars",
+//         width: 150,
+//       });
 
-      existsUser.avatar = {
-        public_id: myCloud.public_id,
-        url: myCloud.secure_url,
-      };
-    }
+//       existsUser.avatar = {
+//         public_id: myCloud.public_id,
+//         url: myCloud.secure_url,
+//       };
+//     }
 
-    await existsUser.save();
+//     await existsUser.save();
 
-    res.status(200).json({
-      success: true,
-      user: existsUser,
-    });
-  })
-);
+//     res.status(200).json({
+//       success: true,
+//       user: existsUser,
+//     });
+//   })
+// );
 
 // update user addresses
 router.put(
@@ -357,9 +356,9 @@ router.delete(
       return next(new ErrorHandler("User is not available with this id", 400));
     }
 
-    const imageId = user.avatar.public_id;
+    // const imageId = user.avatar.public_id;
 
-    await cloudinary.v2.uploader.destroy(imageId);
+    // await cloudinary.v2.uploader.destroy(imageId);
 
     await User.findByIdAndDelete(req.params.id);
 
