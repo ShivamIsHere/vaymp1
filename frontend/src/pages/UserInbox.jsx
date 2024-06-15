@@ -3,21 +3,21 @@ import Header from "../components/Layout/Header";
 import { useSelector } from "react-redux";
 import socketIO from "socket.io-client";
 import { RiCustomerService2Fill } from "react-icons/ri";
-// import { format } from "timeago.js";
 import { server } from "../server";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineArrowRight, AiOutlineSend } from "react-icons/ai";
 import { TfiGallery } from "react-icons/tfi";
 import styles from "../styles/styles";
+
 const ENDPOINT = "https://socket-ecommerce-tu68.onrender.com/";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 const UserInbox = () => {
-  const { user,loading } = useSelector((state) => state.user);
+  const { user, loading } = useSelector((state) => state.user);
   const [conversations, setConversations] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
-  const [currentChat, setCurrentChat] = useState();
+  const [currentChat, setCurrentChat] = useState(null); // Initialize as null
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [userData, setUserData] = useState(null);
@@ -27,10 +27,8 @@ const UserInbox = () => {
   const [open, setOpen] = useState(false);
   const scrollRef = useRef(null);
   const [currTitle, setcurrTitle] = useState("");
+  const [chatActive, setChatActive] = useState(true);
 
-
-
-  console.log("user user..................",user)
   useEffect(() => {
     socketId.on("getMessage", (data) => {
       setArrivalMessage({
@@ -50,16 +48,16 @@ const UserInbox = () => {
   useEffect(() => {
     const getConversation = async () => {
       try {
-        const resonse = await axios.get(
+        const response = await axios.get(
           `${server}/conversation/get-all-conversation-user/${user?._id}`,
           {
             withCredentials: true,
           }
         );
 
-        setConversations(resonse.data.conversations);
+        setConversations(response.data.conversations);
       } catch (error) {
-        // console.log(error);
+        console.log(error);
       }
     };
     getConversation();
@@ -76,30 +74,33 @@ const UserInbox = () => {
   }, [user]);
 
   const onlineCheck = (chat) => {
-    const chatMembers = chat.members.find((member) => member !== user?._id);
-    const online = onlineUsers.find((user) => user.userId === chatMembers);
-
-    return online ? true : false;
+    if (chat.isActive) return true;
+    // const chatMembers = chat.members.find((member) => member !== user?._id);
+    // const online = onlineUsers.find((user) => user.userId === chatMembers);
+    // return online ? true : false;
   };
 
-  // get messages
   useEffect(() => {
     const getMessage = async () => {
-      try {
-        const response = await axios.get(
-          `${server}/message/get-all-messages/${currentChat?._id}`
-        );
-        setMessages(response.data.messages);
-      } catch (error) {
-        console.log(error);
+      if (currentChat) {
+        try {
+          const response = await axios.get(
+            `${server}/message/get-all-messages/${currentChat._id}`
+          );
+          setMessages(response.data.messages);
+          setChatActive(currentChat.isActive);
+        } catch (error) {
+          console.log(error);
+        }
       }
     };
     getMessage();
   }, [currentChat]);
 
-  // create new message
   const sendMessageHandler = async (e) => {
     e.preventDefault();
+
+    if (!currentChat) return;
 
     const message = {
       sender: user._id,
@@ -134,6 +135,8 @@ const UserInbox = () => {
   };
 
   const updateLastMessage = async () => {
+    if (!currentChat) return;
+
     socketId.emit("updateLastMessage", {
       lastMessage: newMessage,
       lastMessageId: user._id,
@@ -166,7 +169,6 @@ const UserInbox = () => {
   };
 
   const imageSendingHandler = async (e) => {
-
     const receiverId = currentChat.members.find(
       (member) => member !== user._id
     );
@@ -179,15 +181,12 @@ const UserInbox = () => {
 
     try {
       await axios
-        .post(
-          `${server}/message/create-new-message`,
-          {
-            images: e,
-            sender: user._id,
-            text: newMessage,
-            conversationId: currentChat._id,
-          }
-        )
+        .post(`${server}/message/create-new-message`, {
+          images: e,
+          sender: user._id,
+          text: newMessage,
+          conversationId: currentChat._id,
+        })
         .then((res) => {
           setImages();
           setMessages([...messages, res.data.message]);
@@ -199,6 +198,8 @@ const UserInbox = () => {
   };
 
   const updateLastMessageForImage = async () => {
+    if (!currentChat) return;
+
     await axios.put(
       `${server}/conversation/update-last-message/${currentChat._id}`,
       {
@@ -208,21 +209,41 @@ const UserInbox = () => {
     );
   };
 
+  const toggleChatActiveStatus = async () => {
+    if (!currentChat) return;
+
+    const newStatus = !chatActive;
+    try {
+      await axios.put(
+        `${server}/conversation/update-conversation-status/${currentChat._id}`,
+        {
+          isActive: newStatus,
+        }
+      );
+      setChatActive(newStatus);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ beahaviour: "smooth" });
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
     <div className="w-full">
       {!open && (
-        <>
-          <Header />
-          <h1 className="text-center text-[30px] py-3 font-Poppins">
-            All Messages1
-          </h1>
-          {/* All messages list */}
-          {conversations &&
-            conversations.map((item, index) => (
+  <>
+    <Header />
+    <h1 className="text-center text-[30px] py-3 font-Poppins">
+      All Messages
+    </h1>
+    {/* All messages list */}
+    {conversations &&
+      (user.role === "Admin" // Check if the logged-in user is an admin
+        ? conversations
+            .filter((item) => item.isActive) // Filter active conversations for admin
+            .map((item, index) => (
               <MessageList
                 data={item}
                 key={index}
@@ -236,11 +257,30 @@ const UserInbox = () => {
                 setActiveStatus={setActiveStatus}
                 loading={loading}
                 setcurrTitle={setcurrTitle}
-                
+                toggleChatActiveStatus={toggleChatActiveStatus}
               />
-            ))}
-        </>
-      )}
+            ))
+        : conversations.map((item, index) => ( // Show all conversations for non-admin users
+            <MessageList
+              data={item}
+              key={index}
+              index={index}
+              setOpen={setOpen}
+              setCurrentChat={setCurrentChat}
+              me={user?._id}
+              setUserData={setUserData}
+              userData={userData}
+              online={onlineCheck(item)}
+              setActiveStatus={setActiveStatus}
+              loading={loading}
+              setcurrTitle={setcurrTitle}
+              toggleChatActiveStatus={toggleChatActiveStatus}
+            />
+          )))}
+  </>
+)}
+
+
 
       {open && (
         <SellerInbox
@@ -256,6 +296,8 @@ const UserInbox = () => {
           handleImageUpload={handleImageUpload}
           currTitle={currTitle}
           loginuser={user}
+          chatActive={chatActive} // Pass chatActive state to SellerInbox
+          toggleChatActiveStatus={toggleChatActiveStatus} // Pass the toggle function
         />
       )}
     </div>
@@ -273,7 +315,8 @@ const MessageList = ({
   online,
   setActiveStatus,
   loading,
-  setcurrTitle
+  setcurrTitle,
+  toggleChatActiveStatus, // Receive the prop
 }) => {
   const [active, setActive] = useState(0);
   const [user, setUser] = useState([]);
@@ -281,44 +324,40 @@ const MessageList = ({
   const handleClick = (id) => {
     navigate(`/inbox?${id}`);
     setOpen(true);
-    setcurrTitle(data?.groupTitle)
+    setcurrTitle(data?.groupTitle);
   };
+
   useEffect(() => {
     setActiveStatus(online);
-    const userId = data.members.find((user) => user !== me);
-    
-    console.log(";;;;;;;;;;;;;;;;;;;;;;;;;",me,userId)
+    const userId = data.members.find((item) => item !== me);
+
     const getUser = async () => {
       try {
-        const res = await axios.get(`${server}/shop/get-shop-info/${userId}`);
-        const res5 = await axios.get(`${server}/user/user-info/${userId}`);
-        console.log("jj;;;;;;;hh;;;;;;;;;;;;;;;;;;",res5.data.user)
-        // setUser(res.data.shop);
-        setUser(res5.data.user);
+        const res = await axios.get(`${server}/user/user-info/${userId}`);
+        setUser(res.data.user);
       } catch (error) {
         console.log(error);
       }
-      
     };
+
     getUser();
-  }, [me, data]);
+  }, [me,data]);
 
   return (
     <div
       className={`w-full flex p-3 px-3 ${
         active === index ? "bg-[#00000010]" : "bg-transparent"
-      }  cursor-pointer`}
-      onClick={(e) =>
-        setActive(index) ||
-        handleClick(data._id) ||
-        setCurrentChat(data) ||
-        setUserData(user) ||
-        setActiveStatus(online)
-      }
+      } cursor-pointer`}
+      onClick={(e) => {
+        setActive(index);
+        handleClick(data._id);
+        setCurrentChat(data);
+        setUserData(user);
+        setActiveStatus(online);
+      }}
     >
       <div className="w-[50px] h-[50px] flex items-center justify-center rounded-full bg-slate-200 relative">
-      <RiCustomerService2Fill className="w-[50px] h-[50px] flex items-center justify-center text-blue-300 text-3xl font-bold"/>
-            
+        <RiCustomerService2Fill className="w-[50px] h-[50px] flex items-center justify-center text-blue-300 text-3xl font-bold" />
         {online ? (
           <div className="w-[12px] h-[12px] bg-green-400 rounded-full absolute top-[2px] right-[2px]" />
         ) : (
@@ -326,25 +365,22 @@ const MessageList = ({
         )}
       </div>
       <div className="pl-3">
-        <h1 className="text-[18px]">{"Help Regarding"} {"#"}{data?.groupTitle.split(' ')[0].substring(15)}</h1>
-        {/* <p className="text-[16px] text-[#000c]">
+        <h1 className="text-[18px]">
+          {"Help Regarding"} {"#"}
+          {data?.groupTitle.split(" ")[0].substring(15)}
+        </h1>
+        <p className="text-[16px] text-[#000c]">
           {!loading && data?.lastMessageId !== userData?._id
             ? "You:"
-            : userData?.name.split(" ")[0] + ": "}{" "}
+            : (userData && userData.name
+                ? userData.name.split(" ")[0] + ":"
+                : "")}{" "}
           {data?.lastMessage}
-        </p> */}
-        <p className="text-[16px] text-[#000c]">
-  {!loading && data?.lastMessageId !== userData?._id
-    ? "You:"
-    : (userData && userData.name ? userData.name.split(" ")[0] + ":" : "")}{" "}
-  {data?.lastMessage}
-</p>
-
+        </p>
       </div>
     </div>
   );
 };
-
 const SellerInbox = ({
   setOpen,
   newMessage,
@@ -357,22 +393,34 @@ const SellerInbox = ({
   scrollRef,
   handleImageUpload,
   currTitle,
-  loginuser
+  loginuser,
+  chatActive, // Receive chatActive state
+  toggleChatActiveStatus, // Receive the toggle function
 }) => {
   return (
     <div className="w-[full] min-h-full flex flex-col justify-between p-5">
       {/* message header */}
       <div className="w-full flex p-3 items-center justify-between bg-slate-200">
         <div className="flex">
-        <RiCustomerService2Fill className="w-[50px] h-[50px] flex items-center justify-center text-blue-300 text-3xl font-bold"/>
-
+          <RiCustomerService2Fill className="w-[50px] h-[50px] flex items-center justify-center text-blue-300 text-3xl font-bold" />
           <div className="pl-3">
-          <h1 className="text-[18px] font-[600]">
-          {loginuser.role === "Admin" && userData?.name? userData?.name : ""}  {loginuser.role === "Admin" && userData?.name? "" : "Help regarding"}  {loginuser.role === "Admin" && currTitle? currTitle : currTitle.split(' ')[1]}
-  </h1>
-  <h1>{activeStatus ? "Active Now" : ""}</h1>
+            <h1 className="text-[18px] font-[600]">
+            {loginuser.role === "Admin" && userData?.name? userData?.name : ""}{" "}{loginuser.role === "Admin" && userData?.name? "" : "Help regarding"}{" "}{loginuser.role === "Admin" && currTitle? currTitle : currTitle.split(' ')[1]}
+              
+            </h1>
+            <h1>{activeStatus ? "Active Now" : ""}</h1>
           </div>
         </div>
+        {loginuser.role === "Admin" && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleChatActiveStatus();
+                  }}
+                >
+                  {chatActive ? "Deactivate Chat" : "Activate Chat"}
+                </button>
+              )}{" "}
         <AiOutlineArrowRight
           size={20}
           className="cursor-pointer"
@@ -391,7 +439,7 @@ const SellerInbox = ({
               ref={scrollRef}
             >
               {item.sender !== sellerId && (
-                <RiCustomerService2Fill  
+                <RiCustomerService2Fill
                   className="w-[30px] h-[30px] rounded-full mr-3 text-blue-300"
                 />
               )}
@@ -410,7 +458,6 @@ const SellerInbox = ({
                   >
                     <p>{item.text}</p>
                   </div>
-
                   <p className="text-[12px] text-[#000000d3] pt-1">
                     {/* {format(item.createdAt)} */}
                   </p>
@@ -426,7 +473,7 @@ const SellerInbox = ({
         className="p-3 relative w-full flex justify-between items-center"
         onSubmit={sendMessageHandler}
       >
-        <div className="w-[30px]">
+       {chatActive && ( <div className="w-[30px]">
           <input
             type="file"
             name=""
@@ -437,24 +484,31 @@ const SellerInbox = ({
           <label htmlFor="image">
             <TfiGallery className="cursor-pointer" size={20} />
           </label>
-        </div>
-        <div className="w-full">
-          <input
-            type="text"
-            required
-            placeholder="Enter your message..."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            className={`${styles.input}`}
-          />
-          <input type="submit" value="Send" className="hidden" id="send" />
-          <label htmlFor="send">
-            <AiOutlineSend
-              size={20}
-              className="absolute right-4 top-5 cursor-pointer"
+        </div>)}
+        
+        {chatActive && (<div className="w-full">
+            <input
+              type="text"
+              required
+              placeholder="Enter your message..."
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              className={`${styles.input}`}
             />
-          </label>
-        </div>
+            <input type="submit" value="Send" className="hidden" id="send" />
+            <label htmlFor="send">
+              <AiOutlineSend
+                size={20}
+                className="absolute right-4 top-5 cursor-pointer"
+              />
+            </label>
+          </div>
+        )}
+        {!chatActive && ( // Center the message
+            <div className="w-full text-center">
+              <h1 className="text-red-500">Chat has been disabled</h1>
+            </div>
+        )}
       </form>
     </div>
   );

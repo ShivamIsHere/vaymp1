@@ -15,7 +15,12 @@ router.post(
       const isConversationExist = await Conversation.findOne({ groupTitle });
 
       if (isConversationExist) {
-        const conversation = isConversationExist;
+        const conversation = await Conversation.findByIdAndUpdate(
+          isConversationExist._id,
+          { isActive: true },
+          { new: true } // This option returns the updated document
+        );
+
         res.status(201).json({
           success: true,
           conversation,
@@ -24,6 +29,7 @@ router.post(
         const conversation = await Conversation.create({
           members: [userId, sellerId],
           groupTitle: groupTitle,
+          isActive: true,
         });
 
         res.status(201).json({
@@ -32,10 +38,28 @@ router.post(
         });
       }
     } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+
+router.put(
+  "/update-conversation-status/:id",
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const { isActive } = req.body;
+      const conversation = await Conversation.findByIdAndUpdate(req.params.id, { isActive }, { new: true });
+      res.status(200).json({
+        success: true,
+        conversation,
+      });
+    } catch (error) {
       return next(new ErrorHandler(error.response.message), 500);
     }
   })
 );
+
 
 // get seller conversations
 router.get(
