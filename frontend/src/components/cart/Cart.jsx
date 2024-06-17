@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addTocart, removeFromCart,updateTocart } from "../../redux/actions/cart";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { getAllProducts } from "../../redux/actions/product";
 
 const Cart = ({ setOpenCart }) => {
   const { cart } = useSelector((state) => state.cart);
@@ -16,8 +17,7 @@ const Cart = ({ setOpenCart }) => {
   const dispatch = useDispatch();
   console.log("cartjj", cart);
   let totalCount = 0;
-
-  cart.forEach(item => {
+    cart.forEach(item => {
     item.stock.forEach(stockItem => {
       if (stockItem.isSelected) {
         totalCount += 1;
@@ -63,16 +63,8 @@ const Cart = ({ setOpenCart }) => {
     }
   });
   
-  // newCart.forEach((val5)=>{
-  //   let p=true;
-  //       val5.stock.forEach((st)=>{
-  //        p=p&st.isSelected
-  //       })
-  //       if(p==false){
-  //         dispatch(removeFromCart(val5));
-  //       }
-  // })
-  };
+
+  }; 
   const totalPrice = cart.reduce((acc, item) => {
     // Calculate the total discounted price for each item based on qty and discountPrice
     const itemTotal = item.stock.reduce(
@@ -112,26 +104,7 @@ const Cart = ({ setOpenCart }) => {
     });
     oldData.stock = l;
     console.log("lllll", oldData);
-    //   const isItemExists = cart && cart.find((i) => i._id === id);
-    //   if (isItemExists) {
-    //     toast.error("aItem alredy in cart!");
-    //   } else {
-    //     if (selectedSize === '') {
-    //       toast.error("Please select a size!");
-    //     } else {
-    //       const selectedProduct = data.stock.find((item) => item.size === selectedSize);
-    //       if (!selectedProduct || selectedProduct.quantity < 1) {
-    //         toast.error("Selected size not available or out of stock!");
-    //       } else {
-    //         const updatedStock = data.stock.map((item) =>
-    //           item.size === selectedSize
-    //             ? { ...item, quantity: item.quantity - count }
-    //             : item
-    //         );
-    //         const cartData = { ...data, stock: updatedStock, qty: count,size: selectedSize };
-    // console.log("data",data)
-    // console.log("stock",updatedStock)
-
+   
     try {
       // await updateStockAfterOrderCreation(itemToUpdate);
       dispatch(addTocart(oldData));
@@ -238,32 +211,7 @@ const Cart = ({ setOpenCart }) => {
                     );
                   })}
 
-                {/* {cart &&
-                  cart.map((i, index) => (
-                    console.log("jjjjjj",i);
-                    i.stock.map(()=>{
-                      return <div></div>
-                    })
-                    // i.stock.map((val2)=>{
-                    //   if(val2.isSelected==true){
-                    //     <CartSingle
-                    //     key={val2._id}
-                    //     data={i}
-                    //     quantityChangeHandler={quantityChangeHandler}
-                    //     removeFromCartHandler={removeFromCartHandler}
-                    //   />
-                    //   }
-                    // })
 
-
-
-                    // <CartSingle
-                    //   key={index}
-                    //   data={i}
-                    //   quantityChangeHandler={quantityChangeHandler}
-                    //   removeFromCartHandler={removeFromCartHandler}
-                    // />
-                  ))} */}
               </div>
             </div>
 
@@ -290,6 +238,23 @@ const CartSingle = ({ val2,data, quantityChangeHandler, removeFromCartHandler })
   const [selectedSize, setSelectedSize] = useState(val2.size); // Example: Initialize selected size state
   const [value, setValue] = useState(val2.qty);
   const totalPrice = data.discountPrice * value;
+  const {allProducts} = useSelector((state) => state.products);
+  const [error,setError]=useState("");
+  useEffect(() => {
+    // Check if the selected size has a quantity of 0 and remove it from the cart if true
+    if (allProducts && Array.isArray(allProducts)) {
+      const matchingProduct = allProducts.find((product) => product._id === data._id);
+      console.log("matchingProduct", matchingProduct);
+      if (matchingProduct && matchingProduct.stock) {
+        const stockItem = matchingProduct.stock.find((item) => item.size === selectedSize);
+        console.log("stockItem", stockItem);
+        if (stockItem && stockItem.quantity === 0) {
+          removeFromCartHandler(data, selectedSize);
+          toast.error(`The size ${selectedSize} for the product ${data.name} is out of stock and has been removed from the cart.`);
+        }
+      }
+    }
+  }, [allProducts, data._id, selectedSize, removeFromCartHandler]);
 
   const increment = () => {
     console.log("mydata", selectedSize);
@@ -315,6 +280,7 @@ const CartSingle = ({ val2,data, quantityChangeHandler, removeFromCartHandler })
   };
 
   return (
+    <>
     <div className="border-b p-4">
       <div className="w-full flex items-center">
         <div>
@@ -370,6 +336,9 @@ const CartSingle = ({ val2,data, quantityChangeHandler, removeFromCartHandler })
         </div>
       </div>
     </div>
+    {/* <div>{error}</div> */}
+
+    </>
   );
 };
 
