@@ -5,10 +5,13 @@ import {
   AiOutlineMessage,
   AiOutlineShoppingCart,
   AiOutlineInfoCircle,
+  AiTwotonePicture,
 } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getAllProductsShop } from "../../redux/actions/product";
+import { getAllProducts } from "../../redux/actions/product";
+
 import { server } from "../../server";
 import styles from "../../styles/styles";
 import {
@@ -27,9 +30,12 @@ const ProductDetails =  ({ data }) => {
   const { cart } = useSelector((state) => state.cart);
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const { products } = useSelector((state) => state.products);
+  const { allProducts } = useSelector((state) => state.products);
+
   const [count, setCount] = useState(1);
   const [click, setClick] = useState(false);
   const [select, setSelect] = useState(0);
+
   const [selectedSize, setSelectedSize] = useState(""); // State for selected size
   const [showDescription, setShowDescription] = useState(false);
 //const [adminuser,setadminuser]=useState({});
@@ -59,7 +65,7 @@ const ProductDetails =  ({ data }) => {
       setCount(count - 1);
     }
   };
-
+  
   const removeFromWishlistHandler = (data) => {
     setClick(!click);
     dispatch(removeFromWishlist(data));
@@ -89,6 +95,7 @@ const ProductDetails =  ({ data }) => {
    
       let newData = JSON.parse(JSON.stringify(isItemExists));
       // console.log("newData1",newData)
+      const isExists = newData.stock.some((val) => val.size === selectedSize && val.isSelected === true);
 
       newData.stock.forEach((val) => {
         if (val.size === selectedSize) {
@@ -119,8 +126,13 @@ const ProductDetails =  ({ data }) => {
       // })
       try {
         // await updateStockAfterOrderCreation(itemToUpdate);
+        
+          if(isExists){
+            toast.error("Item already in cart!");
+          }else{
         dispatch(updateTocart(newCart));
-        toast.success("Item updated to cart successfully!");
+        toast.success("Item added to cart successfully!");
+          }
       } catch (error) {
         console.error("Error updating stock:", error.message);
         toast.error("Failed to add item to cart!");
@@ -153,60 +165,7 @@ const ProductDetails =  ({ data }) => {
 
   const addToCartHandler = async (id, selectedSize, count) => {
     console.log("mycart777", id);
-    // const isItemExists =
-    //   cart &&
-    //   cart.find((i) => {
-    //     // console.log("iiiiiiiiii", i);
-    //     const m1 = i.stock.find((ite) => {
-    //       return ite._id == id;
-    //     });
-    //     console.log("m1m1", m1);
-    //     if (m1 == undefined) {
-    //       return false;
-    //     } else {
-    //       return true;
-    //     }
-    //     // return i._id === id;
-    //   });
-    // console.log("klklkl", isItemExists);
-    // //console.log("iiiidddddd", stock[0].size._id);
-    // if (isItemExists && false) {
-    //   toast.error("Item already in cart!");
-    // } else {
-    //   if (selectedSize === "") {
-    //     toast.error("Please select a size!");
-    //   } else {
-    //     const selectedProduct = data.stock.find(
-    //       (item) => item.size === selectedSize
-    //     );
-    //     if (!selectedProduct || selectedProduct.quantity < 1) {
-    //       toast.error("Selected size not available or out of stock!");
-    //     } else {
-    //       const updatedStock = data.stock.map((item) =>
-    //         item.size === selectedSize
-    //           ? { ...item, quantity: item.quantity - count }
-    //           : item
-    //       );
-    //       const cartData = {
-    //         ...data,
-    //         stock: updatedStock,
-    //         qty: count,
-    //         size: selectedSize
-    //       };
-    //       console.log("cartDatacartData", cartData);
-    //       console.log("stock", updatedStock);
-
-    //       try {
-    //         // await updateStockAfterOrderCreation(itemToUpdate);
-    //         dispatch(addTocart(cartData));
-    //         toast.success("Item added to cart successfully!");
-    //       } catch (error) {
-    //         console.error("Error updating stock:", error.message);
-    //         toast.error("Failed to add item to cart!");
-    //       }
-    //     }
-    //   }
-    // }
+    
   };
 
   const totalReviewsLength =
@@ -311,25 +270,6 @@ const ProductDetails =  ({ data }) => {
                     </h3>
                   </div>
                 </div>
-                {/* <div className="flex items-center mt-12 justify-between pr-3">
-                  <div>
-                    <button
-                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
-                      onClick={decrementCount}
-                    >
-                      -
-                    </button>
-                    <span className="bg-gray-200 text-gray-800 font-medium px-4 py-[11px]">
-                      {count}
-                    </span>
-                    <button
-                      className="bg-gradient-to-r from-teal-400 to-teal-500 text-white font-bold rounded-l px-4 py-2 shadow-lg hover:opacity-75 transition duration-300 ease-in-out"
-                      onClick={incrementCount}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div> */}
 
                 {/* select size  */}
                 <div className="flex items-center pt-8">
