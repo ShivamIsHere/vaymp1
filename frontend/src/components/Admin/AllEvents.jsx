@@ -5,23 +5,33 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { server } from "../../server";
-import {deleteEvent} from "../../redux/actions/event"
-import { useDispatch, useSelector } from "react-redux";
+import { deleteEvent } from "../../redux/actions/event";
+import { useDispatch } from "react-redux";
 
 const AllEvents = () => {
   const [events, setEvents] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get(`${server}/event/admin-all-events`, { withCredentials: true }).then((res) => {
-      setEvents(res.data.events);
+    axios.get(`${server}/product/admin-all-products`, { withCredentials: true }).then((res) => {
+      // Check if res.data and res.data.products exist
+      if (res.data && res.data.products) {
+        // Filter only events
+        const filteredEvents = res.data.products.filter(product => product.listing === "Event");
+        setEvents(filteredEvents);
+      } else {
+        console.error("Unexpected response structure", res);
+      }
+    }).catch((error) => {
+      console.error("Error fetching events", error);
     });
   }, []);
+
   const handleDelete = (id) => {
-    console.log("id",id)
+    console.log("id", id);
     dispatch(deleteEvent(id));
-     window.location.reload();
-  }
+    window.location.reload();
+  };
 
   const columns = [
     { field: "id", headerName: "Event Id", minWidth: 150, flex: 0.7 },
@@ -76,9 +86,7 @@ const AllEvents = () => {
       renderCell: (params) => {
         return (
           <>
-            <Button
-            onClick={() => handleDelete(params.id)}
-            >
+            <Button onClick={() => handleDelete(params.id)}>
               <AiOutlineDelete size={20} />
             </Button>
           </>

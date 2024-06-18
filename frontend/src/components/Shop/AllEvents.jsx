@@ -10,13 +10,13 @@ import { deleteProduct } from "../../redux/actions/product";
 import Loader from "../Layout/Loader";
 
 const AllEvents = () => {
-  const { events, isLoading } = useSelector((state) => state.events);
+  const { products, isLoading } = useSelector((state) => state.products);
   const { seller } = useSelector((state) => state.seller);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllEventsShop(seller._id));
+    dispatch(getAllProductsShop(seller._id));
   }, [dispatch]);
 
   const handleDelete = (id) => {
@@ -45,7 +45,6 @@ const AllEvents = () => {
       minWidth: 80,
       flex: 0.5,
     },
-
     {
       field: "sold",
       headerName: "Sold out",
@@ -95,18 +94,17 @@ const AllEvents = () => {
     },
   ];
 
-  const row = [];
+  // Filter products where listing is "Event"
+  const filteredProducts = products.filter((product) => product.listing === "Event");
 
-  events &&
-  events.forEach((item) => {
-      row.push({
-        id: item._id,
-        name: item.name,
-        price: "Rs. " + item.discountPrice,
-        Stock: item.stock,
-        sold: item.sold_out,
-      });
-    });
+  // Map filtered products to rows
+  const rows = filteredProducts.map((item) => ({
+    id: item._id,
+    name: item.name,
+    price: "Rs. " + item.discountPrice,
+    Stock: item.stock,
+    sold: item.sold_out,
+  }));
 
   return (
     <>
@@ -115,7 +113,7 @@ const AllEvents = () => {
       ) : (
         <div className="w-full mx-8 pt-1 mt-10 bg-white">
           <DataGrid
-            rows={row}
+            rows={rows}
             columns={columns}
             pageSize={10}
             disableSelectionOnClick

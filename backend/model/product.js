@@ -7,7 +7,6 @@ const productSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, "Please enter your product description!"],
   },
   tags: {
     type: String,
@@ -18,6 +17,8 @@ const productSchema = new mongoose.Schema({
   },
   originalPrice: {
     type: Number,
+    required: [true, "Please enter  product price!"],
+
   },
   discountPrice: {
     type: Number,
@@ -73,6 +74,18 @@ const productSchema = new mongoose.Schema({
   fit: {
     type: String,
   },
+  listing: {
+    type: String,
+    status:true,
+    default:"Product"
+  },
+  
+    startDate: {
+      type: Date,
+    },
+    endDate: {
+      type: Date,
+    },
   gender: { 
     type: String,
     required: [true, "Please Select gender"],

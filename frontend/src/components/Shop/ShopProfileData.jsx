@@ -9,45 +9,43 @@ import { getAllEventsShop } from "../../redux/actions/event";
 
 const ShopProfileData = ({ isOwner }) => {
   const { products } = useSelector((state) => state.products);
-  const { events } = useSelector((state) => state.events);
   const { id } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllProductsShop(id));
-    dispatch(getAllEventsShop(id));
   }, [dispatch]);
+  
   const getFirstLetter = (name) => {
     if (!name) return '';
     return name.charAt(0).toUpperCase();
-}
+  }
+  
   const [active, setActive] = useState(1);
 
+  // Function to calculate duration in a human-readable format
+  const calculateDuration = (createdAt) => {
+    const currentDate = new Date();
+    const reviewDate = new Date(createdAt);
+    const differenceInTime = currentDate.getTime() - reviewDate.getTime();
+    const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
 
-   // Function to calculate duration in days
-   // Function to calculate duration in a human-readable format
-const calculateDuration = (createdAt) => {
-  const currentDate = new Date();
-  const reviewDate = new Date(createdAt);
-  const differenceInTime = currentDate.getTime() - reviewDate.getTime();
-  const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
-  
-  if (differenceInDays >= 30) {
-    const months = Math.floor(differenceInDays / 30);
-    return `${months} ${months === 1 ? 'month' : 'months'} ago`;
-  } else if (differenceInDays === 1) {
-    return '1 day ago';
-  } else {
-    return `${differenceInDays} days ago`;
-  }
-};
+    if (differenceInDays >= 30) {
+      const months = Math.floor(differenceInDays / 30);
+      return `${months} ${months === 1 ? 'month' : 'months'} ago`;
+    } else if (differenceInDays === 1) {
+      return '1 day ago';
+    } else {
+      return `${differenceInDays} days ago`;
+    }
+  };
 
-  const allReviews =
-    products && products.map((product) => product.reviews).flat();
+  const allReviews = products && products.map((product) => product.reviews).flat();
 
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
+        {/* Navigation buttons code */}
         <div className="w-full flex">
           <div className="flex items-center" onClick={() => setActive(1)}>
             <h5
@@ -92,39 +90,41 @@ const calculateDuration = (createdAt) => {
       </div>
 
       <br />
+
       {active === 1 && (
         <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
-        {products &&
-          products
-            .filter(product => product.shop.shopIsActive === false)
-            .map((i, index) => (
-              <ProductCard data={i} key={index} isShop={true} />
-            ))}
-      </div>
-      
+          {products &&
+            products
+              .filter((product) => product.listing != "Event" && product.shop.shopIsActive === false)
+              .map((i, index) => (
+                <ProductCard data={i} key={index} isShop={true} />
+              ))}
+        </div>
       )}
 
       {active === 2 && (
         <div className="w-full">
           <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
-            {events &&
-              events
-              .filter(event => event.shop.shopIsActive === false)
-              .map((i, index) => (
-                <ProductCard
-                  data={i}
-                  key={index}
-                  isShop={true}
-                  isEvent={true}
-                />
-              ))}
+            {products &&
+              products
+                .filter((event) => event.listing === "Event" && event.shop.shopIsActive === false)
+                .map((i, index) => (
+                  <ProductCard
+                    data={i}
+                    key={index}
+                    isShop={true}
+                    isEvent={true}
+                  />
+                ))}
           </div>
-          {events &&
-    events.filter(event => event.shop.shopIsActive === false).length === 0 && (
-      <h5 className="w-full text-center py-5 text-[18px]">
-        No Events for this shop!
-      </h5>
-    )}
+          {products &&
+            products
+              .filter((event) => event.listing === "Event" && event.shop.shopIsActive === false)
+              .length === 0 && (
+              <h5 className="w-full text-center py-5 text-[18px]">
+                No Events for this shop!
+              </h5>
+            )}
         </div>
       )}
 
@@ -134,10 +134,10 @@ const calculateDuration = (createdAt) => {
             allReviews.map((item, index) => (
               <div className="w-full flex my-4">
                 <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-slate-200">
-            <div className="w-[50px] h-[50px] flex items-center justify-center text-blue-300 text-3xl font-bold">
-              {getFirstLetter(item?.user?.name)}
-            </div>          
-          </div>
+                  <div className="w-[50px] h-[50px] flex items-center justify-center text-blue-300 text-3xl font-bold">
+                    {getFirstLetter(item?.user?.name)}
+                  </div>          
+                </div>
                 <div className="pl-2">
                   <div className="flex w-full items-center">
                     <h1 className="font-[600] pr-2">{item.user.name}</h1>
@@ -145,7 +145,7 @@ const calculateDuration = (createdAt) => {
                   </div>
                   <p className="font-[400] text-[#000000a7]">{item?.comment}</p>
                   <p className="text-[#000000a7] text-[14px]">{calculateDuration(item.createdAt)}</p>
-              </div>
+                </div>
               </div>
             ))}
           {allReviews && allReviews.length === 0 && (

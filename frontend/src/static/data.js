@@ -808,7 +808,17 @@ export const navItems = [
       type: "15 - 16 Years",
     }
   ];
-  
+  export const listing = 
+  [
+    {
+    id: 1,
+    type: "Product",
+  },
+  {
+    id: 1,
+    type: "Event",
+  }
+];
   // product Data
   export const productData = [
     {
