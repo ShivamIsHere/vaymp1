@@ -11,14 +11,20 @@ import axios from "axios";
 import { server } from "../../server";
 import { useState } from "react";
 
+
+
+
 const AllProducts = () => {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
+
   useEffect(() => {
-    axios.get(`${server}/product/admin-all-products`, {withCredentials: true}).then((res) => {
-        setData(res.data.products);
-    })
+    axios.get(`${server}/product/admin-all-products`, { withCredentials: true }).then((res) => {
+      const filteredData = res.data.products.filter(product => product.listing !== "Event");
+      setData(filteredData);
+    });
   }, []);
+  
   const handleDelete = (id) => {
     console.log("delete id admin",id)
     dispatch(deleteProduct(id));

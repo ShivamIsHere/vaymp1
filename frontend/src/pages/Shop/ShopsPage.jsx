@@ -8,11 +8,16 @@ import { BsShop } from "react-icons/bs";
 const ShopsPage = () => {
   const { allProducts, isLoading } = useSelector((state) => state.products);
   const [shopList, setShopList] = useState([]);
+
   useEffect(() => {
     if (!isLoading) {
       const uniqueShopIds = new Set();
       const uniqueShops = [];
-      allProducts.forEach((product) => {
+      
+      // Filter products where listing is not "Event"
+      const filteredProducts = allProducts.filter((product) => product.listing !== "Event");
+
+      filteredProducts.forEach((product) => {
         const shopId = product.shop._id;
         if (!uniqueShopIds.has(shopId)) {
           uniqueShopIds.add(shopId);
@@ -22,6 +27,7 @@ const ShopsPage = () => {
       setShopList(uniqueShops);
     }
   }, [allProducts, isLoading]);
+
   return (
     <>
       <Header activeHeading={5} />
@@ -45,4 +51,5 @@ const ShopsPage = () => {
     </>
   );
 };
+
 export default ShopsPage;

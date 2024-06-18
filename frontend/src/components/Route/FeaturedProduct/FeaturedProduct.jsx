@@ -4,8 +4,11 @@ import styles from "../../../styles/styles";
 import ProductCard from "../ProductCard/ProductCard";
 
 const FeaturedProduct = () => {
-  const {allProducts} = useSelector((state) => state.products);
-   
+  const { allProducts } = useSelector((state) => state.products);
+
+  // Filter products where listing is not equal to "Event"
+  const filteredProducts = allProducts.filter((product) => product.listing !== "Event");
+
   return (
     <div>
       <div className={`${styles.section}`}>

@@ -9,10 +9,9 @@ const SuggestedProduct = ({ data }) => {
   const [productData,setProductData] = useState();
 
   useEffect(() => {
-    const d =
-    allProducts && allProducts.filter((i) => i.category === data.category);
-    setProductData(d);
-  }, []);
+    const filteredData = allProducts.filter((product) => product.listing !== "Event" && product.category === data.category);
+    setProductData(filteredData);
+  }, [allProducts, data.category]);
 
   return (
     <div>
