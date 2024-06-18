@@ -88,7 +88,8 @@ router.get(
             markedPrice: i.markedPrice,
             discountPrice: i.discountPrice,
             refundStatus: i.refundStatus,
-            paidAt: i.paidAt,
+            deliveredAt: i.deliveredAt,
+            retunedAt:i.returnedAt,
             return1:i.return1,
             cancel:i.cancel,
             delivered:i.delivered,
@@ -118,7 +119,7 @@ router.get(
     catchAsyncErrors(async (req, res, next) => {
       try {
         const orderId = req.params.id;
-        const { status,cancel,return1,paymentInfo,paidAt } = req.body; // New stock object from the request body
+        const { status,cancel,return1,paymentInfo,deliveredAt,returnedAt,refundStatus } = req.body; // New stock object from the request body
   
         // Find the product by ID in the database
         const kuchvi = await Kuchvi.findById(orderId);
@@ -141,11 +142,17 @@ router.get(
         if (return1 !== undefined) {
           kuchvi.return1 = return1;
         }
+        if (refundStatus !== undefined) {
+          kuchvi.refundStatus = refundStatus;
+        }
         if (paymentInfo !== undefined) {
           kuchvi.paymentInfo = paymentInfo;
         }
-        if (paidAt !== undefined) {
-          kuchvi.paidAt=Date.now();
+        if (deliveredAt !== undefined) {
+          kuchvi.deliveredAt=Date.now();
+        }
+        if (returnedAt !== undefined) {
+          kuchvi.returnedAt=Date.now();
         }
         
   

@@ -67,7 +67,8 @@ const OrderDetails = () => {
           return1: val.return1,
           refund:val.refund,
           reundStatus:val.refundStatus,
-          paidAt:val.paidAt,
+          deliveredAt:val.deliveredAt,
+          returnedAt:val.returnedAt,
           createdAt:val.createdAt
         }));
         setRows(newRows);

@@ -228,8 +228,10 @@ const AllUndeliveredItems = () => {
             paymentInfo:item.paymentInfo,
             productName:item.productName,
             product:item.product,
-            paidAt: item.paidAt.slice(0, 10),
-            createdAt: item.createdAt.slice(0, 10),
+            deliveredAt: item.deliveredAt?.slice(0, 10),
+            returnedAt: item.returnedAt?.slice(0, 10),
+            createdAt: item.createdAt?.slice(0, 10),
+
             img:item.img,
             cancel:item.cancel,
             delivered:item.delivered,

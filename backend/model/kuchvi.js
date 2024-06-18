@@ -109,9 +109,11 @@ refundStatus:{
     type: Boolean,
     default:false
 },
-paidAt:{
+deliveredAt:{
     type: Date,
-    default: Date.now(),
+},
+returnedAt:{
+  type: Date,
 },
   createdAt: {
     type: Date,

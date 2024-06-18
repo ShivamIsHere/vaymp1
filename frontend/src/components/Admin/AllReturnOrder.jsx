@@ -177,6 +177,7 @@ console.log("item",item)
 
          const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
           status: "Returned", // Update the stock value in the request body
+          refundStatus:true
           });
   
           if (response.status >= 200 && response.status < 300) {
@@ -229,8 +230,10 @@ console.log("item",item)
             paymentInfo:item.paymentInfo,
             productName:item.productName,
             product:item.product,
-            paidAt: item.paidAt.slice(0, 10),
-            createdAt: item.createdAt.slice(0, 10),
+            deliveredAt: item.deliveredAt?.slice(0, 10),
+            returnedAt: item.returnedAt?.slice(0, 10),
+            createdAt: item.createdAt?.slice(0, 10),
+
             img:item.img,
             cancel:item.cancel,
             delivered:item.delivered,

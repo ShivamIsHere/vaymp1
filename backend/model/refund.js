@@ -97,9 +97,11 @@ img:{
   type: String,
   default:""
 },
-paidAt:{
-    type: Date,
-    default: Date.now(),
+deliveredAt:{
+  type: Date,
+},
+returnedAt:{
+type: Date,
 },
   createdAt: {
     type: Date,

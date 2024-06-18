@@ -231,8 +231,10 @@ console.log("item",item)
             product:item.product,
 
             address: item.shippingAddress,
-            paidAt: item.paidAt.slice(0, 10),
-            createdAt: item.createdAt.slice(0, 10),
+            deliveredAt: item.deliveredAt?.slice(0, 10),
+            returnedAt: item.returnedAt?.slice(0, 10),
+            createdAt: item.createdAt?.slice(0, 10),
+
             img:item.img,
             cancel:item.cancel,
             delivered:item.delivered,

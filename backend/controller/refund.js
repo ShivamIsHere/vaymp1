@@ -86,7 +86,8 @@ router.get(
             paymentInfo:i.paymentInfo,
             productName:i.productName,
             product:i.product,
-            paidAt: i.paidAt,
+            deliveredAt: i.deliveredAt,
+            retunedAt:i.returnedAt,
             createdAt: i.createdAt,
             cancel:i.cancel,
             delivered:i.delivered,
@@ -122,8 +123,9 @@ router.get(
         }
   
         // Update the product's stock with the new stock array
-        refund.refundStatus = refundStatus;
-        refund.paidAt=Date.now();
+        refund.refundStatus = true;
+        refund.deliveredAt=Date.now();
+        refund.returnedAt=Date.now();
   
         // Save the updated product
         await refund.save();
