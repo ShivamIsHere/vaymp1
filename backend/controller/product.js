@@ -88,9 +88,13 @@ router.get(
     try {
       const products = await Product.find({ shopId: req.params.id });
 
+      const filteredProducts = products.filter(product =>
+        product.stock.some(stockItem => stockItem.quantity > 0)
+      );
+
       res.status(201).json({
         success: true,
-        products,
+        products: filteredProducts,
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
@@ -165,14 +169,6 @@ if (req.query.sortBy === "priceHighToLow") {
   sortBy = "originalPrice"; // Default sort by originalPrice
 }
 
-// Use sortBy and sortOrder in your database query or sorting logic
-
-      // console.log("req.query.sortBy",req.query.sortBy)
-      // console.log("req.query.sortOrder",req.query.sortOrder)
-      // console.log("req.query.sortBy",req.query)
-      // console.log("req.query.sortBy",req.params)
-
-      // console.log('Sorting Params:', { sortBy, sortOrder }); // Log sorting params
 
       // Filtering parameters
       const filters = {
@@ -230,11 +226,15 @@ if (req.query.sortBy === "priceHighToLow") {
       }
 
       // Query products with filtering, sorting, and pagination
-      const products = await Product.find(filters)
+      const allProducts = await Product.find(filters)
         .sort({ [sortBy]: sortOrder })
         .skip((page - 1) * perPage)
         .limit(perPage);
 
+      // Filter out products with zero quantity in all sizes
+      const products = allProducts.filter(product => {
+        return product.stock.some(stockItem => stockItem.quantity > 0);
+      });
       // Count total products for pagination
       const totalCount = await Product.countDocuments(filters);
 
@@ -464,6 +464,12 @@ router.get(
         );
       }
 
+            // Filter out products with zero quantity in all sizes
+            filteredProducts = filteredProducts.filter(product =>
+              product.stock.some(stockItem => stockItem.quantity > 0)
+            );
+      
+
       // Apply sorting
       if (sortBy) {
         const sortFields = {
@@ -543,109 +549,6 @@ router.get(
 
 
 
-
-
-// router.get(
-//   "/get-all-searched-products",
-//   catchAsyncErrors(async (req, res, next) => {
-//     try {
-//       const { query, page = 1, limit = 6 } = req.query;
-//       let words = query.toLowerCase().split(" ");
-      
-//       // Remove the word "for" from the search terms
-//       words = words.filter(word => word !== "for");
-//       const quer = words.join(" ");
-//       // console.log("req.query", req.query);
-
-//       // Fetch all products
-//       const allProducts = await Product.find().sort({ createdAt: -1 });
-//       let filteredProducts = allProducts;
-
-//       // Apply gender filter
-//       if (quer.includes("female") || quer.includes("females") || quer.includes("women") || quer.includes("woman") ||
-//           quer.includes("womans") || quer.includes("womens") || quer.includes("ladies") || quer.includes("lady") ||
-//           quer.includes("girl") || quer.includes("gurl") || quer.includes("girls") || quer.includes("ladki") ||
-//           quer.includes("ldki") || quer.includes("gurls")) {
-//         filteredProducts = filteredProducts.filter(val => 
-//           val.gender.toLowerCase() === "women" || 
-//           val.gender.toLowerCase() === "girls" || 
-//           val.gender.toLowerCase().includes('girl') || 
-//           val.gender.toLowerCase() === "boys & girls"
-//         );
-//       } else if (quer.includes("male") || quer.includes("males") || quer.includes("mans") || quer.includes("boys") || 
-//                  quer.includes("men") || quer.includes("mens") || quer.includes("guys") || quer.includes("ladka") || 
-//                  quer.includes("boy") || quer.includes("man")) {
-//         filteredProducts = filteredProducts.filter(val => 
-//           val.gender.toLowerCase() === "men" || 
-//           val.gender.toLowerCase() === "boys & girls" || 
-//           val.gender.toLowerCase().includes('boy') || 
-//           val.gender.toLowerCase().includes('boys')
-//         );
-//       }
-
-//       // Apply category filter
-//       if (quer.includes("shoes") || quer.includes("shoe") || quer.includes("joota") || quer.includes("juta") || 
-//           quer.includes("jhoota") || quer.includes("jutta")) {
-//         filteredProducts = filteredProducts.filter(val => val.category.toLowerCase() === "shoes");
-//       } else if (quer.includes("accessories") || quer.includes("sunglasses") || quer.includes("jhumka") || quer.includes("jumka") ||
-//                  quer.includes("caps") || quer.includes("earrings") || quer.includes("watches") || quer.includes("belts") ||
-//                  quer.includes("bracelets") || quer.includes("bags") || quer.includes("purse") || quer.includes("wallets") ||
-//                  quer.includes("trolley") || quer.includes("hat") || quer.includes("scarfs") || quer.includes("stoles") ||
-//                  quer.includes("leatherbelts") || quer.includes("smartwatches") || quer.includes("digitalwatches") ||
-//                  quer.includes("analogwatches") || quer.includes("hairbands") || quer.includes("gloves") ||
-//                  quer.includes("drivinggloves")) {
-//         filteredProducts = filteredProducts.filter(val => val.category.toLowerCase() === "accessories");
-//       } else if (quer.includes("clothes") || quer.includes("shirt") || quer.includes("dresses") || quer.includes("cloths") || 
-//                  quer.includes("cloth") || quer.includes("kapra") || quer.includes("dress")) {
-//         filteredProducts = filteredProducts.filter(val => val.category.toLowerCase() !== "accessories" && val.category.toLowerCase() !== "shoes");
-//       }
-
-//       // Apply keyword filtering (if no gender or category filters were applied)
-//       const filterByWord = (product, word) => {
-//         const productProperties = [
-//           product?.size,
-//           product?.color,
-//           product?.fabric,
-//           product?.occasion,
-//           product?.fit,
-//           product?.sleeveType,
-//           product?.neckType,
-//           product?.name,
-//           product?.tags,
-//           product?.brand,
-//         ];
-//         return productProperties.some(prop => prop && prop.toLowerCase().includes(word));
-//       };
-
-//       words.forEach((word) => {
-//         const filtered = filteredProducts.filter(product => filterByWord(product, word));
-//         if (filtered.length > 0) {
-//           filteredProducts = filtered;
-//         }
-//       });
-
-//       console.log("filteredProducts",filteredProducts.length)
-//       // Apply pagination
-//       const startIndex = (page - 1) * limit;
-//       const endIndex = page * limit;
-//       const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
-
-//       res.status(200).json({
-//         success: true,
-//         products: paginatedProducts,
-//         totalProducts: filteredProducts.length,
-//         currentPage: page,
-//         totalPages: Math.ceil(filteredProducts.length / limit)
-//       });
-//     } catch (error) {
-//       console.error("Error processing request:", error);
-//       res.status(500).json({
-//         success: false,
-//         message: "An error occurred while fetching products."
-//       });
-//     }
-//   })
-// );
 
 
 // review for a product
