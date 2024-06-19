@@ -177,6 +177,7 @@ console.log("item",item)
 
          const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
           status: "Returned", // Update the stock value in the request body
+          refund:true,
           refundStatus:true
           });
   

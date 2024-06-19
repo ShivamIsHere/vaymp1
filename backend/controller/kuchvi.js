@@ -119,7 +119,7 @@ router.get(
     catchAsyncErrors(async (req, res, next) => {
       try {
         const orderId = req.params.id;
-        const { status,cancel,return1,paymentInfo,deliveredAt,returnedAt,refundStatus } = req.body; // New stock object from the request body
+        const { status,cancel,return1, delivered,paymentInfo,deliveredAt,returnedAt,refundStatus,refund } = req.body; // New stock object from the request body
   
         // Find the product by ID in the database
         const kuchvi = await Kuchvi.findById(orderId);
@@ -136,8 +136,14 @@ router.get(
         if (status !== undefined) {
           kuchvi.status = status;
         }
+        if (refund !== undefined) {
+          kuchvi.refund = refund;
+        }
         if (cancel !== undefined) {
           kuchvi.cancel = cancel;
+        }
+        if (delivered !== undefined) {
+          kuchvi.delivered = delivered;
         }
         if (return1 !== undefined) {
           kuchvi.return1 = return1;

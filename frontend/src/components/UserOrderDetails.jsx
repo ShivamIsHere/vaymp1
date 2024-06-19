@@ -13,20 +13,19 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const UserOrderDetails = () => {
-  const { orders } = useSelector((state) => state.order);
-  // const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  // const [open, setOpen] = useState(false);
   const [comment, setComment] = useState("");
   const [selectedItem, setSelectedItem] = useState(null);
   const [rating, setRating] = useState(1);
   const { user, isAuthenticated } = useSelector((state) => state.user);
-  // const { id } = useParams();
   const navigate = useNavigate();
   const [kuchvi, setkuchvi] = useState([]);
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isReturnable, setIsReturnable] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const [timerInterval, setTimerInterval] = useState(null);
 
 
   
@@ -90,6 +89,105 @@ const UserOrderDetails = () => {
 
   const data = rows.find((item) => item.productid === id);
   console.log("Data:", data);
+//   useEffect(() => {
+//     if (!data) {
+//         console.log("Data is not defined.");
+//         return;
+//     }
+
+//     // Mock data for testing purposes
+//     const mockData = {
+//         ...data,
+//         delivered: true,
+//         deliveredAt: new Date(Date.now() - 60 * 1000).toISOString() // 1 minute ago
+//     };
+
+//     console.log("Mock Data object:", mockData);
+
+//     if (mockData) {
+//         console.log("Data is defined:", mockData);
+//         if (mockData.hasOwnProperty('delivered')) {
+//             console.log("Data delivered property exists:", mockData.delivered);
+//             if (mockData.delivered) {
+//                 console.log("Data has been delivered:", mockData.delivered);
+
+//                 const deliveredAt = new Date(mockData.deliveredAt).getTime();
+//                 console.log("deliveredAt:", deliveredAt);
+
+//                 const currentTime = Date.now();
+//                 console.log("currentTime:", currentTime);
+
+//                 const returnPeriod = 2 * 60 * 1000; // 48 hours in milliseconds
+//                 console.log("returnPeriod:", returnPeriod);
+
+//                 if (currentTime - deliveredAt < returnPeriod) {
+//                     setIsReturnable(true);
+//                     console.log("setIsReturnable:", true);
+//                 } else {
+//                     setIsReturnable(false);
+//                     console.log("Not within return period.");
+//                 }
+//             } else {
+//                 console.log("Data has not been delivered.");
+//             }
+//         } else {
+//             console.log("Data does not have delivered property.");
+//         }
+//     } else {
+//         console.log("Data is not defined.");
+//     }
+// }, [data]);
+useEffect(() => {
+  if (data?.delivered) {
+    const deliveredAt = new Date(data.deliveredAt).getTime();
+    const currentTime = Date.now();
+    const returnPeriod = 2 * 24 * 60 * 60 * 1000; // 2 days in milliseconds
+
+    if (currentTime - deliveredAt < returnPeriod) {
+      setIsReturnable(true);
+      const remainingTime = returnPeriod - (currentTime - deliveredAt);
+      startTimer(remainingTime);
+    }
+  }
+}, [data]);
+
+const startTimer = (remainingTime) => {
+  setCountdown(remainingTime);
+  const interval = setInterval(() => {
+    setCountdown((prevTime) => {
+      if (prevTime <= 1000) {
+        clearInterval(interval);
+        setIsReturnable(false);
+        return 0;
+      }
+      return prevTime - 1000;
+    });
+  }, 1000);
+  setTimerInterval(interval);
+};
+
+const returnHandler = async () => {
+  // Handle return logic here
+  console.log("Return button clicked");
+
+  // Example Axios call for updating status
+  const response = await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${data.kuchviId}`, {
+    return1: true,
+    status: "Return Request",
+  });
+
+  if (response.status >= 200 && response.status < 300) {
+    console.log("Stock updated successfully");
+    // Reload or update data as needed
+  } else {
+    console.error(`Failed to update stock - Unexpected status code: ${response.status}`);
+    // Handle error
+  }
+};
+  
+  
+  
+
 
   if (loading) {
     return <div>Loading...</div>; // Show a loading message while fetching data
@@ -127,25 +225,12 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",data.orderid)
       });
   };
   
-  const refundHandler = async () => {
-    await axios.put(`${server}/order/order-refund/${id}`,{
-      status: "Processing refund"
-    }).then((res) => {
-       toast.success(res.data.message);
-    dispatch(getAllOrdersOfUser(user._id));
-    }).catch((error) => {
-      toast.error(error.response.data.message);
-    })
-  };
   const handleMessageSubmit = async () => {
     if (isAuthenticated) {
       console.log("selectedItem,,,,,,,,,,,,,,,,,,",data)
       const groupTitle = data?.kuchviId +" "+data?.productName;
       const userId = data.userId;
-      // const sellerId = data.shopId;
-      // const sellerId="65fae1d3497be0c126658a67";
       const sellerId=data?.product.adminCreated;
-      // console.log("order kr do",data?.cart[0].adminCreated)
       await axios
         .post(`${server}/conversation/create-new-conversation`, {
           groupTitle,
@@ -328,14 +413,7 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",data.orderid)
             {data?.paymentInfo?.status ? data?.paymentInfo?.status : "Not Paid"}
           </h4>
           <br />
-          {data?.status === "Delivered" && (
-            <div
-              className={`${styles.button} text-white`}
-              onClick={refundHandler}
-            >
-              Give a Refund
-            </div>
-          )}
+          
         </div>
       </div>
       <br />
@@ -346,10 +424,10 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",data.orderid)
         <span className="text-[#fff] flex items-center">Send Message</span>
       </div>
       <br />
-      {data.status=="Delivered" ||data.status=="Returned"||data.status== "Return Request" ?(<Button
+            {data.status=="Delivered" ||data.status=="Returned"||data.status== "Return Request" ?(<Button
             variant="contained"
             color="error"
-            disabled={data.status== "Returned"?true:data.return1}
+            disabled={!isReturnable||data.status== "Returned"?true:data.return1}
             onClick={async () => {
               // Handle return logic here
               console.log("================???????", data);
@@ -422,4 +500,9 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",data.orderid)
   );
 };
 
+const formatTime = (time) => {
+  const minutes = Math.floor((time / 1000 / 60) % 60);
+  const seconds = Math.floor((time / 1000) % 60);
+  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+};
 export default UserOrderDetails;
