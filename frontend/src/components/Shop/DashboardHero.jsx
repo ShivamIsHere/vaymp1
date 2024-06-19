@@ -6,6 +6,8 @@ import { MdBorderClear } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfShop } from "../../redux/actions/order";
 
+import { server } from "../../server";
+import axios from "axios";
 
 import { getAllProductsShop } from "../../redux/actions/product";
 import {  updateNewStockNotification } from "../../redux/actions/sellers";
@@ -22,8 +24,77 @@ const DashboardHero = () => {
   const { orders } = useSelector((state) => state.order);
   const { products } = useSelector((state) => state.products);
   const { id } = useParams();
+  const [kuchvi, setkuchvi] = useState([]);
+  const [row, setRows] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   // const seller=id;
   console.log("seller",seller.notification)
+
+
+
+
+
+  useEffect(() => {
+    axios
+      .get(`${server}/kuchvi/get-all-admin-kuchvi-request`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        // console.log("jklllllllllll",res.data)
+      
+        setkuchvi(res.data.allKuchviRequest);
+        setLoading(false); 
+      })
+      .catch((error) => {
+        console.log(error.response);
+        setLoading(false); 
+      });
+      
+  }, []);
+  useEffect(() => {
+    if (!loading) {
+      const updateRows = () => {
+        const newRows = kuchvi.filter(val => val.shopId === seller._id).map((val, ind) => ({
+          id: ind, // Ensure the unique ID for DataGrid is unique
+          orderid: val.orderId,
+          productid: val.productId,
+          size: val.size,
+          image: val.img,
+          itemsQty: 1,
+          total: "US$ " + val.markedPrice,
+          status: val.status,
+          address: val.shippingAddress,
+          userId: val.userId,
+          shopId: val.shopId,
+          delivered: val.delivered,
+          cancel: val.cancel,
+          refundStatus: val.refundStatus,
+          user:val.user,
+          paymentInfo:val.paymentInfo,
+          productName:val.productName,
+          product:val.product,
+          markedPrice: val.markedPrice,
+          discountPrice: val.discountPrice,
+          shopPrice: val.shopPrice,
+          kuchviId: val.kuchviId,
+          return1: val.return1,
+          refund:val.refund,
+          reundStatus:val.refundStatus,
+          deliveredAt:val.deliveredAt,
+          returnedAt:val.returnedAt,
+          createdAt:val.createdAt
+        }));
+        setRows(newRows);
+      };
+
+      updateRows();
+    }
+  }, [kuchvi, seller._id, loading]);
+
+  // const data = rows.find((item) => item.kuchviId === id);
+  // console.log("Data:", data);
+  console.log("Data:", row);
 
   // console.log("Id",products)
 
@@ -77,7 +148,7 @@ const DashboardHero = () => {
 
   
   const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+    { field: "kuchviId", headerName: "Order ID", minWidth: 150, flex: 0.7 },
     {
       field: "status",
       headerName: "Status",
@@ -109,9 +180,12 @@ const DashboardHero = () => {
       type: "number",
       sortable: false,
       renderCell: (params) => {
+        // Console log the params to see its contents
+        console.log("params",params);
+    
         return (
           <>
-            <Link to={`/dashboard/order/${params.id}`}>
+            <Link to={`/order/${params?.row?.kuchviId}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -119,20 +193,21 @@ const DashboardHero = () => {
           </>
         );
       },
-    },
+    }
+    
   ];
 
-  const row = [];
+  // const row = [];
 
-  orders &&
-    orders.forEach((item) => {
-      row.push({
-        id: item._id,
-        itemsQty: item.cart.reduce((acc, item) => acc + item.qty, 0),
-        total: "Rs" + item.totalPrice,
-        status: item.status,
-      });
-    });
+  // orders &&
+  //   orders.forEach((item) => {
+  //     row.push({
+  //       id: item._id,
+  //       itemsQty: item.cart.reduce((acc, item) => acc + item.qty, 0),
+  //       total: "Rs" + item.totalPrice,
+  //       status: item.status,
+  //     });
+  //   });
 
   return (
     <div className="w-full p-8">
@@ -169,7 +244,8 @@ const DashboardHero = () => {
               <span className="text-[16px]">(with 10% service charge)</span>
             </h3>
           </div>
-          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">Rs.{availableBalance}</h5>          <Link to="/dashboard-withdraw-money">
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">Rs.{availableBalance}</h5>          
+          <Link to="/dashboard-withdraw-money">
           <h5 className="pt-4 pl-[2] text-[#077f9c]">Total Income</h5>
           </Link>
         </div>
@@ -183,7 +259,7 @@ const DashboardHero = () => {
               All Orders
             </h3>
           </div>
-          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{orders && orders.length}</h5>
+          <h5 className="pt-2 pl-[36px] text-[22px] font-[500]">{row && row.length}</h5>
           <Link to="/dashboard-orders">
             <h5 className="pt-4 pl-2 text-[#077f9c]">View Orders</h5>
           </Link>

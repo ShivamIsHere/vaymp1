@@ -44,70 +44,70 @@ const AllOrders = () => {
       });
   }, []);
 
-  const columns = [
-    {
-      field: "image",
-      headerName: "Product Image",
-      minWidth: 180,
-      flex: 0.7,
-      renderCell: (params) => {
-        return (
-          <Link to={`/product/${params.id}`}>
-            <img src={params.value} alt="Product" style={{ width: 50, height: 50 }} />
-          </Link>
-        );
-      },
-    },
-    {
-      field: "orderid",
-      headerName: "order id",
-      type: "number",
-      minWidth: 260,
-      flex: 0.7,
-    },
-    {
-      field: "status",
-      headerName: "Status9999",
-      minWidth: 180,
-      flex: 0.7,
-      cellClassName: (params) => {
-        return params.getValue(params.id, "status") === "Delivered"
-          ? "greenColor"
-          : "redColor";
-      },
-    },
-    {
-      field: "itemsQty",
-      headerName: "Items Qty",
-      type: "number",
-      minWidth: 130,
-      flex: 0.7,
-    },
-    {
-      field: "total",
-      headerName: "Total",
-      type: "number",
-      minWidth: 130,
-      flex: 0.8,
-    },
-    {
-      field: " ",
-      flex: 1,
-      minWidth: 150,
-      headerName: "",
-      type: "number",
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <Link to={`/user/order/${params.row?.productid}`}>
-            <Button>
-              <AiOutlineArrowRight size={20} />
-            </Button>
-          </Link>
-        );
-      },
-    },
-  ];
+  // const columns = [
+  //   {
+  //     field: "image",
+  //     headerName: "Product Image",
+  //     minWidth: 180,
+  //     flex: 0.7,
+  //     renderCell: (params) => {
+  //       return (
+  //         <Link to={`/product/${params.id}`}>
+  //           <img src={params.value} alt="Product" style={{ width: 50, height: 50 }} />
+  //         </Link>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     field: "orderid",
+  //     headerName: "order id",
+  //     type: "number",
+  //     minWidth: 260,
+  //     flex: 0.7,
+  //   },
+  //   {
+  //     field: "status",
+  //     headerName: "Status9999",
+  //     minWidth: 180,
+  //     flex: 0.7,
+  //     cellClassName: (params) => {
+  //       return params.getValue(params.id, "status") === "Delivered"
+  //         ? "greenColor"
+  //         : "redColor";
+  //     },
+  //   },
+  //   {
+  //     field: "itemsQty",
+  //     headerName: "Items Qty",
+  //     type: "number",
+  //     minWidth: 130,
+  //     flex: 0.7,
+  //   },
+  //   {
+  //     field: "total",
+  //     headerName: "Total",
+  //     type: "number",
+  //     minWidth: 130,
+  //     flex: 0.8,
+  //   },
+  //   {
+  //     field: " ",
+  //     flex: 1,
+  //     minWidth: 150,
+  //     headerName: "",
+  //     type: "number",
+  //     sortable: false,
+  //     renderCell: (params) => {
+  //       return (
+  //         <Link to={`/user/order/${params.row?.productid}`}>
+  //           <Button>
+  //             <AiOutlineArrowRight size={20} />
+  //           </Button>
+  //         </Link>
+  //       );
+  //     },
+  //   },
+  // ];
   useEffect(() => {
 
     const updateRows = () => {
@@ -153,7 +153,6 @@ const AllOrders = () => {
 
   console.log("klklklkllk????????",kuchvi );
   console.log("hhhhhhhhhhhhhhhrows555",rows );
-  const row = [];
 
   // orders &&
   //   orders.forEach((item) => {

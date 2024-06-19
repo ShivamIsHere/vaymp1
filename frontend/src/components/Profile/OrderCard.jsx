@@ -11,9 +11,10 @@ const OrderCard = ({ order }) => {
     status,
     total,
     size,
-    productid
+    productid,
+    kuchviId
   } = order;
-
+console.log("zzzz",order)
   return (
     <Link to={`/user/order/${id}`} className="">
     <div className="bg-white ml-2 p-4 rounded shadow flex items-start gap-4">
@@ -35,7 +36,7 @@ const OrderCard = ({ order }) => {
           </div>
         </div>
         <div className="flex flex-col sm:flex-row-reverse items-center mt-6">
-        <Link to={`/user/order/${productid}`} className="">
+        <Link to={`/user/order/${kuchviId}`} className="">
         <Button 
               variant="contained" 
               style={{ 

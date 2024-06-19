@@ -21,6 +21,7 @@ const OrderDetails = () => {
 
   
   const { id } = useParams();
+  console.log("iiiiiidddddd",id)
   useEffect(() => {
     axios
       .get(`${server}/kuchvi/get-all-admin-kuchvi-request`, {
@@ -78,7 +79,7 @@ const OrderDetails = () => {
     }
   }, [kuchvi, seller._id, loading]);
 
-  const data = rows.find((item) => item.orderid === id);
+  const data = rows.find((item) => item.kuchviId === id);
   console.log("Data:", data);
 
   if (loading) {
@@ -108,7 +109,7 @@ return (
 
     <div className="w-full flex items-center justify-between pt-6">
       <h5 className="text-[#00000084]">
-        Order ID: <span>#{data?.orderid?.slice(0, 8)}</span>
+        Order ID: <span>#{data?.kuchviId?.slice(16, 24)}</span>
       </h5>
       <h5 className="text-[#00000084]">
         Placed on: <span>{data?.createdAt?.slice(0, 10)}</span>
@@ -162,8 +163,6 @@ return (
     </div>
     <br />
     <br />
-
-    <h4 className="pt-3 text-[20px] font-[600]">Order Status:</h4>
     <br />
 
     {/* {data?.status !== "Processing" && data?.status !== "Refund Success" && (

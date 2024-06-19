@@ -43,7 +43,7 @@ const AllOrders = () => {
 
 
   const columns = [
-    { field: "orderid", headerName: "Order ID", minWidth: 150, flex: 0.7 },
+    { field: "kuchviId", headerName: "Order ID", minWidth: 150, flex: 0.7 },
     {
       field: "image",
       headerName: "Image",
@@ -87,7 +87,7 @@ const AllOrders = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/order/${params?.row?.orderid}`}>
+            <Link to={`/order/${params?.row?.kuchviId}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>

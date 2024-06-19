@@ -136,6 +136,9 @@ refundStatus:{
 deliveredAt:{
     type: Date,
 },
+pickededAt:{
+  type: Date,
+},
 returnedAt:{
   type: Date,
 },

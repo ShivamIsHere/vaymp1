@@ -17,7 +17,13 @@ router.post(
       const { refund, orderId,productId,size,qty,userId,status,shopId,shopPrice,markedPrice,discountPrice,shippingAddress,refundStatus,return1,cancel,delivered,
         productName,product,
         user,
-        paymentInfo 
+        paymentInfo,
+        transferedToDeliveryPartner,
+                  outForPick,
+                  picked,
+                  shopReciveredReturn,
+                  returnedToShop,
+                  transferedToManager, 
       } = req.body;
        // console.log("order created req.body",cart)
        const shopItemsMap = new Map();
@@ -48,7 +54,12 @@ router.post(
           paymentInfo,
           productName,
           product,
-          
+          transferedToDeliveryPartner,
+          outForPick,
+          picked,
+                  shopReciveredReturn,
+                  returnedToShop,
+                  transferedToManager, 
         });
         // console.log("order updated",order)
         kuchvis.push(kuchviData);
