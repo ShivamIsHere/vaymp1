@@ -43,7 +43,7 @@ const Checkout = () => {
       toast.error("Please choose your delivery address!");
     } else {
       const shippingAddress = {
-        username,
+        userName: username,
         address1,
         address2,
         zipCode,
@@ -66,7 +66,7 @@ const Checkout = () => {
         dispatch(
           updatUserAddress(
             {
-              username,
+              userName: username, 
               phoneNumber,
               city,
               address1,

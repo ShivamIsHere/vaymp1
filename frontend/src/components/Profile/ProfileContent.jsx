@@ -651,7 +651,7 @@ const Address = () => {
       dispatch(
         updatUserAddress(
           {
-            name,
+            userName: name,
             phoneNumber,
             city,
             address1,
