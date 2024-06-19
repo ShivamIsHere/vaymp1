@@ -32,6 +32,22 @@ const shopSchema = new mongoose.Schema({
     type: String,
     default: "Seller",
   },
+  currentCity:{
+    type: String,
+    default:"Phagwara"
+  },
+  currentZipCode:{
+    type: Number,
+    default:144411
+  },
+  aadharCard:{
+    type: Number,
+    default:0
+  },
+  GSTNo:{
+    type: Number,
+    default:0
+  },
   avatar: {
     public_id: {
       type: String,

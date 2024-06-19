@@ -71,8 +71,17 @@ const productSchema = new mongoose.Schema({
   occasion: {
     type: String,
   },
+  
   fit: {
     type: String,
+  },
+  currentCity:{
+    type: String,
+    default:"Phagwara"
+  },
+  currentZipCode:{
+    type: Number,
+    default:144411
   },
   listing: {
     type: String,

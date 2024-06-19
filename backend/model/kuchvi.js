@@ -105,6 +105,30 @@ refund:{
     type: Boolean,
     default:false
 },
+transferedToDeliveryPartner:{
+  type: Boolean,
+  default:false
+},
+outForPick:{
+  type: Boolean,
+  default:false
+},
+picked:{
+  type: Boolean,
+  default:false
+},
+returnedToShop:{
+  type: Boolean,
+  default:false
+},
+shopReciveredReturn:{
+  type: Boolean,
+  default:false
+},
+transferedToManager:{
+  type: Boolean,
+  default:false
+},
 refundStatus:{
     type: Boolean,
     default:false
