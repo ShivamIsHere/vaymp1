@@ -17,6 +17,8 @@ import { useEffect } from "react";
 import { addTocart } from "../../../redux/actions/cart";
 import { toast } from "react-toastify";
 import Ratings from "../../Products/Ratings";
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const ProductCard = ({ data, isEvent }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -28,7 +30,8 @@ const ProductCard = ({ data, isEvent }) => {
   //   data?.stock.quantity < 105 && data?.stock.quantity > 0
   //     ? data?.stock.quantity + " items left"
   //     : "";
-  const remainingItems =
+  // const remainingItems =
+  const [isHovered, setIsHovered] = useState(false);
  
   useEffect(() => {
     if (wishlist && wishlist.find((i) => i._id === data._id)) {
@@ -65,21 +68,47 @@ const ProductCard = ({ data, isEvent }) => {
 
   return (
     <>
-      <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
+      <div className="w-full h-[340px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      >
         <div className="flex justify-end"></div>
-        <Link
-          to={`${
+        <a
+          href={`${
             isEvent === true
               ? `/product/${data._id}?isEvent=true`
               : `/product/${data._id}`
           }`}
         >
+          {isHovered ? (
+          <Carousel
+            showArrows={false}
+            showStatus={false}
+            showIndicators={false}
+            infiniteLoop
+            autoPlay
+            interval={2000}
+            stopOnHover={false}
+            showThumbs={false}
+          >
+            {data.images.map((image, index) => (
+              <div key={index}>
+                <img
+                  src={image.url}
+                  alt=""
+                  className="w-full h-[170px] object-contain"
+                />
+              </div>
+            ))}
+          </Carousel>
+        ) : (
           <img
             src={`${data.images && data.images[0]?.url}`}
             alt=""
             className="w-full h-[170px] object-contain"
           />
-        </Link>
+        )}
+        </a>
         <Link to={`/shop/preview/${data?.shop._id}`}>
           <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
         </Link>
@@ -90,8 +119,8 @@ const ProductCard = ({ data, isEvent }) => {
               : `/product/${data._id}`
           }`}
         >
-          <h4 className="pb-3 font-[500]">
-            {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
+          <h4 className="flex pb-3 text-base font-normal whitespace-nowrap overflow-hidden text-ellipsis max-w-full sm:max-w-[200px] md:max-w-[300px]">
+            {data.name.length > 25 ? data.name.slice(0, 25) + "..." : data.name}
           </h4>
 
           <div className="flex">
@@ -99,16 +128,20 @@ const ProductCard = ({ data, isEvent }) => {
           </div>
 
           <div className="py-2 flex items-center justify-between">
-            <div className="flex">
-              <h5 className={`${styles.productDiscountPrice}`}>
-              Rs{data.originalPrice === 0
+            <div className="flex items-center">
+              <h5 className={`${styles.productDiscountPrice} text-base`}>
+              ₹{data.originalPrice === 0
                   ? data.originalPrice
                   : data.discountPrice}
-                $
               </h5>
-              <h4 className={`${styles.price}`}>
-              {data.originalPrice ? data.originalPrice + "Rs." : null}
-              </h4>
+              <div className="flex items-center ml-2">
+                <h4 className="text-sm text-gray-500 line-through">
+                  ₹{data.originalPrice ? data.originalPrice : null}
+                </h4>
+                <span className="text-sm text-blue-500 font-bold ml-2">
+                  ({Math.round(((data.originalPrice - data.discountPrice) / data.originalPrice) * 100)}% off)
+                </span>
+              </div>
               {/* <h5>{remainingItems}</h5> */}
               {/* <div>
         {data.stock.map((item, index) => (

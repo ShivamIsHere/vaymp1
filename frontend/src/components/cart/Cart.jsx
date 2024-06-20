@@ -151,7 +151,7 @@ const Cart = ({ setOpenCart }) => {
       onClick={handleCloseClick}
     >
       <div
-        className="fixed top-0 right-0 h-full sm:w-[400px] lg:w-[450px] xl:w-[450px] bg-white flex flex-col overflow-y-scroll justify-between shadow-sm"
+        className="fixed top-0 right-0 h-full w-[85%] overflow-y-scroll 800px:w-[400px] bg-white flex flex-col justify-between shadow-sm"
         ref={cartRef}
       >
         {totalCount === 0 ? (
@@ -219,10 +219,10 @@ const Cart = ({ setOpenCart }) => {
               {/* checkout buttons */}
               <Link to="/checkout">
                 <div
-                  className={`h-[45px] flex items-center justify-center w-[100%] bg-[#e44343] rounded-[5px]`}
+                  className={`h-[45px] flex items-center justify-center w-[100%] bg-[#e49e43] rounded-[5px]`}
                 >
                   <h1 className="text-[#fff] text-[18px] font-[600]">
-                    Checkout Now (Rs.{totalPrice})
+                    Checkout Now (₹{totalPrice})
                   </h1>
                 </div>
               </Link>
@@ -280,65 +280,65 @@ const CartSingle = ({ val2,data, quantityChangeHandler, removeFromCartHandler })
   };
 
   return (
-    <>
-    <div className="border-b p-4">
+    <div className="border-[#928f8f] border-t-[1px] border-b-[1px] p-4">
       <div className="w-full flex items-center">
-        <div>
-          <div
-            className={`bg-[#e44343] border border-[#e4434373] rounded-full w-[25px] h-[25px] ${styles.noramlFlex} justify-center cursor-pointer`}
-            onClick={increment}
-          >
-            <HiPlus size={18} color="#fff" />
-          </div>
-          <span className="pl-[10px]">{value}</span>
-          <div
-            className="bg-[#a7abb14f] rounded-full w-[25px] h-[25px] flex items-center justify-center cursor-pointer"
-            onClick={decrement}
-          >
-            <HiOutlineMinus size={16} color="#7d879c" />
-          </div>
-        </div>
         <img
           src={`${data?.images?.[0]?.url}`}
           alt=""
-          className="w-[130px] h-min ml-2 mr-2 rounded-[5px] cursor-pointer"
+          className="w-[90px] h-min ml-1 mr-1 rounded-[5px] cursor-pointer"
           onClick={handleProductClick}
         />
         <div
           className="flex-grow pl-[5px] cursor-pointer"
           onClick={handleProductClick}
         >
-          <h1 style={{ marginBottom: "10px" }}>{data.name}</h1>
+          <h1 style={{ marginBottom: "10px" }}>{data.name.slice(0,20)}</h1>
           <div>Size: {selectedSize}</div>
-          <h4 className="font-[400] text-[15px] text-[#00000082]">
-            {/* Displaying the discount amount */}
+          <div className="flex items-center whitespace-nowrap">
+            <span className="text-[12px] text-green-500 font-bold mr-2">
+              ({Math.round(((data.originalPrice - data.discountPrice) / data.originalPrice) * 100)}% off)
+            </span>
             {data.originalPrice && (
-              <span>
-                <del>₹{data.originalPrice}</del>{" "}
-                {/* Original price with strikethrough */}
-                <br className="sm:hidden" />
-                <span className="sm:ml-2 sm:mt-0">
-                &nbsp; (Save ₹
-                {(data.originalPrice - data.discountPrice) * value})
-                </span>
+              <span className="flex items-center mr-2">
+                <del className="text-[14px] text-[#00000082]">₹{data.originalPrice}</del>
               </span>
             )}
-          </h4>
-          <h4 className="font-[600] text-[17px] pt-[3px] text-[#d02222] font-Roboto">
-            ₹{totalPrice}
-          </h4>
-        </div>
-        <div className={`${isProductNameShort ? "ml-4" : "ml-auto"}`}>
-          <RxCross1
-            className="cursor-pointer"
-            onClick={() => removeFromCartHandler(data, selectedSize)}
-          />
+            <span className="font-[500] text-[15px] text-[#000000] font-Roboto">
+              ₹{totalPrice}
+            </span>
+          </div>
         </div>
       </div>
+      <div className="flex justify-between">
+      <div className="flex items-center">
+        <div className="flex items-center ml-36">
+          <div
+            className="hover:bg-[#eab45dd5] border border-[#e4434373] rounded-full w-[20px] h-[20px] ${styles.noramlFlex} justify-center cursor-pointer"
+            onClick={increment}
+          >
+            <HiPlus size={18} color="#7d879c" />
+          </div>
+          <div
+          className="bg-[#f7f7f7] border border-[#e4434373] rounded-t-sm w-[25px] h-[25px] flex justify-center items-center"
+        >
+          <span className="text-[15px] text-[#000000] font-Roboto">{value}</span>
+        </div>
+          <div
+            className="hover:bg-[#eab45dd5] bg-[#a7abb14f] border border-[#e4434373] rounded-full w-[20px] h-[20px] flex items-center justify-center cursor-pointer"
+            onClick={decrement}
+          >
+            <HiOutlineMinus size={16} color="#7d879c" />
+          </div>
+        </div>
+        </div>
+        <button
+        className="hover:text-[#f06865] border border-[#e4434373] font-Roboto text-[14px] cursor-pointer pl-3 pr-3 py-1 flex items-center justify-center shadow-md"
+        onClick={() => removeFromCartHandler(data, selectedSize)}
+      >
+        Remove
+      </button>
+        </div>
     </div>
-    {/* <div>{error}</div> */}
-
-    </>
   );
 };
 
