@@ -142,7 +142,7 @@ router.post(
                   cancel: false,
                   return1: false,
                   refund: false,
-                  transferedToDeliveryPartner:false,
+                  transferredToDeliveryPartner:false,
                   outForPick:false,
                   picked:false,
                   shopReciveredReturn:false,

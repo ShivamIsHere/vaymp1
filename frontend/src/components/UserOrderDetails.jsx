@@ -166,27 +166,16 @@ const startTimer = (remainingTime) => {
   setTimerInterval(interval);
 };
 
-const returnHandler = async () => {
-  // Handle return logic here
-  console.log("Return button clicked");
 
-  // Example Axios call for updating status
-  const response = await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${data.kuchviId}`, {
-    return1: true,
-    status: "Return Request",
-  });
-
-  if (response.status >= 200 && response.status < 300) {
-    console.log("Stock updated successfully");
-    // Reload or update data as needed
-  } else {
-    console.error(`Failed to update stock - Unexpected status code: ${response.status}`);
-    // Handle error
-  }
-};
   
   
   
+let active;
+  if (data?.status === "processing") active = 1;
+  if (data?.transferredToDeliveryPartner) active = 2;
+  if (data?.delivered) active = 3;
+  if (data?.return1) active = 4;
+  if (data?.status === "Returned") active = 5;
 
 
   if (loading) {
@@ -273,6 +262,59 @@ console.log("selectedItem,,,,,,,,,,,,,,,,,,",data.orderid)
       </div>
 
       <br />
+      <br />
+      {/* Progress Feature */}
+      <div className="w-full flex flex-col items-center pt-10">
+        <h2 className="text-[24px]">Order Progress</h2>
+        <div className="w-full max-w-[600px] flex justify-between mt-4">
+          <div className={`flex flex-col items-center ${active >= 1 ? "text-red-600" : "text-gray-400"}`}>
+            <div className={`w-8 h-8 rounded-full border-2 ${active >= 1 ? "border-red-600" : "border-gray-400"} flex items-center justify-center`}>
+              1
+            </div>
+            <p className="mt-2">Processing</p>
+          </div>
+          <div className={`flex flex-col items-center ${active >= 2 ? "text-red-600" : "text-gray-400"}`}>
+            <div className={`w-8 h-8 rounded-full border-2 ${active >= 2 ? "border-red-600" : "border-gray-400"} flex items-center justify-center`}>
+              2
+            </div>
+            <p className="mt-2">Shipped</p>
+          </div>
+          <div className={`flex flex-col items-center ${active >= 3 ? "text-red-600" : "text-gray-400"}`}>
+            <div className={`w-8 h-8 rounded-full border-2 ${active >= 3 ? "border-red-600" : "border-gray-400"} flex items-center justify-center`}>
+              3
+            </div>
+            <p className="mt-2">Delivered</p>
+          </div>
+          <div className={`flex flex-col items-center ${active >= 4 ? "text-red-600" : "text-gray-400"}`}>
+            <div className={`w-8 h-8 rounded-full border-2 ${active >= 4 ? "border-red-600" : "border-gray-400"} flex items-center justify-center`}>
+              4
+            </div>
+            <p className="mt-2">Return Requested</p>
+          </div>
+          <div className={`flex flex-col items-center ${active >= 5 ? "text-red-600" : "text-gray-400"}`}>
+            <div className={`w-8 h-8 rounded-full border-2 ${active >= 5 ? "border-red-600" : "border-gray-400"} flex items-center justify-center`}>
+              5
+            </div>
+            <p className="mt-2">Returned</p>
+          </div>
+        </div>
+      </div>
+      {/* End of Progress Feature */}
+      <br />
+      <div className="border-t w-full text-center">
+        <h5 className="pt-3 text-[18px]">
+          {data.status === "Processing"
+            ? "Your order is processing in shop."
+            : data.status === "Transferred to delivery partner"
+            ? "Your order is on the way!"
+            : data.status === "Delivered"
+            ? "Your order is delivered!"
+            : data.status === "Return requested"
+            ? "Your return request is in process!"
+            : "Your order is returned!"}
+        </h5>
+      </div>
+
       <br />
       {data ? (
       <div className="w-full flex items-start mb-5">

@@ -105,7 +105,7 @@ refund:{
     type: Boolean,
     default:false
 },
-transferedToDeliveryPartner:{
+transferredToDeliveryPartner:{
   type: Boolean,
   default:false
 },
