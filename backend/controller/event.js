@@ -2,6 +2,7 @@ const express = require("express");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Shop = require("../model/shop");
 const Event = require("../model/event");
+const Product = require("../model/product");
 const ErrorHandler = require("../utils/ErrorHandler");
 const { isSeller, isAdmin, isAuthenticated } = require("../middleware/auth");
 const router = express.Router();
@@ -58,45 +59,53 @@ router.post(
 // get all events
 router.get("/get-all-events", catchAsyncErrors(async (req, res, next) => {
   try {
-    // Define the filter to include only events with inactive shops
     const filters = {
       'shop.shopIsActive': false,
+      'listing': "Event",
+      'status':true,
     };
 
-    const events = await Event.find(filters);
+    const products = await Product.find(filters);
 
     res.status(200).json({
       success: true,
-      events,
+      products,
     });
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }
 }));
 
-// get all events of a shop
+
+
 router.get(
   "/get-all-events/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const events = await Event.find({ shopId: req.params.id });
-
+      const products = await Product.find({ shopId: req.params.id });
+      const filteredProducts = products.filter(
+        (product) =>
+          product.listing === "Event" &&
+          product.status === true &&
+          product.shop.shopIsActive === false
+      );
       res.status(201).json({
         success: true,
-        events,
+        products: filteredProducts,
       });
     } catch (error) {
-      return next(new ErrorHandler(error, 400));
+      return next(new ErrorHandler(error.message, 400));
     }
   })
 );
+
 
 // delete event of a shop
 router.delete(
   "/delete-shop-event/:id",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const event = await Event.findByIdAndDelete(req.params.id);
+      const product = await Product.findByIdAndDelete(req.params.id);
 
       if (!product) {
         return next(new ErrorHandler("Product is not found with this id", 404));
@@ -104,11 +113,11 @@ router.delete(
 
       for (let i = 0; 1 < product.images.length; i++) {
         const result = await cloudinary.v2.uploader.destroy(
-          event.images[i].public_id
+          product.images[i].public_id
         );
       }
     
-      await event.remove();
+      await product.remove();
       // await event.remove(event);
 // 
       res.status(201).json({
@@ -128,12 +137,18 @@ router.get(
   isAdmin("Admin"),
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const events = await Event.find().sort({
+      const products = await Product.find().sort({
         createdAt: -1,
       });
+      const filteredProducts = products.filter(
+        (product) =>
+          product.listing === "Event" &&
+          product.status === true &&
+          product.shop.shopIsActive === false
+      );
       res.status(201).json({
         success: true,
-        events,
+        products: filteredProducts,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

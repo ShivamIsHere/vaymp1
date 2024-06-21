@@ -1,11 +1,18 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from '../../styles/styles';
 import EventCard from './EventCard';
+import { getAllEvents } from '../../redux/actions/event';
 
 const Events = () => {
-  const { allProducts, isLoading } = useSelector((state) => state.products);
-  const eventProducts = allProducts.filter((product) => product.listing === 'Event');
+  const {allEvents,isLoading} = useSelector((state) => state.events);  
+console.log("aaaa",allEvents)
+
+
+  // if (error) {
+  //   console.error("Error loading events:", error);
+  // }
+  console.log("Error loading events:", allEvents);
 
   return (
     <div>
@@ -17,8 +24,8 @@ const Events = () => {
             <h1>Popular Events</h1>
           </div>
           <div className="w-full grid">
-            {eventProducts.length !== 0 ? (
-              eventProducts.map((event) => <EventCard key={event._id} data={event} />)
+            {allEvents && allEvents.length !== 0 ? (
+              allEvents.map((event) => <EventCard key={event._id} data={event} />)
             ) : (
               <h4>No Events available!</h4>
             )}

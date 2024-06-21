@@ -8,28 +8,34 @@ import { useSelector } from "react-redux";
 
 const ProductDetailsPage = () => {
   const { allProducts } = useSelector((state) => state.products);
+  const { allEvents } = useSelector((state) => state.events);
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [searchParams] = useSearchParams();
-  const isEvent = searchParams.get("isEvent");
+  const eventData = searchParams.get("isEvent");
 
   useEffect(() => {
-    if (isEvent !== null) {
-      const eventProducts = allProducts && allProducts.filter((product) => product.listing === "Event");
-      const data = eventProducts.find((product) => product._id === id);
+    if (eventData !== null) {
+      const data = allEvents && allEvents.find((i) => i._id === id);
       setData(data);
     } else {
-      const data = allProducts && allProducts.find((product) => product._id === id);
+      const data = allProducts && allProducts.find((i) => i._id === id);
       setData(data);
     }
-  }, [allProducts, id, isEvent]);
+  }, [allProducts, allEvents]);
 
   return (
     <div>
       <Header />
-      {data ? <ProductDetails data={data} /> : <p>Loading...</p>}
-      {!isEvent && data && <SuggestedProduct data={data} />}
-      <Footer />
+      <ProductDetails data={data} />
+        {
+          !eventData && (
+            <>
+            {data && <SuggestedProduct data={data} />}
+            </>
+          )
+        }
+        <Footer />
     </div>
   );
 };

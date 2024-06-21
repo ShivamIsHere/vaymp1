@@ -10,7 +10,7 @@ import { BsShop } from "react-icons/bs";
 
 const ShopInfo = ({ isOwner }) => {
   const [data, setData] = useState({});
-  const { products } = useSelector((state) => state.products);
+  const { products } = useSelector((state) => state.products|| { products: [] });
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -34,7 +34,7 @@ const ShopInfo = ({ isOwner }) => {
     window.location.reload();
   };
 
-  const filteredProducts = products.filter((product) => product.listing !== "Event");
+  const filteredProducts = products?.filter((product) => product.listing !== "Event") || [];
   const totalReviewsLength =
     filteredProducts &&
     filteredProducts.reduce((acc, product) => acc + product.reviews.length, 0);

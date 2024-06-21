@@ -8,12 +8,15 @@ import Ratings from "../Products/Ratings";
 import { getAllEventsShop } from "../../redux/actions/event";
 
 const ShopProfileData = ({ isOwner }) => {
+  const { events } = useSelector((state) => state.events);
   const { products } = useSelector((state) => state.products);
   const { id } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllProductsShop(id));
+    dispatch(getAllEventsShop(id));
+
   }, [dispatch]);
   
   const getFirstLetter = (name) => {
@@ -94,37 +97,35 @@ const ShopProfileData = ({ isOwner }) => {
       {active === 1 && (
         <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
           {products &&
-            products
-              .filter((product) => product.listing != "Event" && product.shop.shopIsActive === false)
-              .map((i, index) => (
-                <ProductCard data={i} key={index} isShop={true} />
-              ))}
+          products
+            .filter(product => product.shop.shopIsActive === false)
+            .map((i, index) => (
+              <ProductCard data={i} key={index} isShop={true} />
+            ))}
         </div>
       )}
 
       {active === 2 && (
         <div className="w-full">
           <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] xl:grid-cols-4 xl:gap-[20px] mb-12 border-0">
-            {products &&
-              products
-                .filter((event) => event.listing === "Event" && event.shop.shopIsActive === false)
-                .map((i, index) => (
-                  <ProductCard
-                    data={i}
-                    key={index}
-                    isShop={true}
-                    isEvent={true}
-                  />
-                ))}
+          {events &&
+              events
+              .filter(event => event.shop.shopIsActive === false)
+              .map((i, index) => (
+                <ProductCard
+                  data={i}
+                  key={index}
+                  isShop={true}
+                  isEvent={true}
+                />
+              ))}
           </div>
-          {products &&
-            products
-              .filter((event) => event.listing === "Event" && event.shop.shopIsActive === false)
-              .length === 0 && (
-              <h5 className="w-full text-center py-5 text-[18px]">
-                No Events for this shop!
-              </h5>
-            )}
+          {events &&
+    events.filter(event => event.shop.shopIsActive === false).length === 0 && (
+      <h5 className="w-full text-center py-5 text-[18px]">
+        No Events for this shop!
+      </h5>
+    )}
         </div>
       )}
 

@@ -85,10 +85,8 @@ const productSchema = new mongoose.Schema({
   },
   listing: {
     type: String,
-    status:true,
     default:"Product"
   },
-  
     startDate: {
       type: Date,
     },

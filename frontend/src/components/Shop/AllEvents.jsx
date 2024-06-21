@@ -5,24 +5,24 @@ import { AiOutlineDelete, AiOutlineEye } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { deleteEvent, getAllEventsShop } from "../../redux/actions/event";
-import { getAllProductsShop } from "../../redux/actions/product";
-import { deleteProduct } from "../../redux/actions/product";
 import Loader from "../Layout/Loader";
 
 const AllEvents = () => {
-  const { products, isLoading } = useSelector((state) => state.products);
+  const { events, isLoading } = useSelector((state) => state.events);
   const { seller } = useSelector((state) => state.seller);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllProductsShop(seller._id));
-  }, [dispatch]);
+    if (seller && seller._id) {
+      dispatch(getAllEventsShop(seller._id));
+    }
+  }, [dispatch, seller]);
 
   const handleDelete = (id) => {
     dispatch(deleteEvent(id));
     window.location.reload();
-  }
+  };
 
   const columns = [
     { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
@@ -60,16 +60,13 @@ const AllEvents = () => {
       type: "number",
       sortable: false,
       renderCell: (params) => {
-        const d = params.row.name;
-        const product_name = d.replace(/\s+/g, "-");
+        const product_name = params.row.name.replace(/\s+/g, "-");
         return (
-          <>
-            <Link to={`/product/${params.id}?isEvent=true`}>             
-              <Button>
-                <AiOutlineEye size={20} />
-              </Button>
-            </Link>
-          </>
+          <Link to={`/product/${params.id}?isEvent=true`}>
+            <Button>
+              <AiOutlineEye size={20} />
+            </Button>
+          </Link>
         );
       },
     },
@@ -82,29 +79,26 @@ const AllEvents = () => {
       sortable: false,
       renderCell: (params) => {
         return (
-          <>
-            <Button
-            onClick={() => handleDelete(params.id)}
-            >
-              <AiOutlineDelete size={20} />
-            </Button>
-          </>
+          <Button onClick={() => handleDelete(params.id)}>
+            <AiOutlineDelete size={20} />
+          </Button>
         );
       },
     },
   ];
 
-  // Filter products where listing is "Event"
-  const filteredProducts = products.filter((product) => product.listing === "Event");
+  const rows = [];
 
-  // Map filtered products to rows
-  const rows = filteredProducts.map((item) => ({
-    id: item._id,
-    name: item.name,
-    price: "Rs. " + item.discountPrice,
-    Stock: item.stock,
-    sold: item.sold_out,
-  }));
+  events &&
+    events.forEach((item) => {
+      rows.push({
+        id: item._id,
+        name: item.name,
+        price: "Rs. " + item.discountPrice,
+        Stock: item.stock,
+        sold: item.sold_out,
+      });
+    });
 
   return (
     <>

@@ -79,6 +79,34 @@ router.post(
   })
 );
 
+router.patch("/update-status/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {  listing } = req.body;
+
+    console.log('Received ID:', id);
+    console.log('Received listing type:', listing);
+
+    const product = await Product.findByIdAndUpdate(
+      id,
+      { listing: listing },
+      { new: true }
+    );
+
+    if (!product) {
+      console.log('Product not found');
+      return res.status(404).send('Product not found');
+    }
+
+    console.log('Updated product:', product);
+    res.send(product);
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).send('Server error');
+  }
+});
+
+
 
 // get all products of a shop
 router.get(
@@ -87,8 +115,9 @@ router.get(
     catchAsyncErrors(async (req, res, next) => {
     try {
       const products = await Product.find({ shopId: req.params.id });
+      const pro= products.filter((p)=>p.listing!="Event" && p.shop.shopIsActive===false)
 
-      const filteredProducts = products.filter(product =>
+      const filteredProducts = pro.filter(product =>
         product.stock.some(stockItem => stockItem.quantity > 0)
       );
 
@@ -230,9 +259,9 @@ if (req.query.sortBy === "priceHighToLow") {
         .sort({ [sortBy]: sortOrder })
         .skip((page - 1) * perPage)
         .limit(perPage);
-
+      const pro= allProducts.filter((p)=>p.listing!="Event")
       // Filter out products with zero quantity in all sizes
-      const products = allProducts.filter(product => {
+      const products = pro.filter(product => {
         return product.stock.some(stockItem => stockItem.quantity > 0);
       });
       // Count total products for pagination
@@ -463,6 +492,8 @@ router.get(
           product.discountPrice >= minPrice && product.discountPrice <= maxPrice
         );
       }
+      filteredProducts = filteredProducts.filter(product =>
+        product.listing!="Event")
 
             // Filter out products with zero quantity in all sizes
             filteredProducts = filteredProducts.filter(product =>
@@ -624,15 +655,19 @@ router.get(
       const products = await Product.find().sort({
         createdAt: -1,
       });
+
+      const filteredProducts = products.filter((product) => product.listing !== "Event");
+
       res.status(201).json({
         success: true,
-        products,
+        products: filteredProducts,
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }
   })
 );
+
 
 
 

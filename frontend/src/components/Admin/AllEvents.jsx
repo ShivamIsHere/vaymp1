@@ -13,19 +13,20 @@ const AllEvents = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get(`${server}/product/admin-all-products`, { withCredentials: true }).then((res) => {
-      // Check if res.data and res.data.products exist
-      if (res.data && res.data.products) {
-        // Filter only events
-        const filteredEvents = res.data.products.filter(product => product.listing === "Event");
-        setEvents(filteredEvents);
-      } else {
-        console.error("Unexpected response structure", res);
-      }
-    }).catch((error) => {
-      console.error("Error fetching events", error);
-    });
+    axios.get(`${server}/event/admin-all-events`, { withCredentials: true })
+      .then((res) => {
+        // Check if res.data and res.data.products exist
+        if (res.data && res.data.products) {
+          // No need to filter here since the server already does that
+          setEvents(res.data.products);
+        } else {
+          console.error("Unexpected response structure", res);
+        }
+      }).catch((error) => {
+        console.error("Error fetching events", error);
+      });
   }, []);
+  
 
   const handleDelete = (id) => {
     console.log("id", id);
