@@ -183,7 +183,7 @@ const CreateProduct = () => {
 
 console.log("category",category)
   return (
-<div className="w-[90%] 800px:w-[50%] bg-blue-50 shadow h-[80vh] rounded-[4px] p-3 overflow-y-scroll">     
+<div className="w-[90%] 800px:w-[50%] bg-blue-50 shadow h-[100vh] rounded-[4px] p-3 overflow-y-scroll">     
  <h5 className="text-[30px] font-Poppins text-center">Create Product</h5>
       <form onSubmit={handleSubmit}>
         <br />

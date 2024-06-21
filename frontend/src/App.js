@@ -38,6 +38,7 @@ import {
   ShopAllEvents,
   ShopAllCoupouns,
   ShopPreviewPage,
+  ShopPreviewPageForShop,
   ShopAllOrders,
   ShopOrderDetails,
   ShopAllRefunds,
@@ -211,6 +212,8 @@ const App = () => {
           }
         />
         <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
+        <Route path="/shop/detail/:id" element={<ShopPreviewPageForShop />} />
+
         {/* shop Routes */}
         <Route path="/shop-create" element={<ShopCreatePage />} />
         <Route path="/shop-login" element={<ShopLoginPage />} />

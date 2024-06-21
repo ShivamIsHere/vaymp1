@@ -62,7 +62,6 @@ router.get("/get-all-events", catchAsyncErrors(async (req, res, next) => {
     const filters = {
       'shop.shopIsActive': false,
       'listing': "Event",
-      'status':true,
     };
 
     const products = await Product.find(filters);
@@ -85,9 +84,8 @@ router.get(
       const products = await Product.find({ shopId: req.params.id });
       const filteredProducts = products.filter(
         (product) =>
-          product.listing === "Event" &&
-          product.status === true &&
-          product.shop.shopIsActive === false
+          product?.listing === "Event" &&
+          product?.shop.shopIsActive === false
       );
       res.status(201).json({
         success: true,
@@ -143,7 +141,6 @@ router.get(
       const filteredProducts = products.filter(
         (product) =>
           product.listing === "Event" &&
-          product.status === true &&
           product.shop.shopIsActive === false
       );
       res.status(201).json({
