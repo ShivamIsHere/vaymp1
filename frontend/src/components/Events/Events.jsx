@@ -23,8 +23,8 @@ console.log("aaaa",allEvents)
           <div className={styles.heading}>
             <h1>Popular Events</h1>
           </div>
-          <div className="w-full grid">
-            {allEvents && allEvents.length !== 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          {allEvents && allEvents.length !== 0 ? (
               allEvents.map((event) => <EventCard key={event._id} data={event} />)
             ) : (
               <h4>No Events available!</h4>
