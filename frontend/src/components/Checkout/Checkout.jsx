@@ -76,7 +76,10 @@ const Checkout = () => {
         user,
       };
 
-      if (selectedAddressIndex === null) {
+      // Check if the selected address is the last used address and form is disabled
+      if (selectedAddressIndex === null && lastUsedAddress) {
+        // Do not push the last used address to the database
+      } else if (selectedAddressIndex === null) {
         dispatch(
           updatUserAddress(
             {
@@ -269,13 +272,11 @@ const ShippingInfo = ({
             />
           </div>
         </div>
-
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
             <label className="block pb-2">Phone Number</label>
             <input
               type="number"
-              required
               value={phoneNumber}
               disabled={isDisabled}
               onChange={(e) => setPhoneNumber(e.target.value)}
@@ -286,7 +287,6 @@ const ShippingInfo = ({
             <label className="block pb-2">Zip Code</label>
             <input
               type="number"
-              required
               value={zipCode}
               disabled={isDisabled}
               onChange={(e) => setZipCode(e.target.value)}
@@ -294,13 +294,11 @@ const ShippingInfo = ({
             />
           </div>
         </div>
-
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
             <label className="block pb-2">Address 1</label>
             <input
               type="address"
-              required
               value={address1}
               disabled={isDisabled}
               onChange={(e) => setAddress1(e.target.value)}
@@ -318,39 +316,36 @@ const ShippingInfo = ({
             />
           </div>
         </div>
-
-        {user && user.addresses && user.addresses.length > 0 && (
-          <>
-            <h5
-              className="text-[18px] font-[500] cursor-pointer inline-block"
-              onClick={handleChooseSavedAddressClick}
-            >
-              Choose from saved address
-            </h5>
-            {userInfo && (
-              <div className="w-full">
-                {user.addresses.map((item, index) => (
-                  <div
-                    key={index}
-                    className="w-full flex mt-1"
-                  >
+        <br />
+        <div
+          className="cursor-pointer text-[#3a24db] inline-block pt-2"
+          onClick={handleChooseSavedAddressClick}
+        >
+          Choose from saved address
+        </div>
+        {userInfo && (
+          <div className="w-full">
+            {user &&
+              user.addresses.map((item, index) => (
+                <div
+                  className="w-full bg-[#f5f5f5] h-[70px] rounded-[4px] flex items-center px-3 shadow-sm overflow-x-scroll"
+                  key={index}
+                >
+                  <div className="flex items-center">
                     <input
-                      type="radio"
+                      type="checkbox"
                       className="mr-3"
-                      name="address"
-                      value={selectedAddressIndex === index}
-                      onChange={() => handleSavedAddressClick(index, item)}
+                      value={index}
+                      onClick={() => handleSavedAddressClick(index, item)}
                     />
-                    <h2>
-                      {item.addressType}
-                      <br />
-                      <span className="text-[14px]">{item.address1} {item.address2}</span>
-                    </h2>
+                    <h2>{item.addressType}</h2>
                   </div>
-                ))}
-              </div>
-            )}
-          </>
+                  <div className="pl-8 flex items-center">
+                    <h6>{item.address1} {item.address2}</h6>
+                  </div>
+                </div>
+              ))}
+          </div>
         )}
       </form>
     </div>
@@ -369,38 +364,48 @@ const CartData = ({
   return (
     <div className="w-full bg-white rounded-md p-5 pb-8">
       <div className="flex justify-between">
-        <h3 className="text-[18px] font-[400]">Subtotal:</h3>
-        <h3 className="text-[18px] font-[400]">${subTotalPrice}</h3>
+        <h5 className="text-[18px] font-[500]">Order Summary</h5>
       </div>
       <br />
-      <div className="flex justify-between">
-        <h3 className="text-[18px] font-[400]">Shipping:</h3>
-        <h3 className="text-[18px] font-[400]">${shipping}</h3>
+      <div>
+        <div className="flex justify-between">
+          <h4 className="text-[16px] font-[400]">Subtotal:</h4>
+          <h4 className="text-[16px] font-[400]">${subTotalPrice}</h4>
+        </div>
+        <br />
+        <div className="flex justify-between">
+          <h4 className="text-[16px] font-[400]">Shipping:</h4>
+          <h4 className="text-[16px] font-[400]">${shipping}</h4>
+        </div>
+        <br />
+        <div className="flex justify-between border-b pb-3">
+          <h4 className="text-[16px] font-[400]">Discount:</h4>
+          <h4 className="text-[16px] font-[400]">
+            {discountPercentenge ? `- $${discountPercentenge}` : "-"}
+          </h4>
+        </div>
+        <br />
+        <div className="flex justify-between">
+          <h5 className="text-[18px] font-[500] pt-3">Total:</h5>
+          <h5 className="text-[18px] font-[500] pt-3">${totalPrice}</h5>
+        </div>
+        <br />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            className={`${styles.input} h-[40px] pl-2`}
+            placeholder="Coupoun code"
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value)}
+          />
+          <input
+            className={`${styles.button} mt-4 !w-[150px]`}
+            required
+            value="Apply code"
+            type="submit"
+          />
+        </form>
       </div>
-      <br />
-      <div className="flex justify-between border-b pb-3">
-        <h3 className="text-[18px] font-[400]">Discount:</h3>
-        <h3 className="text-[18px] font-[400]">
-          {discountPercentenge ? "$" + discountPercentenge.toFixed(2) : null}
-        </h3>
-      </div>
-      <h5 className="text-[18px] font-[400] text-end pt-3">${totalPrice}</h5>
-      <br />
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          className={`${styles.input} h-[40px] pl-2`}
-          placeholder="Coupoun code"
-          value={couponCode}
-          onChange={(e) => setCouponCode(e.target.value)}
-        />
-        <input
-          className={`${styles.button} mt-8 cursor-pointer`}
-          required
-          value="Apply code"
-          type="submit"
-        />
-      </form>
     </div>
   );
 };
