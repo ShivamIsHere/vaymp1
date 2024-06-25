@@ -22,19 +22,17 @@ const Checkout = () => {
   const [couponCodeData, setCouponCodeData] = useState(null);
   const [discountPrice, setDiscountPrice] = useState(null);
   const [selectedAddressIndex, setSelectedAddressIndex] = useState(null);
-  const [lastUsedAddress, setLastUsedAddress] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const lastUsed = user.addresses.find((address) => address.isLastUsed);
-    if (lastUsed) {
-      setLastUsedAddress(lastUsed);
-      setUsername(lastUsed.userName);
-      setPhoneNumber(lastUsed.phoneNumber);
-      setCity(lastUsed.city);
-      setAddress1(lastUsed.address1);
-      setAddress2(lastUsed.address2);
-      setZipCode(lastUsed.zipCode);
+    const lastUsedAddress = user.addresses.find(address => address.isLastUsed);
+    if (lastUsedAddress) {
+      setUsername(lastUsedAddress.userName);
+      setPhoneNumber(lastUsedAddress.phoneNumber);
+      setCity(lastUsedAddress.city);
+      setAddress1(lastUsedAddress.address1);
+      setAddress2(lastUsedAddress.address2);
+      setZipCode(lastUsedAddress.zipCode);
     }
   }, [user]);
 
@@ -76,21 +74,18 @@ const Checkout = () => {
         user,
       };
 
-      // Check if the selected address is the last used address and form is disabled
-      if (selectedAddressIndex === null && lastUsedAddress) {
-        // Do not push the last used address to the database
-      } else if (selectedAddressIndex === null) {
+      if (selectedAddressIndex === null) {
         dispatch(
           updatUserAddress(
             {
-              userName: username,
+              userName: username, 
               phoneNumber,
               city,
               address1,
               address2,
               zipCode,
               addressType: "Home",
-              isLastUsed: true,
+              isLastUsed: true
             }
           )
         ); // Dispatch action
@@ -100,7 +95,7 @@ const Checkout = () => {
           updatUserAddress(
             {
               ...selectedAddress,
-              isLastUsed: true,
+              isLastUsed: true
             }
           )
         );
@@ -144,8 +139,8 @@ const Checkout = () => {
           setCouponCodeData(res.data.couponCode);
           setCouponCode("");
         }
-      }
-      if (res.data.couponCode === null) {
+      } 
+      if (res.data.couponCode === null) {       
         toast.error("Coupon code doesn't exist!");
         setCouponCode("");
       }
@@ -182,8 +177,6 @@ const Checkout = () => {
             setZipCode={setZipCode}
             selectedAddressIndex={selectedAddressIndex}
             setSelectedAddressIndex={setSelectedAddressIndex}
-            lastUsedAddress={lastUsedAddress}
-            setLastUsedAddress={setLastUsedAddress}
           />
         </div>
         <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
@@ -225,9 +218,7 @@ const ShippingInfo = ({
   zipCode,
   setZipCode,
   selectedAddressIndex,
-  setSelectedAddressIndex,
-  lastUsedAddress,
-  setLastUsedAddress,
+  setSelectedAddressIndex
 }) => {
   const handleSavedAddressClick = (index, item) => {
     setSelectedAddressIndex(index);
@@ -244,20 +235,6 @@ const ShippingInfo = ({
     setUserInfo(!userInfo);
   };
 
-  const handleAddNewAddressClick = () => {
-    setSelectedAddressIndex(null);
-    setUsername("");
-    setAddress1("");
-    setAddress2("");
-    setZipCode(null);
-    setPhoneNumber("");
-    setCity("");
-    setUserInfo(false);
-    setLastUsedAddress(null); // Reset the last used address
-  };
-
-  const isDisabled = selectedAddressIndex !== null && lastUsedAddress !== null;
-
   return (
     <div className="w-full 800px:w-[95%] bg-white rounded-md p-5 pb-8">
       <h5 className="text-[18px] font-[500]">Shipping Address</h5>
@@ -269,18 +246,40 @@ const ShippingInfo = ({
             <input
               type="text"
               value={username}
-              disabled={isDisabled}
-              onChange={(e) => setUsername(e.target.value)}
+              disabled
               className={`${styles.input} !w-[95%]`}
             />
           </div>
           <div className="w-[50%]">
+            <label className="block pb-2">City</label>
+            <input
+              type="city"
+              required
+              value={city}
+              disabled
+              className={`${styles.input} !w-[95%]`}
+            />
+          </div>
+        </div>
+
+        <div className="w-full flex pb-3">
+          <div className="w-[50%]">
             <label className="block pb-2">Phone Number</label>
             <input
               type="number"
+              required
               value={phoneNumber}
-              disabled={isDisabled}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              disabled
+              className={`${styles.input} !w-[95%]`}
+            />
+          </div>
+          <div className="w-[50%]">
+            <label className="block pb-2">Zip Code</label>
+            <input
+              type="number"
+              required
+              value={zipCode}
+              disabled
               className={`${styles.input} !w-[95%]`}
             />
           </div>
@@ -291,79 +290,49 @@ const ShippingInfo = ({
             <label className="block pb-2">Address 1</label>
             <input
               type="address"
+              required
               value={address1}
-              disabled={isDisabled}
-              onChange={(e) => setAddress1(e.target.value)}
+              disabled
               className={`${styles.input} !w-[95%]`}
             />
           </div>
+
           <div className="w-[50%]">
-            <label className="block pb-2">Address 2</label>
+            <label className="block pb-2">Landmark</label>
             <input
               type="address"
               value={address2}
-              disabled={isDisabled}
-              onChange={(e) => setAddress2(e.target.value)}
+              disabled
               className={`${styles.input} !w-[95%]`}
             />
           </div>
         </div>
-
-        <div className="w-full flex pb-3">
-          <div className="w-[50%]">
-            <label className="block pb-2">City</label>
-            <input
-              type="text"
-              value={city}
-              disabled={isDisabled}
-              onChange={(e) => setCity(e.target.value)}
-              className={`${styles.input} !w-[95%]`}
-            />
-          </div>
-          <div className="w-[50%]">
-            <label className="block pb-2">Zip Code</label>
-            <input
-              type="number"
-              value={zipCode}
-              disabled={isDisabled}
-              onChange={(e) => setZipCode(e.target.value)}
-              className={`${styles.input} !w-[95%]`}
-            />
-          </div>
-        </div>
-      </form>
-      <div>
-        <h5
-          className="text-[18px] font-[500] cursor-pointer inline-block"
+        
+      <br />
+        <button
+          className="text-[18px] cursor-pointer inline-block bg-gradient-to-r from-purple-400 to-blue-500 text-white px-4 py-2 rounded-md shadow-lg hover:from-blue-500 hover:to-purple-400 transition duration-300"
           onClick={handleChooseSavedAddressClick}
         >
-          Choose from saved address
-        </h5>
+          Choose From saved address
+        </button>
         {userInfo && (
           <div>
             {user &&
               user.addresses.map((item, index) => (
                 <div className="w-full flex mt-1" key={index}>
                   <input
-                    type="radio"
+                    type="checkbox"
+                    className="mr-3"
                     value={item.addressType}
                     checked={selectedAddressIndex === index}
                     onChange={() => handleSavedAddressClick(index, item)}
                   />
-                  <h5 className="pl-2">{item.addressType}</h5>
+                  <h2>{`${item.addressType} ${item.address1} ${item.address2}`}</h2>
                 </div>
               ))}
-            <div className="w-full flex mt-1">
-              <button
-                className="px-4 py-2 mt-3 border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={handleAddNewAddressClick}
-              >
-                Add New Address
-              </button>
-            </div>
           </div>
         )}
-      </div>
+      </form>
     </div>
   );
 };
@@ -375,48 +344,47 @@ const CartData = ({
   subTotalPrice,
   couponCode,
   setCouponCode,
-  discountPercentenge,
+  discountPercentenge
 }) => {
   return (
-    <div className="w-full bg-white rounded-md p-5 pb-8">
+    <div className="w-full bg-white rounded-md p-5">
       <div className="flex justify-between">
-        <h5 className="text-[18px] font-[500]">Cart Total</h5>
+        <h5 className="text-[18px] font-[500]">Cart Summary</h5>
+        <h5 className="text-[16px] font-[400]">
+          Total: <span className="font-[600]">${totalPrice}</span>
+        </h5>
       </div>
+      <br />
+      <form onSubmit={handleSubmit}>
+        <div className="w-full flex pb-3">
+          <input
+            type="text"
+            placeholder="Coupon Code"
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value)}
+            className={`${styles.input} !w-[60%]`}
+          />
+          <button type="submit" className={`${styles.button} !w-[30%] ml-3 bg-blue-400`}>
+            Apply
+          </button>
+        </div>
+      </form>
       <br />
       <div className="flex justify-between">
         <h5 className="text-[16px] font-[400]">Subtotal:</h5>
         <h5 className="text-[16px] font-[400]">${subTotalPrice}</h5>
       </div>
+      <br />
       <div className="flex justify-between">
         <h5 className="text-[16px] font-[400]">Shipping:</h5>
-        <h5 className="text-[16px] font-[400]">${shipping.toFixed(2)}</h5>
-      </div>
-      <div className="flex justify-between border-b pb-3">
-        <h5 className="text-[16px] font-[400]">Discount:</h5>
-        <h5 className="text-[16px] font-[400]">
-          {discountPercentenge ? "$" + discountPercentenge.toFixed(2) : null}
-        </h5>
-      </div>
-      <div className="flex justify-between pt-3">
-        <h5 className="text-[18px] font-[600]">Total:</h5>
-        <h5 className="text-[18px] font-[600]">${totalPrice}</h5>
+        <h5 className="text-[16px] font-[400]">${shipping}</h5>
       </div>
       <br />
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          className={`${styles.input} w-full h-[40px] pl-2`}
-          placeholder="Coupon code"
-          value={couponCode}
-          onChange={(e) => setCouponCode(e.target.value)}
-        />
-        <button
-          type="submit"
-          className={`w-full bg-[#3BB77E] h-[40px] flex items-center justify-center text-white rounded-[5px] mt-8 cursor-pointer`}
-        >
-          Apply Code
-        </button>
-      </form>
+      <div className="flex justify-between">
+        <h5 className="text-[16px] font-[400]">Discount:</h5>
+        <h5 className="text-[16px] font-[400]">${discountPercentenge}</h5>
+      </div>
+      <br />
     </div>
   );
 };
