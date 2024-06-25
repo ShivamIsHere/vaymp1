@@ -183,6 +183,7 @@ const Checkout = () => {
             selectedAddressIndex={selectedAddressIndex}
             setSelectedAddressIndex={setSelectedAddressIndex}
             lastUsedAddress={lastUsedAddress}
+            setLastUsedAddress={setLastUsedAddress}
           />
         </div>
         <div className="w-full 800px:w-[35%] 800px:mt-0 mt-8">
@@ -226,6 +227,7 @@ const ShippingInfo = ({
   selectedAddressIndex,
   setSelectedAddressIndex,
   lastUsedAddress,
+  setLastUsedAddress,
 }) => {
   const handleSavedAddressClick = (index, item) => {
     setSelectedAddressIndex(index);
@@ -242,7 +244,19 @@ const ShippingInfo = ({
     setUserInfo(!userInfo);
   };
 
-  const isDisabled = lastUsedAddress !== null;
+  const handleAddNewAddressClick = () => {
+    setSelectedAddressIndex(null);
+    setUsername("");
+    setAddress1("");
+    setAddress2("");
+    setZipCode(null);
+    setPhoneNumber("");
+    setCity("");
+    setUserInfo(false);
+    setLastUsedAddress(null); // Reset the last used address
+  };
+
+  const isDisabled = selectedAddressIndex !== null && lastUsedAddress !== null;
 
   return (
     <div className="w-full 800px:w-[95%] bg-white rounded-md p-5 pb-8">
@@ -261,19 +275,6 @@ const ShippingInfo = ({
             />
           </div>
           <div className="w-[50%]">
-            <label className="block pb-2">City</label>
-            <input
-              type="text"
-              required
-              value={city}
-              disabled={isDisabled}
-              onChange={(e) => setCity(e.target.value)}
-              className={`${styles.input} !w-[95%]`}
-            />
-          </div>
-        </div>
-        <div className="w-full flex pb-3">
-          <div className="w-[50%]">
             <label className="block pb-2">Phone Number</label>
             <input
               type="number"
@@ -283,17 +284,8 @@ const ShippingInfo = ({
               className={`${styles.input} !w-[95%]`}
             />
           </div>
-          <div className="w-[50%]">
-            <label className="block pb-2">Zip Code</label>
-            <input
-              type="number"
-              value={zipCode}
-              disabled={isDisabled}
-              onChange={(e) => setZipCode(e.target.value)}
-              className={`${styles.input} !w-[95%]`}
-            />
-          </div>
         </div>
+
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
             <label className="block pb-2">Address 1</label>
@@ -316,38 +308,62 @@ const ShippingInfo = ({
             />
           </div>
         </div>
-        <br />
-        <div
-          className="cursor-pointer text-[#3a24db] inline-block pt-2"
+
+        <div className="w-full flex pb-3">
+          <div className="w-[50%]">
+            <label className="block pb-2">City</label>
+            <input
+              type="text"
+              value={city}
+              disabled={isDisabled}
+              onChange={(e) => setCity(e.target.value)}
+              className={`${styles.input} !w-[95%]`}
+            />
+          </div>
+          <div className="w-[50%]">
+            <label className="block pb-2">Zip Code</label>
+            <input
+              type="number"
+              value={zipCode}
+              disabled={isDisabled}
+              onChange={(e) => setZipCode(e.target.value)}
+              className={`${styles.input} !w-[95%]`}
+            />
+          </div>
+        </div>
+      </form>
+      <div>
+        <h5
+          className="text-[18px] font-[500] cursor-pointer inline-block"
           onClick={handleChooseSavedAddressClick}
         >
           Choose from saved address
-        </div>
+        </h5>
         {userInfo && (
-          <div className="w-full">
+          <div>
             {user &&
               user.addresses.map((item, index) => (
-                <div
-                  className="w-full bg-[#f5f5f5] h-[70px] rounded-[4px] flex items-center px-3 shadow-sm overflow-x-scroll"
-                  key={index}
-                >
-                  <div className="flex items-center">
-                    <input
-                      type="checkbox"
-                      className="mr-3"
-                      value={index}
-                      onClick={() => handleSavedAddressClick(index, item)}
-                    />
-                    <h2>{item.addressType}</h2>
-                  </div>
-                  <div className="pl-8 flex items-center">
-                    <h6>{item.address1} {item.address2}</h6>
-                  </div>
+                <div className="w-full flex mt-1" key={index}>
+                  <input
+                    type="radio"
+                    value={item.addressType}
+                    checked={selectedAddressIndex === index}
+                    onChange={() => handleSavedAddressClick(index, item)}
+                  />
+                  <h5 className="pl-2">{item.addressType}</h5>
                 </div>
               ))}
+            <div className="w-full flex mt-1">
+              <button
+                className="px-4 py-2 mt-3 border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                onClick={handleAddNewAddressClick}
+              >
+                Add New Address
+              </button>
+            </div>
           </div>
         )}
-      </form>
+      </div>
     </div>
   );
 };
@@ -364,48 +380,43 @@ const CartData = ({
   return (
     <div className="w-full bg-white rounded-md p-5 pb-8">
       <div className="flex justify-between">
-        <h5 className="text-[18px] font-[500]">Order Summary</h5>
+        <h5 className="text-[18px] font-[500]">Cart Total</h5>
       </div>
       <br />
-      <div>
-        <div className="flex justify-between">
-          <h4 className="text-[16px] font-[400]">Subtotal:</h4>
-          <h4 className="text-[16px] font-[400]">${subTotalPrice}</h4>
-        </div>
-        <br />
-        <div className="flex justify-between">
-          <h4 className="text-[16px] font-[400]">Shipping:</h4>
-          <h4 className="text-[16px] font-[400]">${shipping}</h4>
-        </div>
-        <br />
-        <div className="flex justify-between border-b pb-3">
-          <h4 className="text-[16px] font-[400]">Discount:</h4>
-          <h4 className="text-[16px] font-[400]">
-            {discountPercentenge ? `- $${discountPercentenge}` : "-"}
-          </h4>
-        </div>
-        <br />
-        <div className="flex justify-between">
-          <h5 className="text-[18px] font-[500] pt-3">Total:</h5>
-          <h5 className="text-[18px] font-[500] pt-3">${totalPrice}</h5>
-        </div>
-        <br />
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            className={`${styles.input} h-[40px] pl-2`}
-            placeholder="Coupoun code"
-            value={couponCode}
-            onChange={(e) => setCouponCode(e.target.value)}
-          />
-          <input
-            className={`${styles.button} mt-4 !w-[150px]`}
-            required
-            value="Apply code"
-            type="submit"
-          />
-        </form>
+      <div className="flex justify-between">
+        <h5 className="text-[16px] font-[400]">Subtotal:</h5>
+        <h5 className="text-[16px] font-[400]">${subTotalPrice}</h5>
       </div>
+      <div className="flex justify-between">
+        <h5 className="text-[16px] font-[400]">Shipping:</h5>
+        <h5 className="text-[16px] font-[400]">${shipping.toFixed(2)}</h5>
+      </div>
+      <div className="flex justify-between border-b pb-3">
+        <h5 className="text-[16px] font-[400]">Discount:</h5>
+        <h5 className="text-[16px] font-[400]">
+          {discountPercentenge ? "$" + discountPercentenge.toFixed(2) : null}
+        </h5>
+      </div>
+      <div className="flex justify-between pt-3">
+        <h5 className="text-[18px] font-[600]">Total:</h5>
+        <h5 className="text-[18px] font-[600]">${totalPrice}</h5>
+      </div>
+      <br />
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          className={`${styles.input} w-full h-[40px] pl-2`}
+          placeholder="Coupon code"
+          value={couponCode}
+          onChange={(e) => setCouponCode(e.target.value)}
+        />
+        <button
+          type="submit"
+          className={`w-full bg-[#3BB77E] h-[40px] flex items-center justify-center text-white rounded-[5px] mt-8 cursor-pointer`}
+        >
+          Apply Code
+        </button>
+      </form>
     </div>
   );
 };
