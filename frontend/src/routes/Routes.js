@@ -27,6 +27,9 @@ import AllRefundOrders from "../pages/AllRefundOrders.jsx";
 import TrackOrderr from "../pages/TrackOrderr.jsx";
 import ShopForgotPassword from "../components/Shop/ShopForgotPassword.jsx";
 import ShopResetPassword from "../components/Shop/ShopResetPassword.jsx";
+import Cart from "../components/cart/Cart.jsx";
+import Wishlist from "../components/Wishlist/Wishlist.jsx";
+import Categories from "../components/Route/Categories/Categories.jsx";
 export { 
     LoginPage,
     ForgotPassword,
@@ -56,5 +59,8 @@ export {
     AllOrders,
     AllCoupons,
     ShopForgotPassword,
-    ShopResetPassword
+    ShopResetPassword,
+    Cart,
+    Wishlist,
+    Categories,
 };

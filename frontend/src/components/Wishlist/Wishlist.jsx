@@ -6,11 +6,13 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromWishlist } from "../../redux/actions/wishlist";
 // import { addTocart } from "../../redux/actions/cart";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 
 const Wishlist = ({ setOpenWishlist }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
+  const location = useLocation();
+  console.log("URL", location.pathname);
   const wishlistRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -42,29 +44,34 @@ const Wishlist = ({ setOpenWishlist }) => {
         {wishlist && wishlist.length === 0 ? (
           <div className="w-full h-screen flex items-center justify-center">
             <div className="flex w-full justify-end pt-5 pr-5 fixed top-3 right-3">
-              <RxCross1
-                size={25}
-                className="cursor-pointer"
-                onClick={() => setOpenWishlist(false)}
-              />
+              {location.pathname !== '/wishlist' && (
+                <RxCross1
+                  size={25}
+                  className="cursor-pointer"
+                  onClick={() => setOpenWishlist(false)}
+                  />
+              )}
             </div>
+           
             <h5>Wishlist Items is empty!</h5>
           </div>
         ) : (
           <>
             <div>
               <div className="flex w-full justify-end pt-5 pr-5">
+              {location.pathname !== '/wishlist' && (
                 <RxCross1
                   size={25}
                   className="cursor-pointer"
                   onClick={() => setOpenWishlist(false)}
-                />
+                  />
+              )}
               </div>
               {/* Item length */}
               <div className={`${styles.noramlFlex} p-4`}>
                 <AiOutlineHeart size={25} />
                 <h5 className="pl-2 text-[20px] font-[500]">
-                  {wishlist && wishlist.length} items
+                {wishlist && wishlist.length} {wishlist && wishlist.length === 1 ? 'item' : 'items'}
                 </h5>
               </div>
 

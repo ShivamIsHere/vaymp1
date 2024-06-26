@@ -3,17 +3,17 @@ import { RxCross1 } from "react-icons/rx";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { HiOutlineMinus, HiPlus } from "react-icons/hi";
 import styles from "../../styles/styles";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addTocart, removeFromCart,updateTocart } from "../../redux/actions/cart";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link, useLocation } from "react-router-dom";
 import { getAllProducts } from "../../redux/actions/product";
 
 const Cart = ({ setOpenCart }) => {
   const { cart } = useSelector((state) => state.cart);
   const cartRef = useRef(null);
-
+  const location = useLocation();
+  console.log("URL", location.pathname);
   const dispatch = useDispatch();
   console.log("cartjj", cart);
   let totalCount = 0;
@@ -157,29 +157,33 @@ const Cart = ({ setOpenCart }) => {
         {totalCount === 0 ? (
           <div className="w-full h-screen flex items-center justify-center">
             <div className="flex w-full justify-end pt-5 pr-5 fixed top-3 right-3">
-              <RxCross1
-                size={25}
-                className="cursor-pointer"
-                onClick={() => setOpenCart(false)}
-              />
+              {location.pathname !== '/cart' && (
+                <RxCross1
+                  size={25}
+                  className="cursor-pointer"
+                  onClick={() => setOpenCart(false)}
+                />
+              )}
             </div>
             <h5>Cart Items is empty!</h5>
           </div>
         ) : (
           <>
             <div>
-              <div className="flex w-full justify-end pt-5 pr-5">
-                <RxCross1
-                  size={25}
-                  className="cursor-pointer"
-                  onClick={() => setOpenCart(false)}
-                />
+            <div className="flex w-full justify-end pt-5 pr-5 fixed top-3 right-3">
+                {location.pathname !== '/cart' && (
+                  <RxCross1
+                    size={25}
+                    className="cursor-pointer"
+                    onClick={() => setOpenCart(false)}
+                  />
+                )}
               </div>
               {/* Item length */}
-              <div className={`${styles.noramlFlex} p-4`}>
-                <IoBagHandleOutline size={25} />
-                <h5 className="pl-2 text-[20px] font-[500]">
-                  {totalCount} items
+              <div className={`${styles.noramlFlex} p-4 flex items-center space-x-3 mt-4 `}>
+                <IoBagHandleOutline size={25} className="text-gray-600" />
+                <h5 className="pl-2 text-[20px] font-[500] text-gray-800">
+                  {totalCount} {totalCount === 1 ? 'item' : 'items'}
                 </h5>
               </div>
 

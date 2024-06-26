@@ -79,6 +79,9 @@ import ShopsPage from "./pages/Shop/ShopsPage.jsx";
 import TrackOrder from "./components/Profile/TrackOrder.jsx";
 import ShopResetPassword from "./components/Shop/ShopResetPassword.jsx";
 import ShopForgotPassword from "./components/Shop/ShopForgotPassword.jsx";
+import Cart from "./components/cart/Cart.jsx";
+import Wishlist from "./components/Wishlist/Wishlist.jsx";
+import Categories from "./components/Route/Categories/Categories.jsx";
 // import AllOrders from "./pages/AllOrders.jsx";
 
 const App = () => {
@@ -152,6 +155,30 @@ const App = () => {
           element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute>
+              <Wishlist />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/categories"
+          element={
+            <ProtectedRoute>
+              <Categories />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
             </ProtectedRoute>
           }
         />
