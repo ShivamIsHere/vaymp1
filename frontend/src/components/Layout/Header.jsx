@@ -482,19 +482,19 @@ const Header = ({ activeHeading }) => {
           <div>
           <div className="flex items-center justify-start space-x-6">
               <div className="relative" onClick={() => setOpenWishlist(true)}>
-                {/* <AiOutlineHeart size={30} />
+                <AiOutlineHeart size={30} />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
                   {wishlist && wishlist.length}
-                </span> */}
+                </span>
               </div>
               <div
                 className="relative right-2"
                 onClick={() => setOpenCart(true)}
               >
-                {/* <AiOutlineShoppingCart size={30} />
+                <AiOutlineShoppingCart size={30} />
                 <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
                   {totalCount}
-                </span> */}
+                </span>
               </div>
             </div>
           </div>
