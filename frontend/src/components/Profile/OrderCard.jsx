@@ -16,7 +16,7 @@ const OrderCard = ({ order }) => {
   } = order;
 console.log("zzzz",order)
   return (
-    <Link to={`/user/order/${id}`} className="">
+    <Link to={`/user/order/${kuchviId}`} className="">
     <div className="bg-white ml-2 p-4 rounded shadow flex items-start gap-4">
     <div className="flex items-start flex-grow">
           {image && (

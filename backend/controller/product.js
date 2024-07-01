@@ -295,7 +295,7 @@ router.get(
   "/get-all-searched-products",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { query, page = 1, limit = 6, color, size, brand, neckType, sleeveType, subCategory, fabric, occasion, fit, gender, customerRating, priceRange, sortBy } = req.query;
+      const { query, page = 1, limit = 10, color, size, brand, neckType, sleeveType, subCategory, fabric, occasion, fit, gender, customerRating, priceRange, sortBy } = req.query;
       let words = query.toLowerCase().split(" ");
 
       // Remove the word "for" from the search terms
@@ -469,9 +469,9 @@ router.get(
             if (range === "3-and-below") {
               return product.ratings <= 3;
             } else if (range === "3-to-4") {
-              return product.ratings > 3 && product.ratings <= 4;
+              return product.ratings >= 3 && product.ratings <= 4;
             } else if (range === "4-and-above") {
-              return product.ratings > 4;
+              return product.ratings >= 4;
             }
             return false;
           })

@@ -38,7 +38,7 @@ const SearchResults = () => {
         params: {
           query,
           page: currentPage,
-          limit: 6,
+          limit: 10,
           color: filters.colors.join(","),
           neckType: filters.neckTypes.join(","),
           sleeveType: filters.sleeveTypes.join(","),
@@ -381,9 +381,11 @@ const SearchResults = () => {
                     <option value="date-desc">Date: New to Old</option>
                   </select>
                 </div>
+                <div>
                 <button type="submit" className="p-2 bg-blue-500 text-white">
                   Apply Filters
                 </button>
+                </div>
               </div>
             </form>
 
