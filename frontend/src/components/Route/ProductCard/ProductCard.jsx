@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import Ratings from "../../Products/Ratings";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { FaArrowDownLong } from "react-icons/fa6";
 
 const ProductCard = ({ data, isEvent }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -129,18 +130,23 @@ const ProductCard = ({ data, isEvent }) => {
 
           <div className="py-2 flex items-center justify-between">
             <div className="flex items-center">
+            <span className="flex items-center text-sm text-blue-500 font-bold -ml-2 mr-1">
+      <FaArrowDownLong bg-green-500 />
+      <span className="ml-0 mr-1">
+        {Math.round(((data.originalPrice - data.discountPrice) / data.originalPrice) * 100)}%
+      </span>
+    </span>
               <h5 className={`${styles.productDiscountPrice} text-base`}>
               ₹{data.originalPrice === 0
                   ? data.originalPrice
                   : data.discountPrice}
               </h5>
               <div className="flex items-center ml-2">
+              
                 <h4 className="text-sm text-gray-500 line-through">
                   ₹{data.originalPrice ? data.originalPrice : null}
                 </h4>
-                <span className="text-sm text-blue-500 font-bold ml-2">
-                  ({Math.round(((data.originalPrice - data.discountPrice) / data.originalPrice) * 100)}% off)
-                </span>
+                
               </div>
               {/* <h5>{remainingItems}</h5> */}
               {/* <div>
