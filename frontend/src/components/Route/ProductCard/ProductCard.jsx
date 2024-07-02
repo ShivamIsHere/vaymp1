@@ -68,8 +68,8 @@ const ProductCard = ({ data, isEvent }) => {
   };
 
   return (
-    <>
-      <div className="w-full h-[340px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer"
+    <div >
+      <div className="w-full h-[310px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       >
@@ -111,7 +111,7 @@ const ProductCard = ({ data, isEvent }) => {
         )}
         </a>
         <Link to={`/shop/preview/${data?.shop._id}`}>
-          <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
+          <h5 className={`${styles.shop_name} mt-0 -mb-4 `}>{data.shop.name}</h5>
         </Link>
         <Link
           to={`${
@@ -120,7 +120,7 @@ const ProductCard = ({ data, isEvent }) => {
               : `/product/${data._id}`
           }`}
         >
-          <h4 className="flex pb-3 text-base font-normal whitespace-nowrap overflow-hidden text-ellipsis max-w-full sm:max-w-[200px] md:max-w-[300px]">
+          <h4 className="flex pb-1 text-base font-normal whitespace-nowrap overflow-hidden text-ellipsis max-w-full sm:max-w-[200px] md:max-w-[300px]">
             {data.name.length > 25 ? data.name.slice(0, 25) + "..." : data.name}
           </h4>
 
@@ -128,7 +128,7 @@ const ProductCard = ({ data, isEvent }) => {
             <Ratings rating={data?.ratings} />
           </div>
 
-          <div className="py-2 flex items-center justify-between">
+          <div className="py-1 flex items-center justify-between">
             <div className="flex items-center">
             <span className="flex items-center text-sm text-blue-500 font-bold -ml-2 mr-1">
       <FaArrowDownLong bg-green-500 />
@@ -148,18 +148,9 @@ const ProductCard = ({ data, isEvent }) => {
                 </h4>
                 
               </div>
-              {/* <h5>{remainingItems}</h5> */}
-              {/* <div>
-        {data.stock.map((item, index) => (
-          <div key={index}>
-            <h5>{item.size}: {item.quantity} items left</h5>
-          </div>
-        ))}
-      </div> */}
+              
             </div>
-            {/* <span className="font-[400] text-[17px] text-[#68d284]"> */}
-              {/* {data?.sold_out} sold */}
-            {/* </span> */}
+            
           </div>
         </Link>
 
@@ -189,17 +180,17 @@ const ProductCard = ({ data, isEvent }) => {
             color="#333"
             title="Quick view"
           />
-          <AiOutlineShoppingCart
+          {/* <AiOutlineShoppingCart
             size={25}
             className="cursor-pointer absolute right-2 top-24"
             onClick={addToCartHandler}
             color="#444"
             title="Add to cart"
-          />
+          /> */}
           {open ? <ProductDetailsCard setOpen={setOpen} data={data} /> : null}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

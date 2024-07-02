@@ -751,6 +751,59 @@ router.patch(
   })
 );
 
+router.put(
+  "/upload-shop-avatar",
+    isAuthenticated,
+  isAdmin("Admin"),
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const { shopId, avatar } = req.body;
+      if (!shopId) {
+        return next(new ErrorHandler("Shop Id is required!", 400));
+      }
+
+      const existsSeller = await Shop.findById(shopId);
+      if (!existsSeller) {
+        return next(new ErrorHandler("Shop Id is invalid!", 400));
+      }
+
+      if (existsSeller.avatar && existsSeller.avatar.public_id) {
+        await cloudinary.v2.uploader.destroy(existsSeller.avatar.public_id);
+      }
+
+      const myCloud = await cloudinary.v2.uploader.upload(avatar, {
+        folder: "avatars",
+        width: 150,
+      });
+
+      existsSeller.avatar = {
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
+      };
+
+      const updateResultForProduct = await Product.updateMany(
+        { shopId: shopId },
+        {
+          $set: {
+            "shop.avatar.public_id": myCloud.public_id,
+            "shop.avatar.url": myCloud.secure_url,
+          }
+        }
+      );
+
+      console.log("updateResultForProduct", updateResultForProduct);
+      await existsSeller.save();
+
+      res.status(200).json({
+        success: true,
+        seller: existsSeller,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
 
 
 module.exports = router;

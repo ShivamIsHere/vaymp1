@@ -122,6 +122,25 @@ const AllSellers = () => {
         },
       },
       {
+        field: "",
+        flex: 1,
+        minWidth: 150,
+        headerName: "Upload photo",
+        type: "number",
+        sortable: false,
+        renderCell: (params) => {
+          return (
+            <>
+              <Link to={`/dashboard-upload-photo/${params.id}`}>
+                <Button>
+                  <MdOutlineLocalOffer  size={20} />
+                </Button>
+              </Link>
+            </>
+          );
+        },
+      },
+      {
         field: "kk",
         flex: 1,
         minWidth: 150,

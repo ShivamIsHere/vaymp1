@@ -35,6 +35,7 @@ import {
   ShopCreateProduct,
   ShopAllProducts,
   ShopCreateEvents,
+  ShopUploadPhoto,
   ShopAllEvents,
   ShopAllCoupouns,
   ShopPreviewPage,
@@ -325,6 +326,15 @@ const App = () => {
             </ProtectedAdminRoute>
           }
           />
+          <Route
+            path="/dashboard-upload-photo/:id"
+            element={
+              <ProtectedAdminRoute>
+                <ShopUploadPhoto />
+              </ProtectedAdminRoute>
+            }
+          />
+
          <Route
           path="/dashboard-create-coupan/:id"
           element={

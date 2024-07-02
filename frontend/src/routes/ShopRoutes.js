@@ -2,6 +2,7 @@ import ShopDashboardPage from "../pages/Shop/ShopDashboardPage";
 import ShopCreateProduct from "../pages/Shop/ShopCreateProduct";
 import ShopAllProducts from "../pages/Shop/ShopAllProducts";
 import ShopCreateEvents from "../pages/Shop/ShopCreateEvents";
+import ShopUploadPhoto from "../pages/Shop/ShopUploadPhoto";
 import ShopAllEvents from "../pages/Shop/ShopAllEvents";
 import ShopAllCoupouns from "../pages/Shop/ShopAllCoupouns";
 import ShopPreviewPage from "../pages/Shop/ShopPreviewPage";
@@ -27,5 +28,6 @@ export {
     ShopAllRefunds,
     ShopSettingsPage,
     ShopWithDrawMoneyPage,
-    ShopInboxPage
+    ShopInboxPage,
+    ShopUploadPhoto
 }

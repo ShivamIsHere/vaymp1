@@ -3,21 +3,14 @@ import Footer from "../../components/Layout/Footer";
 import Header from "../../components/Layout/Header";
 import ShopCard from "../../components/ShopCard/ShopCard";
 import { useSelector } from "react-redux";
-import { BsShop } from "react-icons/bs";
-
 const ShopsPage = () => {
   const { allProducts, isLoading } = useSelector((state) => state.products);
   const [shopList, setShopList] = useState([]);
-
   useEffect(() => {
     if (!isLoading) {
       const uniqueShopIds = new Set();
       const uniqueShops = [];
-      
-      // Filter products where listing is not "Event"
-      const filteredProducts = allProducts.filter((product) => product.listing !== "Event");
-
-      filteredProducts.forEach((product) => {
+      allProducts.forEach((product) => {
         const shopId = product.shop._id;
         if (!uniqueShopIds.has(shopId)) {
           uniqueShopIds.add(shopId);
@@ -27,7 +20,6 @@ const ShopsPage = () => {
       setShopList(uniqueShops);
     }
   }, [allProducts, isLoading]);
-
   return (
     <>
       <Header activeHeading={5} />
@@ -41,6 +33,7 @@ const ShopsPage = () => {
               <ShopCard
                 key={shop._id} 
                 shopName={shop.name}
+                image={shop?.avatar?.url}
                 shopId={shop._id}
               />
             ))}
@@ -51,5 +44,4 @@ const ShopsPage = () => {
     </>
   );
 };
-
 export default ShopsPage;

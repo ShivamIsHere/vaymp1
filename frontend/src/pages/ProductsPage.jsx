@@ -235,7 +235,7 @@ const ProductsPage = () => {
               ) : null}
             </div>
             <div className="pt-2 md:hidden">
-              <div className="grid grid-cols-2 gap-[25px] md:grid-cols-2 md:gap-[25px] mb-12">
+              <div className="grid grid-cols-2 gap-[5px] md:grid-cols-2 md:gap-[25px] mb-12">
                 {data.map((i, index) => (
                   <ProductCard data={i} key={index} />
                 ))}
