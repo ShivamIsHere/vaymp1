@@ -16,6 +16,7 @@ import {
   shoeOccasions,
   fit,
   gender,  
+  listing
 } from "../../static/data";
 import { useParams } from 'react-router-dom';
 

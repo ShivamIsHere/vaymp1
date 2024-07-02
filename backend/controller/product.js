@@ -230,6 +230,20 @@ if (req.query.sortBy === "priceHighToLow") {
       if (req.query.occasion) {
         filters.occasion = { $in: req.query.occasion.split(',') };
       }
+      
+      // New filters for shoeOccasions, accessorySubCategories, and footwearSubCategories
+      if (req.query.shoeOccasions) {
+        filters.shoeOccasions = { $in: req.query.shoeOccasions.split(',') };
+      }
+      
+      if (req.query.accessorySubCategories) {
+        filters.accessorySubCategories = { $in: req.query.accessorySubCategories.split(',') };
+      }
+      
+      if (req.query.footwearSubCategories) {
+        filters.footwearSubCategories = { $in: req.query.footwearSubCategories.split(',') };
+      }
+      
       if (req.query.size) {
         filters['stock.size'] = { $in: req.query.size.split(',') };
       }
@@ -295,7 +309,7 @@ router.get(
   "/get-all-searched-products",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { query, page = 1, limit = 10, color, size, brand, neckType, sleeveType, subCategory, fabric, occasion, fit, gender, customerRating, priceRange, sortBy } = req.query;
+      const { query, page = 1, limit = 10, color, size, brand, neckType, sleeveType, subCategory, fabric, occasion, fit, gender, customerRating, priceRange, sortBy,shoeOccasions,accessorySubCategories,footwearSubCategories } = req.query;
       let words = query.toLowerCase().split(" ");
 
       // Remove the word "for" from the search terms
@@ -360,6 +374,9 @@ router.get(
           product?.name,
           product?.tags,
           product?.brand,
+          product?.shoeOccasions,
+          product?.accessorySubCategories,
+          product?.footwearSubCategories
         ];
         return productProperties.some(prop => prop && prop.toLowerCase().includes(word));
       };
@@ -443,6 +460,34 @@ router.get(
           )
         );
       }
+      
+      if (shoeOccasions) {
+        const shoeOccasionsArray = shoeOccasions.split(',').map(c => c.trim());
+        filteredProducts = filteredProducts.filter(product => 
+          shoeOccasionsArray.some(selectedShoeOccasion =>
+            product.shoeOccasions?.toLowerCase() === selectedShoeOccasion.toLowerCase()
+          )
+        );
+      }
+      
+      if (accessorySubCategories) {
+        const accessorySubCategoriesArray = accessorySubCategories.split(',').map(c => c.trim());
+        filteredProducts = filteredProducts.filter(product => 
+          accessorySubCategoriesArray.some(selectedAccessorySubCategory =>
+            product.accessorySubCategories?.toLowerCase() === selectedAccessorySubCategory.toLowerCase()
+          )
+        );
+      }
+      
+      if (footwearSubCategories) {
+        const footwearSubCategoriesArray = footwearSubCategories.split(',').map(c => c.trim());
+        filteredProducts = filteredProducts.filter(product => 
+          footwearSubCategoriesArray.some(selectedFootwearSubCategory =>
+            product.footwearSubCategories?.toLowerCase() === selectedFootwearSubCategory.toLowerCase()
+          )
+        );
+      }
+      
 
       if (fabric) {
         const fabricsArray = fabric.split(',').map(c => c.trim());

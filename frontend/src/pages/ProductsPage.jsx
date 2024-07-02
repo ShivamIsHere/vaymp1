@@ -8,7 +8,7 @@ import Loader from "../components/Layout/Loader";
 import ProductCard from "../components/Route/ProductCard/ProductCard";
 import styles from "../styles/styles";
 import { getAllProducts } from "../redux/actions/product";
-import { categoriesData, sleeveType, neckType, color, fabric, occasion, fit, gender, size, subCategory } from "../static/data"; // Assuming data is imported correctly
+import { categoriesData, sleeveType, neckType, color, fabric, occasion, fit, gender, size, subCategory ,shoeSizes,shoeOccasions,accessorySubCategories,footwearSubCategories } from "../static/data"; // Assuming data is imported correctly
 import { AiOutlineCaretDown, AiOutlineCaretUp, AiOutlineClose, AiFillFilter, AiOutlineSwap } from "react-icons/ai";
 
 const ProductsPage = () => {
@@ -20,6 +20,9 @@ const ProductsPage = () => {
   const [filters, setFilters] = useState({
     category: categoriesParam ? categoriesParam.split(',') : [],
     subCategory: [],
+    shoeOccasions:[],
+    accessorySubCategories:[],
+    footwearSubCategories:[], 
     color: [],
     size: [],
     neckType: [],
@@ -28,6 +31,7 @@ const ProductsPage = () => {
     fabric: [],
     fit: [],
     occasion: [],
+    shoeSizes:[],
     sortBy: "",
     sortOrder: "desc",
     customerRating: [],
@@ -80,7 +84,11 @@ const ProductsPage = () => {
       key === "fit" ||
       key === "gender" ||
       key === "occasion" ||
-      key === "color"
+      key === "color"||
+      key === "shoeOccasions"||
+      key === "accessorySubCategories"||
+      key === "footwearSubCategories" ||
+      key === "shoeSizes"
     ) {
       const index = updatedFilters[key].indexOf(value);
       if (index === -1) {
@@ -140,6 +148,10 @@ const ProductsPage = () => {
       subCategory: [],
       color: [],
       size: [],
+      shoeOccasions: [],
+      accessorySubCategories: [],
+      footwearSubCategories: [],
+      shoeSizes:[],
       neckType: [],
       sleeveType: [],
       gender: [],
@@ -170,7 +182,7 @@ const ProductsPage = () => {
         <div>
           <Header activeHeading={3} />
           {/* FOR MOBILE VIEW */}
-          {categoriesParam === "Cloths" && (
+          {categoriesParam ==="Cloths" && (
             <div className="flex mb-0 sticky top-28 z-10" style={{ zIndex: 1 }}>
               <div className="w-1/2">
                 <button
@@ -197,7 +209,59 @@ const ProductsPage = () => {
           )}
 
           {/* for larger screen */}
-          {categoriesParam === "Cloths" && (
+          {categoriesParam ==="Cloths"  && (
+            <div className=" bg-gray-100 flex -mb-1 mr-14 ml-16 rounded-full sticky top-28 z-10 justify-between items-center">
+              <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
+              <button
+                onClick={() => setFilterDrawerOpen(true)}
+                className="w-1/6  font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm space-x-2 mr-11 ml-auto hidden md:block  hover:bg-blue-100 transition duration-300 ease-in-out"
+              >
+                <AiFillFilter className="ml-11 -mb-6 text-xl text-gray-800" />
+                filter
+
+              </button>
+
+              <button
+                onClick={() => setSortDrawerOpen(true)}
+                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden md:block hover:bg-blue-100 transition duration-300 ease-in-out"
+              >
+
+                <AiOutlineSwap className=" ml-11 -mb-6 text-xl text-gray-800 mr-2" />
+                Sort
+
+              </button>
+            </div>
+
+          )}
+          {/* FOR MOBILE VIEW */}
+          {categoriesParam ==="Shoes" && (
+            <div className="flex mb-0 sticky top-28 z-10" style={{ zIndex: 1 }}>
+              <div className="w-1/2">
+                <button
+                  onClick={() => setFilterDrawerOpen(true)}
+                  className="w-full bg-blue-100 flex items-center justify-center font-bold text-lg tracking-wider border-t-1 border-b-2 text-gray-700 p-3 rounded-lg mb-2 border-gray-500 transition duration-300 ease-in-out md:hidden"
+                >
+                  <AiFillFilter className="mr-2 text-xl text-gray-800" />
+                  Filter
+
+                </button>
+              </div>
+              <div className="w-1/2">
+                <button
+                  onClick={() => setSortDrawerOpen(true)}
+                  className="w-full bg-blue-100 flex items-center justify-center font-bold text-lg tracking-wider border-t-1 border-b-2 text-gray-700 p-3 rounded-lg mb-2 border-gray-500 transition duration-300 ease-in-out md:hidden"
+                >
+
+                  <AiOutlineSwap className="text-xl text-gray-800 mr-2" />
+                  Sort
+
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* for larger screen */}
+          {categoriesParam ==="Shoes"  && (
             <div className=" bg-gray-100 flex -mb-1 mr-14 ml-16 rounded-full sticky top-28 z-10 justify-between items-center">
               <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
               <button
@@ -268,7 +332,7 @@ const ProductsPage = () => {
             </div>
 
             {/* Add filter options here */}
-            <div className="mb-4">
+            {categoriesParam==="Cloths"&&<div className="mb-4">
               <label className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out" onClick={() => setSizeExpanded(!sizeExpanded)}>
                 Size
                 {!sizeExpanded ? (
@@ -307,9 +371,49 @@ const ProductsPage = () => {
                   )}
                 </div>
               )}
-            </div>
+            </div>}
+            {categoriesParam==="Shoes"&&<div className="mb-4">
+              <label className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out" onClick={() => setSizeExpanded(!sizeExpanded)}>
+                Size
+                {!sizeExpanded ? (
+                  <AiOutlineCaretDown className="h-6" />
+                ) : (
+                  <AiOutlineCaretUp className="h-6" />
+                )}
+              </label>
+              {sizeExpanded && (
+                <div className="pl-4">
+                  {shoeSizes.map((option, index) => (
+                    // {size.map((option, index) => (
+                    <div key={index} className="flex items-center mb-2">
+                      <input
+                        type="checkbox"
+                        id={option.id}
+                        name="shoeSizes"
+                        value={option.type}
+                        onChange={(e) => {
+                          handleFilterChange("size", e.target.value);
+                          applyFilters();
+                        }}
+                        checked={filters.size.includes(option.type)}
+                        className="mr-2"
+                      />
+                      <label htmlFor={option.id}>{option.type}</label>
+                    </div>
+                  ))}
+                  {shoeSizes.length > 6 && (
+                    <button
+                      onClick={() => setShowAllSizes(!showAllSizes)}
+                      className="text-blue-500 hover:underline"
+                    >
+                      {showAllSizes ? 'Show Less' : 'See More'}
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>}
             {/* Add other filter sections similarly */}
-            <div className="mb-4">
+            {categoriesParam==="Cloths"&&<div className="mb-4">
               <label
                 className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out"
                 onClick={() => setSubCategoryExpanded(!subCategoryExpanded)}
@@ -350,7 +454,49 @@ const ProductsPage = () => {
                   )}
                 </div>
               )}
-            </div>
+            </div>}
+            {categoriesParam==="Shoes"&&<div className="mb-4">
+              <label
+                className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out"
+                onClick={() => setSubCategoryExpanded(!subCategoryExpanded)}
+              >
+                Category
+                {!subCategoryExpanded ? (
+                  <AiOutlineCaretDown className="h-8" />
+                ) : (
+                  <AiOutlineCaretUp className="h-8" />
+                )}
+              </label>
+              {subCategoryExpanded && (
+                <div className="pl-4">
+                  {footwearSubCategories.map((option, index) => (
+                    <div key={option.id} className="flex items-center mb-2">
+                      <input
+                        type="checkbox"
+                        id={option.id}
+                        name="footwearSubCategories"
+                        value={option.title}
+                        onChange={(e) => {
+                          handleFilterChange("footwearSubCategories", e.target.value);
+                          applyFilters();
+                        }}
+                        checked={filters.footwearSubCategories.includes(option.title)}
+                        className="mr-2"
+                      />
+                      <label htmlFor={option.id}>{option.title}</label>
+                    </div>
+                  ))}
+                  {footwearSubCategories.length > 6 && (
+                    <button
+                      onClick={() => setShowAllSubCategories(!showAllSubCategories)}
+                      className="text-blue-500 hover:underline"
+                    >
+                      {showAllSubCategories ? 'Show Less' : 'See More'}
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>}
             {/* Color filter section */}
             <div className="mb-4">
               <label className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out" onClick={() => setColorExpanded(!colorExpanded)}>
@@ -393,7 +539,7 @@ const ProductsPage = () => {
             </div>
             {/* add more filter */}
             {/* Fabric filter section */}
-            <div className="mb-4">
+            {categoriesParam==="Cloths"&&<div className="mb-4">
               <label className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out" onClick={() => setFabricExpanded(!fabricExpanded)}>
                 Fabric
                 {!fabricExpanded ? (
@@ -423,9 +569,9 @@ const ProductsPage = () => {
                   ))}
                 </div>
               )}
-            </div>
+            </div>}
             {/* Occasion filter section */}
-            <div className="mb-4">
+            {categoriesParam==="Cloths"&&<div className="mb-4">
               <label className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out" onClick={() => setOccasionExpanded(!occasionExpanded)}>Occasion
                 {!occasionExpanded ? (
                   <AiOutlineCaretDown className="h-8" />
@@ -454,9 +600,39 @@ const ProductsPage = () => {
                   ))}
                 </div>
               )}
-            </div>
+            </div>}
+            {categoriesParam==="Shoes"&&<div className="mb-4">
+              <label className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out" onClick={() => setOccasionExpanded(!occasionExpanded)}>Occasion
+                {!occasionExpanded ? (
+                  <AiOutlineCaretDown className="h-8" />
+                ) : (
+                  <AiOutlineCaretUp className="h-8" />
+                )}
+              </label>
+              {occasionExpanded && (
+                <div className="pl-4">
+                  {shoeOccasions.map((option) => (
+                    <div key={option.id} className="flex items-center mb-2">
+                      <input
+                        type="checkbox"
+                        id={option.id}
+                        name="shoeOccasions"
+                        value={option.type}
+                        onChange={(e) => {
+                          handleFilterChange("shoeOccasions", e.target.value);
+                          applyFilters();
+                        }}
+                        checked={filters.shoeOccasions.includes(option.type)}
+                        className="mr-2"
+                      />
+                      <label htmlFor={option.id}>{option.type}</label>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>}
             {/* Fit filter section */}
-            <div className="mb-4">
+            {categoriesParam==="Cloths"&&<div className="mb-4">
               <label className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out" onClick={() => setFitExpanded(!fitExpanded)}>
                 Fit
                 {!fitExpanded ? (
@@ -486,7 +662,7 @@ const ProductsPage = () => {
                   ))}
                 </div>
               )}
-            </div>
+            </div>}
             {/* Gender filter section */}
             <div className="mb-4">
               <label className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out" onClick={() => setGenderExpanded(!genderExpanded)}>
@@ -520,7 +696,7 @@ const ProductsPage = () => {
               )}
             </div>
             {/* Sleeve Type filter section */}
-            <div className="mb-4">
+            {categoriesParam==="Cloths"&&<div className="mb-4">
               <label className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out" onClick={() => setSleeveTypeExpanded(!sleeveTypeExpanded)}>Sleeve Type
                 {!sleeveTypeExpanded ? (
                   <AiOutlineCaretDown className="h-8" />
@@ -549,9 +725,9 @@ const ProductsPage = () => {
                   ))}
                 </div>
               )}
-            </div>
+            </div>}
             {/* Neck Type filter section */}
-            <div className="mb-4">
+            {categoriesParam==="Cloths"&&<div className="mb-4">
               <label className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out" onClick={() => setNeckTypeExpanded(!neckTypeExpanded)}>Neck Type
                 {!neckTypeExpanded ? (
                   <AiOutlineCaretDown className="h-8" />
@@ -588,7 +764,7 @@ const ProductsPage = () => {
                   )}
                 </div>
               )}
-            </div>
+            </div>}
             {/* Customer Rating filter section */}
             <div className="mb-4">
               <label className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out" onClick={() => setCustomerRatingExpanded(!customerRatingExpanded)}>
