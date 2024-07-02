@@ -6,11 +6,14 @@ import { createProduct } from "../../redux/actions/product";
 import {
   categoriesData,
   subCategory,
+  footwearSubCategories,
   sleeveType,
   neckType,
   color,
   fabric,
   occasion,
+  accessorySubCategories,
+  shoeOccasions,
   fit,
   gender,  
 } from "../../static/data";
@@ -37,7 +40,8 @@ const CreateProduct = () => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
-
+  const [selectedShoesSubCategory, setSelectedShoesSubCategory] = useState("");
+  const [selectedAccessoriesSubCategory, setSelectedAccessoriesSubCategory] = useState("");
   const [tags, setTags] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
   const [ShopPrice, setShopPrice] = useState("");
@@ -48,17 +52,14 @@ const CreateProduct = () => {
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedFabric, setSelectedFabric] = useState("");
   const [selectedOccasion, setSelectedOccasion] = useState("");
+  const [selectedShoesOccasion, setSelectedShoesOccasion] = useState("");
   const [selectedFit, setSelectedFit] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
   const [sizesAndQuantities, setSizesAndQuantities] = useState([{ size: "", quantity: 0 }]);
 
   const sizes = [
-    '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL', '8XL',
-    '0 - 1 Month', '1 - 2 Months', '2 - 3 Months', '3 - 4 Months', '4 - 5 Months', '5 - 6 Months', 
-    '6 - 7 Months', '7 - 8 Months', '8 - 9 Months', '9 - 10 Months', '10 - 11 Months', '11 - 12 Months', 
-    '1 - 2 Years', '2 - 3 Years', '3 - 4 Years', '4 - 5 Years', '5 - 6 Years', '6 - 7 Years', '7 - 8 Years', 
-    '8 - 9 Years', '9 - 10 Years', '10 - 11 Years', '11 - 12 Years', '12 - 13 Years', '13 - 14 Years', 
-    '14 - 15 Years', '15 - 16 Years'
+    'Free Size', '2XS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '5XL', '6XL', '7XL', '8XL',
+  '3', '3.5', '4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11', '11.5', '12', '12.5', '13', '13.5', '14', '14.5', '15', '15.5', '16'
   ];  
   useEffect(() => {
     if (error) {
@@ -143,18 +144,19 @@ const CreateProduct = () => {
     newForm.append("discountPrice", discountPrice);
     newForm.append("category", category);
     newForm.append("subCategory", selectedSubCategory);
+    newForm.append("footwearSubCategories", selectedShoesSubCategory);
+    newForm.append("accessorySubCategories", selectedAccessoriesSubCategory);
     newForm.append("neckType", selectedNeckType);
     newForm.append("sleeveType", selectedSleeveType);
     newForm.append("brand", selectedBrand);
     newForm.append("color", selectedColor);
     newForm.append("fabric", selectedFabric);
     newForm.append("occasion", selectedOccasion);
+    newForm.append("shoeOccasions", selectedShoesOccasion);
     newForm.append("fit", selectedFit);
     newForm.append("gender", selectedGender);
     newForm.append("shopId", seller._id);
     newForm.append("adminCreated", user._id);
-
-
      dispatch(
         createProduct({
           name,
@@ -165,6 +167,9 @@ const CreateProduct = () => {
           discountPrice,
           stock: stockData,
           category,
+          footwearSubCategories:selectedShoesSubCategory,
+          accessorySubCategories:selectedAccessoriesSubCategory,
+          shoeOccasions:selectedShoesOccasion,
           subCategory:selectedSubCategory,
           neckType: selectedNeckType,
           sleeveType: selectedSleeveType,
@@ -269,7 +274,7 @@ console.log("category",category)
           />
         </div>
         <br />
-        {category==="Cloths" && <div>
+        <div>
             <label className="pb-2">Size and Quantity</label>
             {sizesAndQuantities.map((item, index) => (
               <div key={index} className="flex mt-2">
@@ -318,7 +323,7 @@ console.log("category",category)
                 )}
               </div>
             ))}
-          </div>}
+          </div>
           <br />
         <div>
           <label className="pb-2">
@@ -337,7 +342,7 @@ console.log("category",category)
             ))}
           </select>
         </div>
-        <div>
+        {category==="Cloths" && <div>
           <label className="pb-2">
             subCategory <span className="text-red-500">*</span>
           </label>
@@ -353,7 +358,41 @@ console.log("category",category)
               </option>
             ))}
           </select>
-        </div>
+        </div>}
+        {category==="Shoes" && <div>
+          <label className="pb-2">
+            subCategory <span className="text-red-500">*</span>
+          </label>
+          <select
+            className="w-full mt-2 border h-[35px] rounded-[5px]"
+            value={selectedShoesSubCategory}
+            onChange={(e) => setSelectedShoesSubCategory(e.target.value)}
+          >
+            <option value="">Choose a sub-Category</option>
+            {footwearSubCategories.map((i) => (
+              <option value={i.title} key={i.title}>
+                {i.title}
+              </option>
+            ))}
+          </select>
+        </div>}
+        {category==="Accessories" && <div>
+          <label className="pb-2">
+            subCategory <span className="text-red-500">*</span>
+          </label>
+          <select
+            className="w-full mt-2 border h-[35px] rounded-[5px]"
+            value={selectedAccessoriesSubCategory}
+            onChange={(e) => setSelectedAccessoriesSubCategory(e.target.value)}
+          >
+            <option value="">Choose a sub-Category</option>
+            {accessorySubCategories.map((i) => (
+              <option value={i.title} key={i.title}>
+                {i.title}
+              </option>
+            ))}
+          </select>
+        </div>}
         <br />
         <div>
           <label className="pb-2">Neck Type</label>
@@ -433,7 +472,22 @@ console.log("category",category)
           </select>
         </div>
         <br />
-        <div>
+        {category==="Shoes" && <div>
+          <label className="pb-2">Occasion</label>
+          <select
+            className="w-full mt-2 border h-[35px] rounded-[5px]"
+            value={selectedShoesOccasion}
+            onChange={(e) => setSelectedShoesOccasion(e.target.value)}
+          >
+            <option value="">Choose Occasion type</option>
+            {shoeOccasions.map((i) => (
+              <option value={i.type} key={i.type}>
+                {i.type}
+              </option>
+            ))}
+          </select>
+        </div>}
+        {category==="Cloths" && <div>
           <label className="pb-2">Occasion</label>
           <select
             className="w-full mt-2 border h-[35px] rounded-[5px]"
@@ -447,7 +501,7 @@ console.log("category",category)
               </option>
             ))}
           </select>
-        </div>
+        </div>}
         <br />
         <div>
           <label className="pb-2">fit</label>

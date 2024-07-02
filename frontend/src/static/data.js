@@ -564,6 +564,219 @@ export const navItems = [
       type: "Sports",
     }
   ];
+  export const shoeOccasions = [
+    {
+      id: 1,
+      type: "Casual",
+    },
+    {
+      id: 2,
+      type: "Formal",
+    },
+    {
+      id: 3,
+      type: "Sports",
+    },
+    {
+      id: 4,
+      type: "Party",
+    },
+    {
+      id: 5,
+      type: "Outdoor",
+    },
+    {
+      id: 6,
+      type: "Work",
+    },
+    {
+      id: 7,
+      type: "Beach",
+    },
+    {
+      id: 8,
+      type: "Hiking",
+    },
+    {
+      id: 9,
+      type: "Wedding",
+    },
+    {
+      id: 10,
+      type: "Everyday",
+    },
+  ];
+  
+
+  export const accessorySubCategories = [
+    {
+      id: 1,
+      title: "Wallets"
+    },
+    {
+      id: 2,
+      title: "Belts"
+    },
+    {
+      id: 3,
+      title: "Ties"
+    },
+    {
+      id: 4,
+      title: "Sunglasses"
+    },
+    {
+      id: 5,
+      title: "Hats"
+    },
+    {
+      id: 6,
+      title: "Caps"
+    },
+    {
+      id: 7,
+      title: "Scarves"
+    },
+    {
+      id: 8,
+      title: "Gloves"
+    },
+    {
+      id: 9,
+      title: "Umbrellas"
+    },
+    {
+      id: 10,
+      title: "Handkerchiefs"
+    },
+    {
+      id: 11,
+      title: "Socks"
+    },
+    {
+      id: 12,
+      title: "Jewelry"
+    },
+    {
+      id: 13,
+      title: "Watches"
+    },
+    {
+      id: 14,
+      title: "Hair Accessories"
+    },
+    {
+      id: 15,
+      title: "Bags"
+    },
+    {
+      id: 16,
+      title: "Backpacks"
+    },
+    {
+      id: 17,
+      title: "Luggage"
+    },
+    {
+      id: 18,
+      title: "Briefcases"
+    },
+    {
+      id: 19,
+      title: "Travel Accessories"
+    },
+    {
+      id: 20,
+      title: "Phone Cases"
+    }
+  ];
+
+  
+  
+  export const footwearSubCategories = [
+    {
+      id: 1,
+      title: "Flip Flops"
+    },
+    {
+      id: 2,
+      title: "Slide Sandals"
+    },
+    {
+      id: 3,
+      title: "House Slippers"
+    },
+    {
+      id: 4,
+      title: "Thong Slippers"
+    },
+    {
+      id: 5,
+      title: "Gladiator Sandals"
+    },
+    {
+      id: 6,
+      title: "Sport Sandals"
+    },
+    {
+      id: 7,
+      title: "Wedge Sandals"
+    },
+    {
+      id: 8,
+      title: "Heeled Sandals"
+    },
+    {
+      id: 9,
+      title: "Flat Sandals"
+    },
+    {
+      id: 10,
+      title: "Sneakers"
+    },
+    {
+      id: 11,
+      title: "Running Shoes"
+    },
+    {
+      id: 12,
+      title: "Loafers"
+    },
+    {
+      id: 13,
+      title: "Oxfords"
+    },
+    {
+      id: 14,
+      title: "Brogues"
+    },
+    {
+      id: 15,
+      title: "Boots"
+    },
+    {
+      id: 16,
+      title: "Heels"
+    },
+    {
+      id: 17,
+      title: "Flats"
+    },
+    {
+      id: 18,
+      title: "Moccasins"
+    },
+    {
+      id: 19,
+      title: "Derbies"
+    },
+    {
+      id: 20,
+      title: "Espadrilles"
+    }
+  ];
+  
+  
   export const fit = [
     {
       id: 1,
@@ -649,165 +862,172 @@ export const navItems = [
   export const size = [
     {
       id: 1,
-      type: "2XS",
+      type: "Free Size"
     },
     {
       id: 2,
-      type: "XS",
+      type: "2XS"
     },
     {
       id: 3,
-      type: "S",
+      type: "XS"
     },
     {
       id: 4,
-      type: "M",
+      type: "S"
     },
     {
       id: 5,
-      type: "L",
+      type: "M"
     },
     {
       id: 6,
-      type: "XL",
+      type: "L"
     },
     {
       id: 7,
-      type: "2XL",
+      type: "XL"
     },
     {
       id: 8,
-      type: "3XL",
+      type: "2XL"
     },
     {
       id: 9,
-      type: "4XL",
+      type: "3XL"
     },
     {
       id: 10,
-      type: "5XL",
+      type: "4XL"
     },
     {
       id: 11,
-      type: "6XL",
+      type: "5XL"
     },
     {
       id: 12,
-      type: "7XL",
+      type: "6XL"
     },
     {
       id: 13,
-      type: "8XL",
+      type: "7XL"
     },
     {
       id: 14,
-      type: "0 - 1 Month",
+      type: "8XL"
     },
     {
       id: 15,
-      type: "1 - 2 Months",
+      type: "3"
     },
     {
       id: 16,
-      type: "2 - 3 Months",
+      type: "3.5"
     },
     {
       id: 17,
-      type: "3 - 4 Months",
+      type: "4"
     },
     {
       id: 18,
-      type: "4 - 5 Months",
+      type: "4.5"
     },
     {
       id: 19,
-      type: "5 - 6 Months",
+      type: "5"
     },
     {
       id: 20,
-      type: "6 - 7 Months",
+      type: "5.5"
     },
     {
       id: 21,
-      type: "7 - 8 Months",
+      type: "6"
     },
     {
       id: 22,
-      type: "8 - 9 Months",
+      type: "6.5"
     },
     {
       id: 23,
-      type: "9 - 10 Months",
+      type: "7"
     },
     {
       id: 24,
-      type: "10 - 11 Months",
+      type: "7.5"
     },
     {
       id: 25,
-      type: "11 - 12 Months",
+      type: "8"
     },
     {
       id: 26,
-      type: "1 - 2 Years",
+      type: "8.5"
     },
     {
       id: 27,
-      type: "2 - 3 Years",
+      type: "9"
     },
     {
       id: 28,
-      type: "3 - 4 Years",
+      type: "9.5"
     },
     {
       id: 29,
-      type: "4 - 5 Years",
+      type: "10"
     },
     {
       id: 30,
-      type: "5 - 6 Years",
+      type: "10.5"
     },
     {
       id: 31,
-      type: "6 - 7 Years",
+      type: "11"
     },
     {
       id: 32,
-      type: "7 - 8 Years",
+      type: "11.5"
     },
     {
       id: 33,
-      type: "8 - 9 Years",
+      type: "12"
     },
     {
       id: 34,
-      type: "9 - 10 Years",
+      type: "12.5"
     },
     {
       id: 35,
-      type: "10 - 11 Years",
+      type: "13"
     },
     {
       id: 36,
-      type: "11 - 12 Years",
+      type: "13.5"
     },
     {
       id: 37,
-      type: "12 - 13 Years",
+      type: "14"
     },
     {
       id: 38,
-      type: "13 - 14 Years",
+      type: "14.5"
     },
     {
       id: 39,
-      type: "14 - 15 Years",
+      type: "15"
     },
     {
       id: 40,
-      type: "15 - 16 Years",
+      type: "15.5"
+    },
+    {
+      id: 41,
+      type: "16"
     }
   ];
+  
+  
+  
   export const listing = 
   [
     {

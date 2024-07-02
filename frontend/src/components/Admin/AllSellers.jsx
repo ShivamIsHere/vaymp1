@@ -122,7 +122,7 @@ const AllSellers = () => {
         },
       },
       {
-        field: "",
+        field: "mmm",
         flex: 1,
         minWidth: 150,
         headerName: "Upload photo",
