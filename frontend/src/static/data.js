@@ -773,6 +773,14 @@ export const navItems = [
     {
       id: 20,
       title: "Espadrilles"
+    },
+    {
+      id: 21,
+      title: "Shoes"
+    },
+    {
+      id: 22,
+      title: "Crocs"
     }
   ];
   

@@ -153,6 +153,7 @@ const Header = ({ activeHeading }) => {
   const handleSearchSubmit = (e) => {
     if (e.key === "Enter" && searchTerm) {
       navigate(`/search/${searchTerm}`);
+      window.location.reload(true);
       setSearchTerm("");
       setSearchData(null);
     }

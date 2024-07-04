@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/Layout/Header";
@@ -21,15 +20,22 @@ import {
   size,
   subCategory,
   brandingData,
+  shoeSizes,
+  shoeOccasions,
+  accessorySubCategories,
+  footwearSubCategories
 } from "../static/data"; // Assuming data is imported correctly
 
 const SearchResults = () => {
   const { query } = useParams();
+  console.log("queryqueryquery",query)
   const [filteredData, setFilteredData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+
   const [filters, setFilters] = useState({
     colors: [],
     sizes: [],
@@ -43,12 +49,23 @@ const SearchResults = () => {
     genders: [],
     customerRatings: [],
     priceRanges: [],
+    shoeSize:[],
+    shoeOccasion:[],
+    accessorySubCategorie:[],
+    footwearSubCategorie:[],
   });
+    const [isClothes, setIsClothes] = useState(false);
+    const [isFootWear, setIsFootWear] = useState(false);
+    const [isValid, setIsValid] = useState(false);
+
   const [sortDrawerOpen, setSortDrawerOpen] = useState(false);
   const [sortBy, setSortBy] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [showAllSizes, setShowAllSizes] = useState(false);
+  const [showAllShoesSizes, setShowAllShoesSizes] = useState(false);
   const [showAllSubCategories, setShowAllSubCategories] = useState(false);
+  const [showAllShoeSubCategories, setShowAllShoesSubCategories] = useState(false);
+
   const [showAllColors, setShowAllColors] = useState(false);
   const [showAllNeckTypes, setShowAllNeckTypes] = useState(false);
   const [dropdowns, setDropdowns] = useState({
@@ -64,6 +81,10 @@ const SearchResults = () => {
     genders: false,
     customerRatings: false,
     priceRanges: false,
+    shoeSize: false,
+    shoeOccasion: false,
+    accessorySubCategorie: false,
+    footwearSubCategorie: false,
   });
 
   const fetchProducts = async () => {
@@ -85,6 +106,10 @@ const SearchResults = () => {
           brandingData: filters.brandingDatas.join(","),
           customerRating: filters.customerRatings.join(","),
           priceRange: filters.priceRanges.join(","),
+          shoeSizes:  filters.shoeSize.join(","),
+          shoeOccasions:  filters.shoeOccasion.join(","),
+          accessorySubCategories:  filters.accessorySubCategorie.join(","),
+          footwearSubCategories:  filters.footwearSubCategorie.join(","),
           sortBy,
         },
       });
@@ -92,6 +117,7 @@ const SearchResults = () => {
       const data = response.data;
       if (data.success) {
         setFilteredData(data.products);
+        setTotalPage(data.l3)
         setTotalPages(data.totalPages);
       } else {
         setError("Failed to fetch products");
@@ -105,6 +131,51 @@ const SearchResults = () => {
   };
 
   useEffect(() => {
+    const clothesKeywords = [
+      "t-shirts", "tshirt", "blouses", "shirts", "tank tops", "sweaters", "hoodies", "jeans", "trousers", "shorts",
+      "skirts", "leggings", "jackets", "coats", "blazers", "vests", "raincoats", "casual dresses", "formal dresses",
+      "maxi dresses", "cocktail dresses", "sundresses", "sports bras", "gym tops", "yoga pants", "track pants",
+      "running shorts", "pajamas", "robes", "sweatpants", "lounge tops", "half pants", "bras", "panties", "boxers",
+      "briefs", "undershirts", "suits", "tuxedos", "full sleeve", "half sleeve", "short sleeve", "sleeveless",
+      "modal", "linen blend", "wool blend", "poly cotton", "nylon", "viscose rayon", "cotton blend", "elastane",
+      "organic cotton", "polyester", "pure cotton", "2xs", "xs", "s", "m", "l", "xl", "2xl", "3xl", "4xl", "5xl", "6xl",
+      "7xl", "8xl", "beach wear", "casual", "formal", "lounge wear", "party", "sports", "boxy", "compression", "loose",
+      "oversized", "regular", "slim", "clothes", "shirt", "dresses", "cloths", "cloth", "kapra", "dress"
+    ];
+
+    const shoesKeywords = [
+      "shoe", "sneaker", "boot", "heel", "sandal", "flip-flop", "loafer", "slipper", "casual", "formal", "sports",
+      "party", "outdoor", "work", "beach", "hiking", "wedding", "everyday", "flip flops", "slide sandals",
+      "house slippers", "thong slippers", "gladiator sandals", "sport sandals", "wedge sandals", "heeled sandals",
+      "flat sandals", "sneakers", "running shoes", "loafers", "oxfords", "brogues", "boots", "heels", "flats",
+      "moccasins", "derbies", "espadrilles", "shoes", "crocs", "3", "3.5", "4", "4.5", "5", "5.5", "6", "6.5", "7",
+      "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "12.5", "13", "13.5", "14", "14.5", "15", "15.5",
+      "16", "joota", "juta", "jhoota", "jutta", "sliper", "slipers"
+    ];
+
+    const stopWords = [
+      "for", "in", "the", "and", "a", "of", "to", "is", "on", "at", "by", "with", "from", "as", "about", "into",
+      "through", "during", "before", "after", "over", "between", "under", "above", "below", "up", "down", "out", "off",
+      "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any",
+      "both", "each", "few", "more", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than",
+      "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"
+    ];
+
+    const queryWords = query.toLowerCase().split(" ").filter(word => !stopWords.includes(word));
+
+    const isClothesQuery = queryWords.some(word => clothesKeywords.includes(word));
+    const isShoesQuery = queryWords.some(word => shoesKeywords.includes(word));
+
+    if (isClothesQuery) {
+      setIsClothes(true);
+    }
+    if (isShoesQuery) {
+      setIsFootWear(true);
+    }
+    if (isClothesQuery !== isShoesQuery) {
+      setIsValid(true);
+    }
+
     fetchProducts();
   }, [query, currentPage, filters, sortBy]);
 
@@ -154,9 +225,16 @@ const SearchResults = () => {
       case "sizes":
         setShowAllSizes(!showAllSizes);
         break;
+        case "shoeSize":
+        setShowAllShoesSizes(!showAllShoesSizes);
+        break;
       case "subCategorys":
         setShowAllSubCategories(!showAllSubCategories);
         break;
+        case "footwearSubCategorie":
+        setShowAllShoesSubCategories(!showAllShoeSubCategories);
+        break;
+
       case "colors":
         setShowAllColors(!showAllColors);
         break;
@@ -182,15 +260,49 @@ const SearchResults = () => {
       genders: [],
       customerRatings: [],
       priceRanges: [],
+      shoeSize: [],
+      shoeOccasion: [],
+      accessorySubCategorie: [],
+      footwearSubCategorie: [],
     });
     setCurrentPage(1);
-  window.location.reload() ;
+    setIsFootWear(false);
+    setIsClothes(false);
+    setShowAllSizes(false);
+    setShowAllShoesSizes(false);
+    setShowAllSubCategories(false);
+    setShowAllShoesSubCategories(false);
+    setShowAllColors(false);
+    setShowAllNeckTypes(false);
+    setDropdowns({
+      colors: false,
+      sizes: false,
+      subCategorys: false,
+      neckTypes: false,
+      fabrics: false,
+      occasions: false,
+      fits: false,
+      sleeveTypes: false,
+      brandingDatas: false,
+      genders: false,
+      customerRatings: false,
+      priceRanges: false,
+      shoeSize: false,
+      shoeOccasion: false,
+      accessorySubCategorie: false,
+      footwearSubCategorie: false,
+    });
   };
+
+
   
 
 
   const visibleSizes = showAllSizes ? size : size.slice(0, 6);
+  const visibleShoesSizes = showAllShoesSizes ? shoeSizes : shoeSizes.slice(0, 6);
   const visibleSubCategories = showAllSubCategories ? subCategory : subCategory.slice(0, 6);
+  const visibleShoeSubCategories = showAllShoeSubCategories ? footwearSubCategories : footwearSubCategories.slice(0, 6);
+
   const visibleColors = showAllColors ? color : color.slice(0, 6);
   const visibleNeckTypes = showAllNeckTypes ? neckType : neckType.slice(0, 6);
 
@@ -198,14 +310,14 @@ const SearchResults = () => {
     <>
       {isLoading ? (
         <Loader />
-      ) : error ? (
-        <div className="text-center text-red-500">{error}</div>
-      ) : (
+      ): (
         <div>
           <Header activeHeading={3} />
           <div className={`${styles.section}`}>
+          {totalPage===0&&<h>NO Product Found...Here are some suggested Products</h>}              
+
             {/* for MObile view */}
-            <div className="flex mb-0 sticky top-28 z-10 -mx-4">
+            {isValid===true&&<div className="flex mb-0 sticky top-28 z-10 -mx-4">
               <div className="w-1/2 p-0 m-0">
                 <button
                   className="w-full bg-blue-100 flex items-center justify-center font-bold text-lg tracking-wider border-t-1 border-b-2 text-gray-700 p-3 rounded-lg mb-2 border-gray-500 transition duration-300 ease-in-out md:hidden"
@@ -224,12 +336,12 @@ const SearchResults = () => {
                   Sort
                 </button>
               </div>
-            </div>
+            </div>}
 
             {/* for larger screen */}
 
     
-            <div className=" bg-gray-100  rounded-full flex mb-1 mt-1 sticky top-28 z-10 justify-between items-center">
+            {isValid===true&&<div className=" bg-gray-100  rounded-full flex mb-1 mt-1 sticky top-28 z-10 justify-between items-center">
               <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
               <button
                 className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm space-x-2 mr-11 ml-auto hidden md:block  hover:bg-blue-100 transition duration-300 ease-in-out"
@@ -247,7 +359,7 @@ const SearchResults = () => {
                    <AiOutlineSwap className=" ml-11 -mb-6 text-xl text-gray-800 mr-2" />
                 Sort
               </button>
-            </div>
+            </div>}
 
 
 
@@ -305,7 +417,36 @@ const SearchResults = () => {
                   )}
                 </div>
                 {/* Size Filter */}
-                <div className="mb-4">
+                {isFootWear===true&&<div className="mb-4">
+                  <h3
+                    className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out"
+                    onClick={() => toggleDropdown("shoeSize")}
+                  >
+                    Size
+                    {dropdowns.shoeSize ? <AiOutlineCaretUp /> : <AiOutlineCaretDown />}
+                  </h3>
+                  {dropdowns.shoeSize &&
+                    visibleShoesSizes.map((s) => (
+                      <label key={s.id} className="block ml-2">
+                        <input
+                          type="checkbox"
+                          value={s.type}
+                          checked={filters.shoeSize.includes(s.type)}
+                          onChange={() => handleCheckboxChange("shoeSize", s.type)}
+                        />
+                        {s.type}
+                      </label>
+                    ))}
+                  {dropdowns.shoeSize && shoeSizes.length > 6 && (
+                    <button
+                      className="ml-2 text-blue-500"
+                      onClick={() => toggleShowAll("shoeSize")}
+                    >
+                      {showAllShoesSizes ? "See Less" : "See More"}
+                    </button>
+                  )}
+                </div>}
+                {isClothes===true&&<div className="mb-4">
                   <h3
                     className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out"
                     onClick={() => toggleDropdown("sizes")}
@@ -333,9 +474,9 @@ const SearchResults = () => {
                       {showAllSizes ? "See Less" : "See More"}
                     </button>
                   )}
-                </div>
+                </div>}
                 {/* SubCategory Filter */}
-                <div className="mb-4">
+                {isClothes===true&&<div className="mb-4">
                   <h3
                     className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out"
                     onClick={() => toggleDropdown("subCategorys")}
@@ -363,9 +504,38 @@ const SearchResults = () => {
                       {showAllSubCategories ? "See Less" : "See More"}
                     </button>
                   )}
-                </div>
+                </div>}
+                {isFootWear===true&&<div className="mb-4">
+                  <h3
+                    className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out"
+                    onClick={() => toggleDropdown("footwearSubCategorie")}
+                  >
+                    Category
+                    {dropdowns.footwearSubCategorie ? <AiOutlineCaretUp /> : <AiOutlineCaretDown />}
+                  </h3>
+                  {dropdowns.footwearSubCategorie &&
+                    visibleShoeSubCategories.map((s) => (
+                      <label key={s.id} className="block ml-2">
+                        <input
+                          type="checkbox"
+                          value={s.title}
+                          checked={filters.footwearSubCategorie.includes(s.title)}
+                          onChange={() => handleCheckboxChange("footwearSubCategorie", s.title)}
+                        />
+                        {s.title}
+                      </label>
+                    ))}
+                  {dropdowns.footwearSubCategorie && footwearSubCategories.length > 6 && (
+                    <button
+                      className="ml-2 text-blue-500"
+                      onClick={() => toggleShowAll("footwearSubCategorie")}
+                    >
+                      {showAllShoeSubCategories ? "See Less" : "See More"}
+                    </button>
+                  )}
+                </div>}
                 {/* Neck Type Filter */}
-                <div className="mb-4">
+                {isClothes===true&&<div className="mb-4">
                   <h3
                     className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out"
                     onClick={() => toggleDropdown("neckTypes")}
@@ -393,9 +563,9 @@ const SearchResults = () => {
                       {showAllNeckTypes ? "See Less" : "See More"}
                     </button>
                   )}
-                </div>
+                </div>}
                 {/* Fabric Filter */}
-                <div className="mb-4">
+                {isClothes===true&&<div className="mb-4">
                   <h3
                     className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out"
                     onClick={() => toggleDropdown("fabrics")}
@@ -415,9 +585,9 @@ const SearchResults = () => {
                         {f.type}
                       </label>
                     ))}
-                </div>
+                </div>}
                 {/* Occasion Filter */}
-                <div className="mb-4">
+                {isClothes===true&&<div className="mb-4">
                   <h3
                     className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out"
                     onClick={() => toggleDropdown("occasions")}
@@ -437,9 +607,30 @@ const SearchResults = () => {
                         {o.type}
                       </label>
                     ))}
-                </div>
+                </div>}
+                {isFootWear===true&&<div className="mb-4">
+                  <h3
+                    className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out"
+                    onClick={() => toggleDropdown("shoeOccasion")}
+                  >
+                    Occasion
+                    {dropdowns.shoeOccasion ? <AiOutlineCaretUp /> : <AiOutlineCaretDown />}
+                  </h3>
+                  {dropdowns.shoeOccasion &&
+                    shoeOccasions.map((o) => (
+                      <label key={o.id} className="block ml-2">
+                        <input
+                          type="checkbox"
+                          value={o.type}
+                          checked={filters.shoeOccasion.includes(o.type)}
+                          onChange={() => handleCheckboxChange("shoeOccasion", o.type)}
+                        />
+                        {o.type}
+                      </label>
+                    ))}
+                </div>}
                 {/* Fit Filter */}
-                <div className="mb-4">
+                {isClothes===true&&<div className="mb-4">
                   <h3
                     className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out"
                     onClick={() => toggleDropdown("fits")}
@@ -459,9 +650,9 @@ const SearchResults = () => {
                         {s.type}
                       </label>
                     ))}
-                </div>
+                </div>}
                 {/* Sleeve Type Filter */}
-                <div className="mb-4">
+                {isClothes===true&&<div className="mb-4">
                   <h3
                     className="cursor-pointer flex items-center justify-between border-t-1 border-b-2 border-gray-300 text-gray-700 p-3 rounded-lg mb-2 hover:border-gray-500 transition duration-300 ease-in-out"
                     onClick={() => toggleDropdown("sleeveTypes")}
@@ -481,7 +672,7 @@ const SearchResults = () => {
                         {s.title}
                       </label>
                     ))}
-                </div>
+                </div>}
                 {/* Gender Filter */}
                 <div className="mb-4">
                   <h3
@@ -557,10 +748,11 @@ const SearchResults = () => {
                    
               </form>
             </div>
+            
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {filteredData.map((product) => (
-                <ProductCard data={product} key={product._id} />
-              ))}
+                {filteredData.map((product) => (
+                  <ProductCard data={product} key={product._id} />
+                ))}
             </div>
             <div className="mt-4 flex justify-center">
               {Array.from({ length: totalPages }, (_, index) => (
