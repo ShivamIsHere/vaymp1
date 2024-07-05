@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useInView } from "react-intersection-observer";
 import Header from "../components/Layout/Header";
 import Footer from "../components/Layout/Footer";
 import ProductCard from "../components/Route/ProductCard/ProductCard";
@@ -25,11 +26,12 @@ import {
   accessorySubCategories,
   footwearSubCategories
 } from "../static/data"; // Assuming data is imported correctly
+import ClipLoader from "react-spinners/ClipLoader";
 
 const SearchResults = () => {
   const { query } = useParams();
-  console.log("queryqueryquery",query)
   const [filteredData, setFilteredData] = useState([]);
+  const [filteredDatas, setFilteredDatas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -89,6 +91,7 @@ const SearchResults = () => {
 
   const fetchProducts = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get(`${server}/product/get-all-searched-products`, {
         params: {
           query,
@@ -116,7 +119,8 @@ const SearchResults = () => {
 
       const data = response.data;
       if (data.success) {
-        setFilteredData(data.products);
+        setFilteredData((prevData) => [...prevData, ...data.products]); // Append new data to existing data
+        setFilteredDatas(data.products);
         setTotalPage(data.l3)
         setTotalPages(data.totalPages);
       } else {
@@ -306,15 +310,26 @@ const SearchResults = () => {
   const visibleColors = showAllColors ? color : color.slice(0, 6);
   const visibleNeckTypes = showAllNeckTypes ? neckType : neckType.slice(0, 6);
 
+
+  const { ref: loadMoreRef, inView } = useInView({
+    threshold: 1.0,
+  });
+
+  useEffect(() => {
+    if (inView && !isLoading && currentPage < totalPages) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  }, [inView, isLoading, currentPage, totalPages]);
+
   return (
     <>
-      {isLoading ? (
+      {isLoading && currentPage === 1 ? (
         <Loader />
       ): (
         <div>
           <Header activeHeading={3} />
           <div className={`${styles.section}`}>
-          {totalPage===0&&<h>NO Product Found...Here are some suggested Products</h>}              
+          {totalPage===0&&<h>NO Product Found...Here are some suggested Products</h>}
 
             {/* for MObile view */}
             {isValid===true&&<div className="flex mb-0 sticky top-28 z-10 -mx-4">
@@ -748,13 +763,31 @@ const SearchResults = () => {
                    
               </form>
             </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {filteredData.map((product) => (
-                  <ProductCard data={product} key={product._id} />
-                ))}
+
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:hidden gap-2">
+              {filteredData.map((product) => (
+                <ProductCard data={product} key={product._id} />
+              ))}
             </div>
-            <div className="mt-4 flex justify-center">
+            <div className="hidden lg:grid lg:grid-cols-4 gap-2">
+              {filteredDatas.map((product) => (
+                <ProductCard data={product} key={product._id} />
+              ))}
+            </div>
+
+            {/* Loader for Medium and Small Screens */}
+            <div ref={loadMoreRef} className="mt-4 flex justify-center md:hidden">
+              {isLoading===true && <ClipLoader
+                  color="#2874F0"
+                  size={55}
+                  // loading={isLoading}
+                  thick={50}
+                  speedMultiplier={1}
+                />}
+            </div>
+
+          {/* Pagination for Large Screens */}
+            <div className="mt-4 justify-center hidden md:flex">
               {Array.from({ length: totalPages }, (_, index) => (
                 <button
                   key={index}
@@ -852,7 +885,6 @@ const SearchResults = () => {
               </div>
             </div>
           )}
-          <Footer />
         </div>
       )}
     </>

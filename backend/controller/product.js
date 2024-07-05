@@ -309,7 +309,7 @@ router.get(
   "/get-all-searched-products",
   catchAsyncErrors(async (req, res, next) => {
     try {
-      const { query, page = 1, limit = 10, color, size, brand, neckType, sleeveType, subCategory, fabric, occasion, fit, gender, customerRating, priceRange, sortBy, shoeOccasions, accessorySubCategories, footwearSubCategories,shoeSizes } = req.query;
+      const { query, page = 1, limit = 5, color, size, brand, neckType, sleeveType, subCategory, fabric, occasion, fit, gender, customerRating, priceRange, sortBy, shoeOccasions, accessorySubCategories, footwearSubCategories,shoeSizes } = req.query;
       let words = query.toLowerCase().split(" ");
        let avail=query.toLowerCase().includes("t shirt")|| query.toLowerCase().includes("t-shirt")|| query.toLowerCase().includes("tshirt")|| query.toLowerCase().includes("t shirts")|| query.toLowerCase().includes("tshirts")|| query.toLowerCase().includes("t-shirtes")|| query.toLowerCase().includes("t shirtes")|| query.toLowerCase().includes("tshirtes");
 
