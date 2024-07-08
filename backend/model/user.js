@@ -38,6 +38,18 @@ const userSchema = new mongoose.Schema({
       zipCode:{
         type: Number,
       },
+      altphoneNumber:{
+        type: Number,
+        default:"",
+      },
+      landmark:{
+        type:String,
+        default:"",
+      },
+      state:{
+        type:String,
+        default:"",
+      },
       phoneNumber:{
         type:Number,
       },

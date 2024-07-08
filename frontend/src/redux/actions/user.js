@@ -81,7 +81,7 @@ export const updateUserInformation =
 
 // update user address
 export const updatUserAddress =
-  ({ userName, phoneNumber, city, address1, address2, zipCode, addressType, isLastUsed, _id }) =>
+({ userName, phoneNumber, altphoneNumber, landmark, city, address1, address2, zipCode, addressType, isLastUsed, _id }) =>
   async (dispatch) => {
     try {
       dispatch({
@@ -93,6 +93,8 @@ export const updatUserAddress =
         {
           userName,
           phoneNumber,
+          altphoneNumber,
+          landmark,
           city,
           address1,
           address2,

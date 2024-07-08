@@ -13,6 +13,8 @@ const Checkout = () => {
   const { cart } = useSelector((state) => state.cart);
   const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [altphoneNumber, setAltPhoneNumber] = useState("");
+  const [landmark, setLandMark] = useState("");
   const [city, setCity] = useState("");
   const [userInfo, setUserInfo] = useState(false);
   const [address1, setAddress1] = useState("");
@@ -31,7 +33,9 @@ const Checkout = () => {
       setLastUsedAddress(lastUsed);
       setUsername(lastUsed.userName);
       setPhoneNumber(lastUsed.phoneNumber);
+      setAltPhoneNumber(lastUsed.altphoneNumber);
       setCity(lastUsed.city);
+      setLandMark(lastUsed.landmark);      
       setAddress1(lastUsed.address1);
       setAddress2(lastUsed.address2);
       setZipCode(lastUsed.zipCode);
@@ -62,6 +66,8 @@ const Checkout = () => {
         address2,
         zipCode,
         phoneNumber,
+        altphoneNumber,
+        landmark,
         city,
         isLastUsed: true,
       };
@@ -85,6 +91,8 @@ const Checkout = () => {
             {
               userName: username,
               phoneNumber,
+              altphoneNumber,
+              landmark,
               city,
               address1,
               address2,
@@ -170,6 +178,10 @@ const Checkout = () => {
             setUsername={setUsername}
             phoneNumber={phoneNumber}
             setPhoneNumber={setPhoneNumber}
+            altphoneNumber={altphoneNumber}
+            setAltPhoneNumber={setAltPhoneNumber}
+            landmark={landmark}
+            setLandMark={setLandMark}
             city={city}
             setCity={setCity}
             userInfo={userInfo}
@@ -222,6 +234,10 @@ const ShippingInfo = ({
   setAddress2,
   phoneNumber,
   setPhoneNumber,
+  altphoneNumber,
+  setAltPhoneNumber,
+  landmark,
+  setLandMark,
   zipCode,
   setZipCode,
   selectedAddressIndex,
@@ -234,6 +250,8 @@ const ShippingInfo = ({
     setUsername(item.userName);
     setAddress1(item.address1);
     setAddress2(item.address2);
+    setAltPhoneNumber(item.altphoneNumber);
+    setLandMark(item.landmark);
     setZipCode(item.zipCode);
     setPhoneNumber(item.phoneNumber);
     setCity(item.city);
@@ -251,6 +269,8 @@ const ShippingInfo = ({
     setAddress2("");
     setZipCode(null);
     setPhoneNumber("");
+    setAltPhoneNumber("");
+    setLandMark("");
     setCity("");
     setUserInfo(false);
     setLastUsedAddress(null); // Reset the last used address
@@ -308,7 +328,28 @@ const ShippingInfo = ({
             />
           </div>
         </div>
-
+        <div className="w-full flex pb-3">
+          <div className="w-[50%]">
+            <label className="block pb-2">LandMark</label>
+            <input
+              type="address"
+              value={landmark}
+              disabled={isDisabled}
+              onChange={(e) => setLandMark(e.target.value)}
+              className={`${styles.input} !w-[95%]`}
+            />
+          </div>
+          <div className="w-[50%]">
+            <label className="block pb-2">Alt Phone number</label>
+            <input
+              type="number"
+              value={altphoneNumber}
+              disabled={isDisabled}
+              onChange={(e) => setAltPhoneNumber(e.target.value)}
+              className={`${styles.input} !w-[95%]`}
+            />
+          </div>
+        </div>
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
             <label className="block pb-2">City</label>

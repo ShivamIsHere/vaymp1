@@ -1,38 +1,9 @@
-import React, { useState } from "react";
-import {
-  AiOutlineArrowRight,
-  AiOutlineCamera,
-  AiOutlineDelete,
-} from "react-icons/ai";
-import OrderCard from "../components/Profile/OrderCard";
-
-import { useDispatch, useSelector } from "react-redux";
-import { server } from "../server";
-import styles from "../styles/styles";
-import { DataGrid } from "@material-ui/data-grid";
-import { Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { MdTrackChanges } from "react-icons/md";
-import { RxCross1 } from "react-icons/rx";
-import {
-  deleteUserAddress,
-  loadUser,
-  updatUserAddress,
-  updateUserInformation,
-} from "../redux/actions/user";
-import { Country, State } from "country-state-city";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
-import axios from "axios";
-import { getAllOrdersOfUser } from "../redux/actions/order";
-import Header from "../components/Layout/Header";
-import Footer from "../components/Layout/Footer";
-// import AllOrdersComponent from '../Shop/AllOrders';
-
 const Address = () => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(""); // New state for name
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [altphoneNumber, setAltPhoneNumber] = useState("");
+  const [landmark, setLandMark] = useState("");
   const [city, setCity] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [address1, setAddress1] = useState("");
@@ -58,6 +29,8 @@ const Address = () => {
           {
             userName: name,
             phoneNumber,
+            altphoneNumber,
+            landmark,
             city,
             address1,
             address2,
@@ -67,10 +40,11 @@ const Address = () => {
           }
         )
       );
-      
       setOpen(false);
       setName(""); // Reset name state
       setPhoneNumber("");
+      setAltPhoneNumber("");
+      setLandMark("");
       setCity("");
       setAddress1("");
       setAddress2("");
@@ -86,7 +60,7 @@ const Address = () => {
 
   return (
 <>
-<Header/>    
+{/* <Header/>     */}
 <div className="w-full px-5">
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-25 z-50">
@@ -128,6 +102,24 @@ const Address = () => {
                   className="border h-[40px] rounded-[5px] w-full"
                   value={address2}
                   onChange={(e) => setAddress2(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block pb-2"> LandMark</label>
+                <input
+                  type="text"
+                  className="border h-[40px] rounded-[5px] w-full"
+                  value={landmark}
+                  onChange={(e) => setLandMark(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="block pb-2"> Alt Phone Number</label>
+                <input
+                  type="number"
+                  className="border h-[40px] rounded-[5px] w-full"
+                  value={altphoneNumber}
+                  onChange={(e) => setAltPhoneNumber(e.target.value)}
                 />
               </div>
               <div>
@@ -212,6 +204,8 @@ const Address = () => {
               <p>{item.address1}</p>
               <p>{item.address2}</p>
               <p>{item.phoneNumber}</p>
+              <p>{item.altphoneNumber}</p>
+              <p>{item.landmark}</p>
               <p>{item.city}</p>
               <p>{item.zipCode}</p>
               <p>{item.name}</p> {/* Display the name */}
@@ -221,12 +215,10 @@ const Address = () => {
       ))}
       {user && user.addresses.length === 0 && (
         <h5 className="text-center pt-8 text-[18px]">
-          You do not have any saved addresses!
+          You do not have any saved address!
         </h5>
       )}
     </div>
 {/* <Footer/> */}
 </>  );
 };
-
-export default Address;
