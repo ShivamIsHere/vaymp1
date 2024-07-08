@@ -96,7 +96,6 @@ const SearchResults = () => {
         params: {
           query,
           page: currentPage,
-          limit: 6,
           color: filters.colors.join(","),
           neckType: filters.neckTypes.join(","),
           sleeveType: filters.sleeveTypes.join(","),
@@ -315,24 +314,29 @@ const SearchResults = () => {
     threshold: 1.0,
   });
 
+  // useEffect(() => {
+  //   if (inView && !isLoading && currentPage < totalPages) {
+  //     setCurrentPage((prevPage) => prevPage + 1);
+  //   }
+  // }, [inView, isLoading, currentPage, totalPages]);
   useEffect(() => {
-    if (inView && !isLoading && currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
+    if (inView && !isLoading&& currentPage < totalPages) {
+      handlePageChange(currentPage + 1);
     }
-  }, [inView, isLoading, currentPage, totalPages]);
+  }, [inView, currentPage, totalPages,isLoading]);
 
   return (
     <>
       {isLoading && currentPage === 1 ? (
         <Loader />
       ): (
-        <div>
+        <div className="w-full">
           <Header activeHeading={3} />
-          <div className={`${styles.section}`}>
+          <div className={`${styles.section} `}>
           {totalPage===0&&<h>NO Product Found...Here are some suggested Products</h>}
-
+{/* <div style={{height:'20px',border:'2px solid black',backgroundColor:'red'}}></div> */}
             {/* for MObile view */}
-            {isValid===true&&<div className="flex mb-0 sticky top-28 z-10 -mx-4">
+            {isValid===true&&<div className="flex -mb-3 sticky top-28 z-10 mt-2">
               <div className="w-1/2 p-0 m-0">
                 <button
                   className="w-full bg-blue-100 flex items-center justify-center font-bold text-lg tracking-wider border-t-1 border-b-2 text-gray-700 p-3 rounded-lg mb-2 border-gray-500 transition duration-300 ease-in-out md:hidden"
@@ -356,7 +360,7 @@ const SearchResults = () => {
             {/* for larger screen */}
 
     
-            {isValid===true&&<div className=" bg-gray-100  rounded-full flex mb-1 mt-1 sticky top-28 z-10 justify-between items-center">
+            {isValid===true&&<div className=" bg-gray-100  rounded-full flex mb-1 mt-1 sticky top-28 z-10 justify-between items-center px-14">
               <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
               <button
                 className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm space-x-2 mr-11 ml-auto hidden md:block  hover:bg-blue-100 transition duration-300 ease-in-out"
@@ -764,12 +768,12 @@ const SearchResults = () => {
               </form>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:hidden gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:hidden gap-1 w-full mx-0">
               {filteredData.map((product) => (
                 <ProductCard data={product} key={product._id} />
               ))}
             </div>
-            <div className="hidden lg:grid lg:grid-cols-4 gap-2">
+            <div className="hidden lg:grid lg:grid-cols-5 gap-8 w-full px-14">
               {filteredDatas.map((product) => (
                 <ProductCard data={product} key={product._id} />
               ))}
@@ -885,6 +889,7 @@ const SearchResults = () => {
               </div>
             </div>
           )}
+         {/* <Footer /> */}
         </div>
       )}
     </>

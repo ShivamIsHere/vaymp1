@@ -173,36 +173,32 @@ router.delete(
   })
 );
 
-// get all products
 router.get(
   '/get-all-products',
   catchAsyncErrors(async (req, res, next) => {
     try {
-      // Pagination parameters
       const page = parseInt(req.query.page) || 1;
-      const perPage = parseInt(req.query.perPage) || 30;
-      // console.log('Pagination Params:', { page, perPage }); // Log pagination params
+      const perPage = parseInt(req.query.perPage) || 5; // Adjust as needed
 
-      // Sorting parameters
-      let sortBy = ""; // Initialize sortBy variable
-let sortOrder = -1; // Default sort order is descending (high to low)
+      let sortBy = "";
+      let sortOrder = -1;
 
-if (req.query.sortBy === "priceHighToLow") {
-  sortBy = "discountPrice"; // Sort by price (high to low)
-} else if (req.query.sortBy === "priceLowToHigh") {
-  sortBy = "discountPrice"; // Sort by price (low to high)
-  sortOrder = 1; // Change sort order to ascending (low to high)
-} else if (req.query.sortBy === "latest") {
-  sortBy = "-createdAt"; // Sort by latest
-} else {
-  sortBy = "originalPrice"; // Default sort by originalPrice
-}
+      if (req.query.sortBy === "priceHighToLow") {
+        sortBy = "discountPrice";
+      } else if (req.query.sortBy === "priceLowToHigh") {
+        sortBy = "discountPrice";
+        sortOrder = 1;
+      } else if (req.query.sortBy === "latest") {
+        sortBy = "-createdAt";
+      } else {
+        sortBy = "originalPrice";
+      }
 
-
-      // Filtering parameters
       const filters = {
-        'shop.shopIsActive': false, // Filter to include only products with inactive shops
+        'shop.shopIsActive': false,
+        'listing': "Product"
       };
+
       if (req.query.category) {
         filters.category = { $in: req.query.category.split(',') };
       }
@@ -230,34 +226,28 @@ if (req.query.sortBy === "priceHighToLow") {
       if (req.query.occasion) {
         filters.occasion = { $in: req.query.occasion.split(',') };
       }
-      
-      // New filters for shoeOccasions, accessorySubCategories, and footwearSubCategories
       if (req.query.shoeOccasions) {
         filters.shoeOccasions = { $in: req.query.shoeOccasions.split(',') };
       }
-      
       if (req.query.accessorySubCategories) {
         filters.accessorySubCategories = { $in: req.query.accessorySubCategories.split(',') };
       }
-      
       if (req.query.footwearSubCategories) {
         filters.footwearSubCategories = { $in: req.query.footwearSubCategories.split(',') };
       }
-      
       if (req.query.size) {
         filters['stock.size'] = { $in: req.query.size.split(',') };
       }
       if (req.query.customerRating) {
-        const ratingRanges = req.query.customerRating.split(','); // Split multiple ranges
+        const ratingRanges = req.query.customerRating.split(',');
         const ratingFilters = ratingRanges.map((range) => {
           const [minRating, maxRating] = range.split('-').map(parseFloat);
           return { ratings: { $gte: minRating, $lte: maxRating } };
         });
         filters.$or = ratingFilters;
       }
-      
       if (req.query.priceRange) {
-        const priceRanges = req.query.priceRange.split(','); // Split multiple ranges
+        const priceRanges = req.query.priceRange.split(',');
         let minPrice = Infinity;
         let maxPrice = -Infinity;
         priceRanges.forEach((range) => {
@@ -267,32 +257,37 @@ if (req.query.sortBy === "priceHighToLow") {
         });
         filters.discountPrice = { $gte: minPrice, $lte: maxPrice };
       }
-
-      // Query products with filtering, sorting, and pagination
       const allProducts = await Product.find(filters)
+      const proi= allProducts.filter((p)=>p.listing!="Event")
+      // Filter out products with zero quantity in all sizes
+      const pros = proi.filter(product => {
+        return product.stock.some(stockItem => stockItem.quantity > 0);
+      });
+
+      const totalProducts = await Product.countDocuments(filters);
+      const paginatedProducts = await Product.find(filters)
         .sort({ [sortBy]: sortOrder })
         .skip((page - 1) * perPage)
         .limit(perPage);
-      const pro= allProducts.filter((p)=>p.listing!="Event")
-      // Filter out products with zero quantity in all sizes
-      const products = pro.filter(product => {
-        return product.stock.some(stockItem => stockItem.quantity > 0);
-      });
-      // Count total products for pagination
-      const totalCount = await Product.countDocuments(filters);
-
+        
       res.status(200).json({
         success: true,
-        products,
-        totalCount,
-        totalPages: Math.ceil(totalCount / perPage),
+        pro:pros,
+        products: paginatedProducts,
+        totalProducts: totalProducts,
+        currentPage: page,
+        totalPages: Math.ceil(totalProducts / perPage),
       });
+      console.log("prroooo",pros.length)
+
     } catch (error) {
-      console.error('Error:', error); // Log error
+      console.error('Error:', error);
       return next(new ErrorHandler(error, 400));
     }
   })
 );
+
+
 
 
 

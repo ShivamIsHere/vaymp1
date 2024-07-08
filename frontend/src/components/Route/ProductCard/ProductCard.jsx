@@ -132,9 +132,9 @@ const ProductCard = ({ data, isEvent }) => {
             <div className="flex items-center">
             <span className="flex items-center text-sm text-blue-500 font-bold -ml-2 mr-1">
       <FaArrowDownLong bg-green-500 />
-      <span className="ml-0 mr-1">
+      <div className="ml-0 mr-1">
         {Math.round(((data.originalPrice - data.discountPrice) / data.originalPrice) * 100)}%
-      </span>
+      </div>
     </span>
               <h5 className={`${styles.productDiscountPrice} text-base`}>
               ₹{data.originalPrice === 0

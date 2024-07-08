@@ -10,19 +10,25 @@ import styles from "../styles/styles";
 import { getAllProducts } from "../redux/actions/product";
 import { categoriesData, sleeveType, neckType, color, fabric, occasion, fit, gender, size, subCategory ,shoeSizes,shoeOccasions,accessorySubCategories,footwearSubCategories } from "../static/data"; // Assuming data is imported correctly
 import { AiOutlineCaretDown, AiOutlineCaretUp, AiOutlineClose, AiFillFilter, AiOutlineSwap } from "react-icons/ai";
+import { useInView } from "react-intersection-observer";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
   const categoriesParam = searchParams.get("category");
-  const { allProducts, isLoading } = useSelector((state) => state.products);
+  const { allPro, allProduct, isLoading, totalPages } = useSelector((state) => state.products);
+  // console.log("allProducts",allProducts)
+  console.log("allProduct",allProduct)
+
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
+  const [datas, setDatas] = useState([]);
   const [filters, setFilters] = useState({
     category: categoriesParam ? categoriesParam.split(',') : [],
     subCategory: [],
-    shoeOccasions:[],
-    accessorySubCategories:[],
-    footwearSubCategories:[], 
+    shoeOccasions: [],
+    accessorySubCategories: [],
+    footwearSubCategories: [],
     color: [],
     size: [],
     neckType: [],
@@ -31,13 +37,13 @@ const ProductsPage = () => {
     fabric: [],
     fit: [],
     occasion: [],
-    shoeSizes:[],
+    shoeSizes: [],
     sortBy: "",
     sortOrder: "desc",
     customerRating: [],
     priceRange: [],
   });
-
+  
   // State variables to track the expanded/collapsed state for each filter section
   const [categoryExpanded, setCategoryExpanded] = useState(false);
   const [subCategoryExpanded, setSubCategoryExpanded] = useState(false);
@@ -57,24 +63,52 @@ const ProductsPage = () => {
   const [showAllColors, setShowAllColors] = useState(false);
   const [showAllNeckTypes, setShowAllNeckTypes] = useState(false);
 
-  const [perPage] = useState(30); // Or any default value you prefer
+  // const [perPage] = useState(30); // Or any default value you prefer
+
+  const { ref: loadMoreRef, inView } = useInView({
+    threshold: 1.0,
+  });
+
+
+
+  // useEffect(() => {
+  //   if (inView && !isLoading && page < totalPages) {
+  //     setPage((prevPage) => prevPage + 1);
+  //   }
+  // }, [inView, page,isLoading, totalPages]);
+  useEffect(() => {
+    if (inView && !isLoading&& page < totalPages) {
+      handlePageChange(page + 1);
+    }
+  }, [inView, page, totalPages,isLoading]);
+  
+
   useEffect(() => {
     applyFilters();
   }, [filters, page]);
 
   useEffect(() => {
     if (categoriesParam === null) {
-      setData(allProducts);
+      setData(allPro);
     } else {
-      const filteredData = allProducts.filter((item) => filters.category.includes(item.category));
+      const filteredData = allPro.filter((item) => filters.category.includes(item.category));
       setData(filteredData);
     }
-  }, [allProducts, categoriesParam, filters.category]);
-  console.log("categoriesParam", categoriesParam);
+  }, [allPro, categoriesParam, filters.category]);
+
+  useEffect(() => {
+    // Update data and datas based on viewport size
+    if (window.innerWidth < 1024) {
+      setDatas((prevDatas) => [...prevDatas, ...allProduct]);
+      setData(datas); // Optionally update data separately if needed
+    } else {
+      setData(allPro);
+      setDatas([]); // Clear datas for desktop view
+    }
+  }, [allPro, allProduct]);
 
   const handleFilterChange = (key, value) => {
     const updatedFilters = { ...filters };
-    // Logic for updating filters remains the same
     if (
       key === "size" ||
       key === "sleeveType" ||
@@ -121,10 +155,9 @@ const ProductsPage = () => {
     const queryParams = {
       ...filters,
       page,
-      perPage,
+      // perPage,
     };
     dispatch(getAllProducts(queryParams));
-
   };
 
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
@@ -165,18 +198,19 @@ const ProductsPage = () => {
     });
     window.location.reload()
     setPage(1); // Reset to the first page when filters change
-    // setData(categoriesParam);
-
   };
 
-
+  const handlePageChange = (pageNumber) => {
+    setPage(pageNumber);
+  };
   const visibleSizes = showAllSizes ? size : size.slice(0, 6);
   const visibleSubCategories = showAllSubCategories ? subCategory : subCategory.slice(0, 6);
   const visibleColors = showAllColors ? color : color.slice(0, 6);
   const visibleNeckTypes = showAllNeckTypes ? neckType : neckType.slice(0, 6);
+
   return (
     <>
-      {isLoading ? (
+      {isLoading && page === 1 ? (
         <Loader />
       ) : (
         <div>
@@ -287,29 +321,52 @@ const ProductsPage = () => {
           )}
 
 
-          <div className={`${styles.section}`}>
-            <div className="pt-2 hidden md:block">
-              <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px] mb-12">
-                {data.map((i, index) => (
-                  <ProductCard data={i} key={index} />
+<div className={`${styles.section}`}>
+            <div className="pt-0 hidden md:block">
+              {/* <div className="grid grid-cols-2 md:grid-cols-2 lg:hidden gap-1 w-full mx-0">
+                {datas.map((product) => (
+                  <ProductCard data={product} key={product._id} />
+                ))}
+              </div> */}
+              <div className="hidden lg:grid lg:grid-cols-5 gap-8 w-full px-14 mt-2">
+                {data.map((product) => (
+                  <ProductCard data={product} key={product._id} />
                 ))}
               </div>
-              {data.length === 0 ? (
-                <h1 className="text-center w-full pb-[100px] text-[20px]">No products found!</h1>
-              ) : null}
+
+              {/* Pagination for larger screens */}
+              <div className="mt-4 flex justify-center md:flex">
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index}
+                    className={`px-4 py-2 border mx-1 ${page === index + 1 ? 'bg-blue-500 text-white' : ''}`}
+                    onClick={() => handlePageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="pt-2 md:hidden">
-              <div className="grid grid-cols-2 gap-[5px] md:grid-cols-2 md:gap-[25px] mb-12">
-                {data.map((i, index) => (
-                  <ProductCard data={i} key={index} />
+            <div className="pt-0 md:hidden">
+              {/* Auto-load more products on scroll for mobile */}
+              <div className="grid grid-cols-2 gap-1 mb-12">
+                {datas.map((product, index) => (
+                  <ProductCard key={index} data={product} />
                 ))}
               </div>
-              {data.length === 0 ? (
-                <h1 className="text-center w-full pb-[100px] text-[20px]">No products found!</h1>
-              ) : null}
+              <div ref={loadMoreRef} className="mt-4 flex justify-center">
+                {isLoading===true && (
+                  <ClipLoader
+                    color="#2874F0"
+                    size={55}
+                    thick={50}
+                    speedMultiplier={1}
+                  />
+                )}
+              </div>
             </div>
           </div>
-          <Footer />
+          {/* <Footer /> */}
         </div>
       )}
 

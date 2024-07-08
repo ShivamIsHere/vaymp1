@@ -145,21 +145,32 @@ export const getAllProducts = (queryParams) => async (dispatch) => {
     const queryString = new URLSearchParams(queryParams).toString();
     const { data } = await axios.get(`${server}/product/get-all-products?${queryString}`);
     
-    console.log("API Response:", data); // Add this line for debugging
+    console.log("API Response:", data.pro); // For debugging purposes
 
     dispatch({
       type: "getAllProductsSuccess",
-      payload: data.products
+      payload: {
+        products: data.pro,
+        pro: data.products,
+        totalPages: data.totalPages, // Assuming totalPages is returned from the API
+        currentPage: data.currentPage || 1 // Set currentPage from queryParams or default to 1
+      }
     });
   } catch (error) {
-    console.log("API Error:", error); // Add this line for debugging
+  //   dispatch({
+  //     type: "getAllProductsSuccess",
+  //     payload: data.products
+  //   });
+  // } catch (error) {
+    console.log("API Error:", error); // For debugging purposes
 
     dispatch({
       type: "getAllProductsFailed",
-      payload: error.response.data.message
+      payload: error.response?.data?.message || error.message
     });
   }
 };
+
 
 export const updateProductStock =
   (productId, size, quantity) => async (dispatch) => {

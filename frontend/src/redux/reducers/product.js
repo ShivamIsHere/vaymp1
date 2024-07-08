@@ -1,11 +1,16 @@
 import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
-  isLoading: false,
   allProducts: [],
-  error: null,
+  allProduct: [],
+  allPro: [],
 
+  isLoading: false,
+  error: null,
+  totalPages: 0,
+  currentPage: 1
 };
+
 export const productReducer = createReducer(initialState, {
   productCreateRequest: (state) => {
     state.isLoading = true;
@@ -21,7 +26,6 @@ export const productReducer = createReducer(initialState, {
     state.success = false;
   },
 
-  // get all products of shop
   getAllProductsShopRequest: (state) => {
     state.isLoading = true;
   },
@@ -34,11 +38,9 @@ export const productReducer = createReducer(initialState, {
     state.error = action.payload;
   },
 
-  // delete product of a shop
   deleteProductRequest: (state) => {
     state.isLoading = true;
   },
-
   deleteProductSuccess: (state, action) => {
     state.isLoading = false;
     state.message = action.payload;
@@ -48,23 +50,42 @@ export const productReducer = createReducer(initialState, {
     state.error = action.payload;
   },
 
-  // get all products
   getAllProductsRequest: (state) => {
     state.isLoading = true;
+    state.error = null; // Clear previous errors
   },
   getAllProductsSuccess: (state, action) => {
+    console.log("Action Payload:", action.payload.products); // Ensure this logs pro data
     state.isLoading = false;
-    state.allProducts = action.payload;
+    state.allProducts = action.payload.products;
+    state.allPro = action.payload.pro;
+    state.allProduct = action.payload.pro;
+    state.totalPages = action.payload.totalPages;
+    state.currentPage = action.payload.currentPage;
   },
   getAllProductsFailed: (state, action) => {
     state.isLoading = false;
     state.error = action.payload;
   },
-  
   clearErrors: (state) => {
     state.error = null;
   },
-
+  
+  // getAllProductsRequest: (state) => {
+  //   state.isLoading = true;
+  // },
+  // getAllProductsSuccess: (state, action) => {
+  //   state.isLoading = false;
+  //   state.allProducts = action.payload;
+  // },
+  // getAllProductsFailed: (state, action) => {
+  //   state.isLoading = false;
+  //   state.error = action.payload;
+  // },
+  
+  // clearErrors: (state) => {
+  //   state.error = null;
+  // },
   updateProductStockRequest: (state) => {
     state.isLoading = true;
   },
@@ -76,11 +97,8 @@ export const productReducer = createReducer(initialState, {
     );
     state.products = updatedProducts;
   },
-  
   updateProductStockFailed: (state, action) => {
     state.isLoading = false;
     state.products = action.payload;
   }
 });
-
-
