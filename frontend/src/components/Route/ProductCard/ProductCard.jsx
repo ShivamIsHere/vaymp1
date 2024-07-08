@@ -120,9 +120,26 @@ const ProductCard = ({ data, isEvent }) => {
               : `/product/${data._id}`
           }`}
         >
-          <h4 className="flex pb-1 text-base font-normal whitespace-nowrap overflow-hidden text-ellipsis max-w-full sm:max-w-[200px] md:max-w-[300px]">
-            {data.name.length > 25 ? data.name.slice(0, 25) + "..." : data.name}
-          </h4>
+          <div>
+            {/* Visible on small screens */}
+            <div className="md:hidden">
+              <h4 className="flex pb-3 text-base font-normal whitespace-nowrap text-ellipsis max-w-full">
+                {data.name.length > 13 ? data.name.slice(0, 13) + "..." : data.name}
+              </h4>
+            </div>
+            {/* Visible on medium screens */}
+            <div className="hidden md:block lg:hidden">
+              <h4 className="flex pb-3 text-base font-normal whitespace-nowrap text-ellipsis max-w-full">
+                {data.name.length > 35 ? data.name.slice(0, 35) + "..." : data.name}
+              </h4>
+            </div>
+            {/* Visible on large screens */}
+            <div className="hidden lg:block">
+              <h4 className="flex pb-3 text-base font-normal whitespace-nowrap text-ellipsis max-w-full">
+                {data.name.length > 25 ? data.name.slice(0, 25) + "..." : data.name}
+              </h4>
+            </div>
+          </div>
 
           <div className="flex">
             <Ratings rating={data?.ratings} />
@@ -131,11 +148,11 @@ const ProductCard = ({ data, isEvent }) => {
           <div className="py-1 flex items-center justify-between">
             <div className="flex items-center">
             <span className="flex items-center text-sm text-blue-500 font-bold -ml-2 mr-1">
-      <FaArrowDownLong bg-green-500 />
-      <div className="ml-0 mr-1">
-        {Math.round(((data.originalPrice - data.discountPrice) / data.originalPrice) * 100)}%
-      </div>
-    </span>
+                <FaArrowDownLong bg-green-500 />
+                <span className="ml-0 mr-1">
+                  {Math.round(((data.originalPrice - data.discountPrice) / data.originalPrice) * 100)}%
+                </span>
+              </span>
               <h5 className={`${styles.productDiscountPrice} text-base`}>
               ₹{data.originalPrice === 0
                   ? data.originalPrice

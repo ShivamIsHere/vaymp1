@@ -258,7 +258,7 @@ const Header = ({ activeHeading }) => {
                 value={searchTerm}
                 onChange={handleSearchChange}
                 onKeyDown={handleSearchSubmit}
-                className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
+                className="h-[40px] w-full px-2 border-flipkart-blue border-[2px] rounded-md"
               />
               <AiOutlineSearch
                 size={30}
@@ -337,7 +337,7 @@ const Header = ({ activeHeading }) => {
                   onClick={() => setOpenWishlist(true)}
                 >
                   <AiOutlineHeart size={30} color="rgb(255 255 255 / 83%)" />
-                  <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
+                  <span className="absolute right-0 top-0 rounded-full bg-[#f44336] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
                     {wishlist && wishlist.length}
                   </span>
                 </div>
@@ -354,7 +354,7 @@ const Header = ({ activeHeading }) => {
                     size={30}
                     color="rgb(255 255 255 / 83%)"
                   />
-                  <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
+                  <span className="absolute right-0 top-0 rounded-full  bg-[#f44336] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px] leading-tight text-center">
                     {totalCount}
                   </span>
                 </div>

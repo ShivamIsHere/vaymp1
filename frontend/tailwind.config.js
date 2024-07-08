@@ -8,6 +8,13 @@ module.exports = {
       Poppins: ['Poppins', "sans-serif"],
     },
     extend: {
+      colors: {
+        'custom-blue': '#08639C',
+        'custom-orange': '#FF9F01',
+        'flipkart-blue': '#2874F0',
+        'flipkart-yellow': '#FF9F00',
+        'flipkart-orange': '#FB641B',
+      },
       scrollSnapType: {
         'x': 'x mandatory',
       },
@@ -24,5 +31,16 @@ module.exports = {
     },
   },
   variants: {},
-  plugins: [],
-};
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.hide-scrollbar': {
+          '-ms-overflow-style': 'none', /* Internet Explorer 10+ */
+          'scrollbar-width': 'none', /* Firefox */
+        },
+        '.hide-scrollbar::-webkit-scrollbar': {
+          display: 'none', /* Safari and Chrome */
+        },
+      });
+    },
+  ],};

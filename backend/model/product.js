@@ -98,6 +98,12 @@ const productSchema = new mongoose.Schema({
     type: String,
     default:"Product"
   },
+  eventType:{
+    type: String,
+  },
+  eventDescription: {
+    type: String,
+  },
     startDate: {
       type: Date,
     },

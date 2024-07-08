@@ -5,9 +5,7 @@ import EventCard from './EventCard';
 import { getAllEvents } from '../../redux/actions/event';
 
 const Events = () => {
-  const {allEvents,isLoading} = useSelector((state) => state.events);  
-console.log("aaaa",allEvents)
-
+  const { allEvents, isLoading } = useSelector((state) => state.events);
 
   // if (error) {
   //   console.error("Error loading events:", error);
@@ -23,9 +21,13 @@ console.log("aaaa",allEvents)
           <div className={styles.heading}>
             <h1>Popular Events</h1>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {allEvents && allEvents.length !== 0 ? (
-              allEvents.map((event) => <EventCard key={event._id} data={event} />)
+          <div className="flex overflow-x-auto space-x-4 snap-x snap-mandatory hide-scrollbar">
+            {allEvents && allEvents.length !== 0 ? (
+              allEvents.map((event) => (
+                <div className="snap-center shrink-0 w-full md:w-1/2" key={event._id}>
+                  <EventCard data={event} />
+                </div>
+              ))
             ) : (
               <h4>No Events available!</h4>
             )}

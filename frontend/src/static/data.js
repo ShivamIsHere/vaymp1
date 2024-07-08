@@ -4,10 +4,10 @@ export const navItems = [
       title: "Home",
       url: "/",
     },
-    {
-      title: "Best Selling",
-      url: "/best-selling",
-    },
+    // {
+    //   title: "Best Selling",
+    //   url: "/best-selling",
+    // },
     {
       title: "Products",
       url: "/products",
@@ -1046,8 +1046,19 @@ export const navItems = [
     type: "Product",
   },
   {
-    id: 1,
+    id: 2,
     type: "Event",
+  }
+];
+export const eventType = 
+  [
+    {
+    id: 1,
+    type: "Discount",
+  },
+  {
+    id: 2,
+    type: "Combo",
   }
 ];
   // product Data

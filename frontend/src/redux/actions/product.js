@@ -27,6 +27,8 @@ export const createProduct =
     discountPrice,
     adminCreated,
     stock,
+    eventDescription,
+    eventType,
     size,
     quantity,
     shopId,
@@ -58,7 +60,8 @@ export const createProduct =
         sleeveType,
         brand,
         color,
-        
+        eventDescription,
+        eventType,
         adminCreated,
         fabric,
         occasion,

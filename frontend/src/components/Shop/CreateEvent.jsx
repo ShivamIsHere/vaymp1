@@ -16,7 +16,8 @@ import {
   shoeOccasions,
   fit,
   gender,  
-  listing
+  listing,
+  eventType
 } from "../../static/data";
 import { useParams } from 'react-router-dom';
 
@@ -37,8 +38,11 @@ const CreateEvent = () => {
 
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
+  const [selectedEventType, setSelectedEventType] = useState("");
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
   const [category, setCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [selectedShoesSubCategory, setSelectedShoesSubCategory] = useState("");
@@ -153,6 +157,9 @@ const CreateEvent = () => {
     newForm.append("name", name);
     newForm.append("description", description);
     newForm.append("tags", tags);
+    newForm.append("eventDescription", eventDescription);
+    newForm.append("listing", selectedListing);
+    newForm.append("eventType", selectedEventType);
     newForm.append("Shop's Price", ShopPrice);
     newForm.append("originalPrice", originalPrice);
     newForm.append("discountPrice", discountPrice);
@@ -192,6 +199,8 @@ const CreateEvent = () => {
           brand: selectedBrand,
           color: selectedColor,
           fabric: selectedFabric,
+          eventType:selectedEventType,
+          eventDescription,
           occasion: selectedOccasion,
           fit: selectedFit,
           listing:selectedListing,
@@ -378,6 +387,7 @@ console.log("category",category)
             ))}
           </select>
         </div>}
+
         {category==="Shoes" && <div>
           <label className="pb-2">
             subCategory <span className="text-red-500">*</span>
@@ -395,6 +405,22 @@ console.log("category",category)
             ))}
           </select>
         </div>}
+        <br/>
+        <div>
+          <label className="pb-2">eventType</label>
+          <select
+            className="w-full mt-2 border h-[35px] rounded-[5px]"
+            value={selectedEventType}
+            onChange={(e) => setSelectedEventType(e.target.value)}
+          >
+            <option value="">Choose EventType type</option>
+            {eventType.map((i) => (
+              <option value={i.type} key={i.type}>
+                {i.type}
+              </option>
+            ))}
+          </select>
+        </div>
         {category==="Accessories" && <div>
           <label className="pb-2">
             subCategory <span className="text-red-500">*</span>
@@ -412,6 +438,22 @@ console.log("category",category)
             ))}
           </select>
         </div>}
+        <div>
+          <label className="pb-2">
+            Event-Description <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            cols="30"
+            required
+            rows="8"
+            type="text"
+            name="eventDescription"
+            value={eventDescription}
+            onChange={(e) => setEventDescription(e.target.value)}
+            placeholder="Enter your event description..."
+            className="mt-2 appearance-none block w-full pt-2 px-3 border border-gray-300 rounded-[3px] placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          ></textarea>
+        </div>
         <br />
         <div>
           <label className="pb-2">listing</label>
