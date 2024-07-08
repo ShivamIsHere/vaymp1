@@ -15,17 +15,18 @@ import {
 const Footer = () => {
   return (
     <div className="bg-[#000] text-white">
-      <div className="md:flex md:justify-between md:items-center sm:px-12 px-4 bg-[#342ac8] py-7">
-        <h1 className="lg:text-4xl text-3xl md:mb-0 mb-6 lg:leading-normal font-semibold md:w-2/5">
-        <span className="text-[#77fc63]">Live chat </span>with us for queries{" "}
-          <br />
-          events and offers
-        </h1>
-        <div>
-        <a href="https://wa.me/917277244691" target="_blank"><img src='whatsappclick.png' width='350px'
-          /></a>
-        </div>
-      </div>
+      <div className="flex justify-between items-center px-4 bg-[#342ac8] py-1 sm:px-12 md:flex md:justify-between md:items-center">
+    <h1 className="text-xl font-semibold leading-normal md:w-2/5 lg:text-3xl">
+      <span className="text-[#77fc63]">Live chat </span>with us for queries
+      <br />
+      events and offers
+    </h1>
+    <div>
+      <a href="https://wa.me/917277244691" target="_blank">
+        <img src="whatsappmsg.png" width="300px" alt="WhatsApp Message" />
+      </a>
+    </div>
+  </div>
       <div className="grid grid-cols-1 sm:gird-cols-3 lg:grid-cols-4 gap-6 sm:px-8 px-5 py-16 sm:text-center">
         <ul className="px-5 text-center sm:text-start flex sm:block flex-col items-center">
         <h1 style={{ color: '#142337', fontSize: '44px', fontWeight: 'bold' }}>vaymp</h1>

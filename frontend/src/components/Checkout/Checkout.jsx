@@ -226,7 +226,7 @@ const Checkout = () => {
         className="w-full max-w-[280px] mt-10 hidden md:flex justify-center items-center bg-gray-900 rounded-lg py-3 cursor-pointer transition-transform transform hover:scale-105 active:scale-95"
         onClick={paymentSubmit}
       >
-        <h5 className="text-white font-semibold">Go to Payment</h5>
+        <h5 className="font-medium font-semibold">Go to Payment</h5>
       </div>
 
 
@@ -295,7 +295,7 @@ const ShippingInfo = ({
   return (
     <div className="w-full 800px:w-[95%] bg-white rounded-md p-5 pb-8">
 
-      <h5 className="text-[18px] font-[500]">Shipping Address</h5>
+      <h5 className="text-[16px] font-[500]">Shipping Address</h5>
       <br />
       <form>
         <div className="w-full flex pb-3">
@@ -478,12 +478,12 @@ const CartData = ({
       <div className="flex justify-between border-b pb-3">
         <h5 className="text-[16px] font-[400]">Discount:</h5>
         <h5 className="text-[16px] font-[400]">
-          {discountPercentenge ? "$" + discountPercentenge.toFixed(2) : null}
+          {discountPercentenge ? "₹" + discountPercentenge.toFixed(2) : null}
         </h5>
       </div>
       <div className="flex justify-between pt-3">
         <h5 className="text-[18px] font-[600]">Total:</h5>
-        <h5 className="text-[18px] font-[600]">${totalPrice}</h5>
+        <h5 className="text-[18px] font-[600]">₹{totalPrice}</h5>
       </div>
       <br />
       <form onSubmit={handleSubmit}>

@@ -457,7 +457,7 @@ const Header = ({ activeHeading }) => {
 
       {/* mobile header */}
       <div
-        className={`sticky top-0 z-[20] bg-white w-full shadow-sm 800px:hidden`}
+        className={`sticky top-0 z-[20] bg-blue-200 w-full shadow-sm 800px:hidden`}
       >
         <div className="w-full flex items-center justify-between">
           <div>
@@ -629,7 +629,7 @@ const Header = ({ activeHeading }) => {
             value={mobileSearchTerm}
             onChange={handlemobileSearchChange}
             onKeyDown={handleMobileSearchSubmit}
-            className="h-[40px] w-full px-2  border-[1px] rounded-md bg-blue-50 mb-3"
+            className="h-[40px] w-[98%] px-2  border-[1px] rounded-md bg-blue-50 mb-3 ml-1"
             />
           <AiOutlineSearch
             size={30}

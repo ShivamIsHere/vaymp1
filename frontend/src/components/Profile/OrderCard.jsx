@@ -7,7 +7,7 @@ const OrderCard = ({ order }) => {
   const {
     id,
     image,
-    name,
+    productName,
     status,
     total,
     size,
@@ -21,13 +21,13 @@ console.log("zzzz",order)
     <div className="flex items-start flex-grow">
           {image && (
             <div className="flex-none w-34">
-              <img src={image} alt={name} className="w-[70px] h-[90px] object-cover rounded" />
+              <img src={image} alt={productName} className="w-[70px] h-[90px] object-cover rounded" />
             </div>
           )}
           <div className="flex flex-col justify-between flex-grow ml-4">
             <div className="mb-2">
-              <Link to={`/user/order/${id}`} className="text-blue-500 hover:underline">
-                {name}
+            <Link to={`/user/order/${id}`}className="hover:text-blue-500">
+             {productName}
               </Link>
             </div>
             <div className="text-sm text-gray-600">Status: {status}</div>
