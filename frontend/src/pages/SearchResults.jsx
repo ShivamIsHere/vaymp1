@@ -360,23 +360,25 @@ const SearchResults = () => {
             {/* for larger screen */}
 
     
-            {isValid===true&&<div className=" bg-gray-100  rounded-full flex mb-1 mt-1 sticky top-28 z-10 justify-between items-center px-14">
+            {isValid===true&&<div className=" bg-gray-100  rounded-full flex mb-1 mt-1 sticky top-28 justify-between items-center"
+              style={{ zIndex: 1 }}
+            >
               <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
               <button
-                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm space-x-2 mr-11 ml-auto hidden md:block  hover:bg-blue-100 transition duration-300 ease-in-out"
+                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden md:flex items-center justify-center space-x-2 hover:bg-blue-100 transition duration-300 ease-in-out"
                 onClick={toggleDrawer}
               >
-                  <AiFillFilter className="ml-11 -mb-6 text-xl text-gray-800" />
-                filter
+                  <AiFillFilter className="text-xl text-gray-800" />
+                  <span className="text-center">Filter</span>
               </button>
 
 
               <button
-                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden md:block hover:bg-blue-100 transition duration-300 ease-in-out"
+                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden md:flex items-center justify-center space-x-2 hover:bg-blue-100 transition duration-300 ease-in-out"
                 onClick={toggleSortDrawer}
               >
-                   <AiOutlineSwap className=" ml-11 -mb-6 text-xl text-gray-800 mr-2" />
-                Sort
+                   <AiOutlineSwap className="text-xl text-gray-800" />
+                   <span className="text-center">Sort</span>
               </button>
             </div>}
 
@@ -767,7 +769,13 @@ const SearchResults = () => {
                    
               </form>
             </div>
-
+            {filteredData.length === 0 ? (
+              // <div className="text-center text-gray-500 mt-4">No products found</div>
+              <div className="flex justify-center items-center">
+              <img src={`${process.env.PUBLIC_URL}/noproductshd.png`} alt="No Products Found" className="max-w-4/5 max-h-4/5" />
+            </div>
+            ) : (
+              <>
             <div className="grid grid-cols-2 md:grid-cols-2 lg:hidden gap-1 w-full mx-0">
               {filteredData.map((product) => (
                 <ProductCard data={product} key={product._id} />
@@ -778,6 +786,8 @@ const SearchResults = () => {
                 <ProductCard data={product} key={product._id} />
               ))}
             </div>
+            </>
+            )}
 
             {/* Loader for Medium and Small Screens */}
             <div ref={loadMoreRef} className="mt-4 flex justify-center md:hidden">

@@ -244,24 +244,26 @@ const ProductsPage = () => {
 
           {/* for larger screen */}
           {categoriesParam ==="Cloths"  && (
-            <div className=" bg-gray-100 flex -mb-1 mr-14 ml-16 rounded-full sticky top-28 z-10 justify-between items-center">
-              <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
+            <div className=" bg-gray-100 flex -mb-1 mr-14 ml-16 rounded-full sticky top-28 justify-between items-center"
+              style={{ zIndex: 1 }}
+            >
+            <h4 className="text-4xl font-semibold text-gray-700 hidden md:block">New Arrivals</h4>
               <button
                 onClick={() => setFilterDrawerOpen(true)}
-                className="w-1/6  font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm space-x-2 mr-11 ml-auto hidden md:block  hover:bg-blue-100 transition duration-300 ease-in-out"
-              >
-                <AiFillFilter className="ml-11 -mb-6 text-xl text-gray-800" />
-                filter
+                className="w-1/6  font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm mr-11 ml-auto hidden md:flex items-center justify-center space-x-2  hover:bg-blue-100 transition duration-300 ease-in-out"              
+                >
+                <AiFillFilter className="text-xl text-gray-800" />
+                <span className="text-center">Filter</span>
 
               </button>
 
               <button
                 onClick={() => setSortDrawerOpen(true)}
-                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden md:block hover:bg-blue-100 transition duration-300 ease-in-out"
-              >
+                className="w-1/6 font-bold text-lg bg-white text-gray-800 px-4 py-2 tracking-wider rounded-full border border-gray-300 shadow-sm hidden md:flex items-center justify-center space-x-2 hover:bg-blue-100 transition duration-300 ease-in-out"
+                >
 
-                <AiOutlineSwap className=" ml-11 -mb-6 text-xl text-gray-800 mr-2" />
-                Sort
+<AiOutlineSwap className="text-xl text-gray-800" />
+<span className="text-center">Sort</span>
 
               </button>
             </div>
@@ -333,7 +335,11 @@ const ProductsPage = () => {
                   <ProductCard data={product} key={product._id} />
                 ))}
               </div>
-
+              {data.length === 0 ? (
+                <div className="flex justify-center items-center">
+                <img src={`${process.env.PUBLIC_URL}/noproductshd.png`} alt="No Products Found" className="max-w-4/5 max-h-4/5" />
+              </div>
+            ) : null}
               {/* Pagination for larger screens */}
               <div className="mt-4 flex justify-center md:flex">
                 {Array.from({ length: totalPages }, (_, index) => (
@@ -354,6 +360,11 @@ const ProductsPage = () => {
                   <ProductCard key={index} data={product} />
                 ))}
               </div>
+              {datas.length === 0 ? (
+                <div className="flex justify-center items-center">
+                <img src={`${process.env.PUBLIC_URL}/noproductshd.png`} alt="No Products Found" className="max-w-4/5 max-h-4/5" />
+              </div>
+            ) : null}
               <div ref={loadMoreRef} className="mt-4 flex justify-center">
                 {isLoading===true && (
                   <ClipLoader

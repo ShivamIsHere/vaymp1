@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import SearchResults from "./pages/SearchResults.jsx";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   LoginPage,
   SignupPage,
@@ -81,6 +82,7 @@ import TrackOrder from "./components/Profile/TrackOrder.jsx";
 import ShopResetPassword from "./components/Shop/ShopResetPassword.jsx";
 import ShopForgotPassword from "./components/Shop/ShopForgotPassword.jsx";
 import Cart from "./components/cart/Cart.jsx";
+import ScrollRestoration from "./components/Layout/ScrollRestoration.jsx";
 import Wishlist from "./components/Wishlist/Wishlist.jsx";
 import Categories from "./components/Route/Categories/Categories.jsx";
 // import AllOrders from "./pages/AllOrders.jsx";
@@ -102,6 +104,7 @@ const App = () => {
 
   return (
     <BrowserRouter>
+      <ScrollRestoration />
       {stripeApikey && (
         <Elements stripe={loadStripe(stripeApikey)}>
           <Routes>

@@ -16,8 +16,9 @@ const Hero = () => {
     const { onClick } = props;
     return (
       <div
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-100 text-black p-2 rounded-full cursor-pointer z-10"
-        onClick={onClick}
+      className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-100 text-black p-2 rounded-full cursor-pointer"
+      style={{zIndex: 1}}
+      onClick={onClick}
       >
         &#8250;
       </div>
@@ -29,8 +30,9 @@ const Hero = () => {
     const { onClick } = props;
     return (
       <div
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-blue-100 text-black p-2 rounded-full cursor-pointer z-10"
-        onClick={onClick}
+      className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-blue-100 text-black p-2 rounded-full cursor-pointer"
+      style={{zIndex: 1}}
+      onClick={onClick}
       >
         &#8249;
       </div>
