@@ -214,7 +214,7 @@ const ProductsPage = () => {
         <Loader />
       ) : (
         <div>
-          <Header activeHeading={3} />
+          <Header activeHeading={2} />
           {/* FOR MOBILE VIEW */}
           {categoriesParam ==="Cloths" && (
             <div className="flex mb-0 sticky top-28 z-10" style={{ zIndex: 1 }}>

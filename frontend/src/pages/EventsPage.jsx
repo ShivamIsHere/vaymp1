@@ -13,10 +13,14 @@ const EventsPage = () => {
         <Loader />
       ) : (
         <div>
-          <Header activeHeading={4} />
-          {allEvents.map((event, index) => (
-            <EventCard key={index} active={true} data={event} />
-          ))} 
+          <Header activeHeading={3} />
+          <div className="flex flex-wrap justify-center">
+            {allEvents.map((event, index) => (
+              <div key={index} className="w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2 p-2">
+                <EventCard key={index} active={true} data={event} />
+              </div>
+            ))}
+          </div> 
         </div>
       )}
     </>

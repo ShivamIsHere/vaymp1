@@ -99,7 +99,7 @@ const EventCard = ({ active, data }) => {
         </div>
         {/* Visible on large screens */}
         <div className="hidden lg:block">
-          <p className="text-gray-600 mb-2">{data.description.length > 35 ? data.description.slice(0, 35) + "..." : data.description}</p>
+          <p className="text-gray-600 mb-2">{data.description.length > 30 ? data.description.slice(0, 35) + "..." : data.description}</p>
         </div>
         <div className="flex items-center py-1 justify-between">
           <div className="flex items-center">
@@ -118,8 +118,8 @@ const EventCard = ({ active, data }) => {
         <CountDown data={data} />
         <div className="mt-4">
           <Link to={`/product/${data._id}?isEvent=true`}>
-            <div className={`${styles.button} bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600`}>
-              See Details
+          <div className={`${styles.button} bg-gray-900 text-white py-2 px-4 rounded-lg shadow-md hover:bg-black`}>
+            See Details
             </div>
           </Link>
         </div>

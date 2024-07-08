@@ -361,81 +361,81 @@ const Header = ({ activeHeading }) => {
               </div>
 
               <div className={`${styles.noramlFlex}`}>
-  <div
-    className="container mx-auto bg-blue p-2 rounded-lg shadow-lg flex items-center justify-between cursor-pointer"
-    onMouseEnter={() => setIsDropdownOpen(true)}
-    onMouseLeave={() => setIsDropdownOpen(false)}
-  >
-    <div className="relative">
-      {isAuthenticated ? (
-        <div className="relative flex items-center">
-          <div className="flex items-center cursor-pointer">
-          <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-slate-200">
-            <div className="w-8 h-8 flex items-center justify-center text-blue-300 text-3xl font-bold">
-              {getFirstLetter(user?.name)}
-            </div>          
-          </div>
-            <span className="ml-2 text-white">
-            {`${user.name.split(' ')[0]}`}
-            </span>
-          </div>
-          <FiChevronDown className="ml-2 text-white" /> {/* Dropdown icon */}
-          {isDropdownOpen && (
-            <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-md z-20">
-              {/* Dropdown content */}
-              <Link
-                to="/profile"
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-              >
-                Profile
-              </Link>
-              <Link
-                to={`/orders`}
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-              >
-                Orders
-              </Link>
-              <Link
-                 onClick={logoutHandler}
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-              >
-                LogOut
-              </Link>
-               {/* Add Orders link */}
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="relative flex items-center">
-          <div className="flex items-center cursor-pointer">
-            <CgProfile size={30} color="rgb(255 255 255 / 83%)" />
-            <span className="ml-2 text-white">
-              Login
-            </span>
-          </div>
-          <FiChevronDown className="ml-2 text-white" /> {/* Dropdown icon */}
-          {isDropdownOpen && (
-            <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-md z-20">
-              {/* Dropdown content */}
-              <Link
-                to="/login"
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-              >
-                Login
-              </Link>
-              <Link
-                to="/sign-up"
-                className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-              >
-                Register
-              </Link> {/* Add Register link */}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  </div>
-</div>
+              <div
+                  className="container mx-auto bg-blue p-2 rounded-lg shadow-lg flex items-center justify-between cursor-pointer"
+                  onMouseEnter={() => setIsDropdownOpen(true)}
+                  onMouseLeave={() => setIsDropdownOpen(false)}
+                >
+                  <div className="relative">
+                    {isAuthenticated ? (
+                      <div className="relative flex items-center">
+                        <div className="flex items-center cursor-pointer">
+                          <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-slate-200">
+                            <div className="w-8 h-8 flex items-center justify-center text-blue-300 text-3xl font-bold">
+                              {getFirstLetter(user?.name)}
+                            </div>
+                          </div>
+                          <span className="ml-2 text-white">
+                            {`${user.name.split(' ')[0]}`}
+                          </span>
+                        </div>
+                        <FiChevronDown className="ml-2 text-white" /> {/* Dropdown icon */}
+                        {isDropdownOpen && (
+                          <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-md z-20">
+                            {/* Dropdown content */}
+                            <Link
+                              to="/profile"
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                            >
+                              Profile
+                            </Link>
+                            <Link
+                              to={`/orders`}
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                            >
+                              Orders
+                            </Link>
+                            <Link
+                              onClick={logoutHandler}
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                            >
+                              LogOut
+                            </Link>
+                            {/* Add Orders link */}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="relative flex items-center">
+                        <div className="flex items-center cursor-pointer">
+                          <CgProfile size={30} color="rgb(255 255 255 / 83%)" />
+                          <span className="ml-2 text-white">
+                            Login
+                          </span>
+                        </div>
+                        <FiChevronDown className="ml-2 text-white" /> {/* Dropdown icon */}
+                        {isDropdownOpen && (
+                          <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-md z-20">
+                            {/* Dropdown content */}
+                            <Link
+                              to="/login"
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                            >
+                              Login
+                            </Link>
+                            <Link
+                              to="/sign-up"
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
+                            >
+                              Register
+                            </Link> {/* Add Register link */}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
 
 
               {/* cart popup */}
@@ -457,7 +457,7 @@ const Header = ({ activeHeading }) => {
 
       {/* mobile header */}
       <div
-        className={`sticky top-0 z-[10] bg-white w-full shadow-sm 800px:hidden`}
+        className={`sticky top-0 z-[20] bg-white w-full shadow-sm 800px:hidden`}
       >
         <div className="w-full flex items-center justify-between">
           <div>

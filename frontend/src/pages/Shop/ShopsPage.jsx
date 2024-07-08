@@ -22,7 +22,7 @@ const ShopsPage = () => {
   }, [allProducts, isLoading]);
   return (
     <>
-      <Header activeHeading={5} />
+      <Header activeHeading={4} />
       {isLoading ? (
         <h1>Loading</h1>
       ) : (
