@@ -35,7 +35,7 @@ const Checkout = () => {
       setPhoneNumber(lastUsed.phoneNumber);
       setAltPhoneNumber(lastUsed.altphoneNumber);
       setCity(lastUsed.city);
-      setLandMark(lastUsed.landmark);      
+      setLandMark(lastUsed.landmark);
       setAddress1(lastUsed.address1);
       setAddress2(lastUsed.address2);
       setZipCode(lastUsed.zipCode);
@@ -210,12 +210,26 @@ const Checkout = () => {
           />
         </div>
       </div>
+      {/* for mobile view */}
+      <div className="relative" style={{ zIndex: 1 }}>
+        <div className="fixed bottom-0 left-0 w-full bg-gray-800 shadow-lg p-4 md:hidden" style={{ zIndex: 0 }}>
+          <div
+            className="w-full max-w-[280px] mx-auto flex justify-center items-center bg-gray-900 rounded-lg py-3 cursor-pointer transition-transform transform hover:scale-105 active:scale-95"
+            onClick={paymentSubmit}
+          >
+            <h5 className="text-white font-semibold">Go to Payment</h5>
+          </div>
+        </div>
+      </div>
+      {/* for larger screen */}
       <div
-        className={`${styles.button} w-[150px] 800px:w-[280px] mt-10`}
+        className="w-full max-w-[280px] mt-10 hidden md:flex justify-center items-center bg-gray-900 rounded-lg py-3 cursor-pointer transition-transform transform hover:scale-105 active:scale-95"
         onClick={paymentSubmit}
       >
-        <h5 className="text-white">Go to Payment</h5>
+        <h5 className="text-white font-semibold">Go to Payment</h5>
       </div>
+
+
     </div>
   );
 };
@@ -267,7 +281,7 @@ const ShippingInfo = ({
     setUsername("");
     setAddress1("");
     setAddress2("");
-    setZipCode(null);
+    setZipCode("");
     setPhoneNumber("");
     setAltPhoneNumber("");
     setLandMark("");
@@ -276,10 +290,11 @@ const ShippingInfo = ({
     setLastUsedAddress(null); // Reset the last used address
   };
 
-  const isDisabled = selectedAddressIndex !== null && lastUsedAddress !== null;
+  const isDisabled = selectedAddressIndex !== null || lastUsedAddress !== null;
 
   return (
     <div className="w-full 800px:w-[95%] bg-white rounded-md p-5 pb-8">
+
       <h5 className="text-[18px] font-[500]">Shipping Address</h5>
       <br />
       <form>
@@ -295,7 +310,7 @@ const ShippingInfo = ({
             />
           </div>
           <div className="w-[50%]">
-            <label className="block pb-2">Phone Number</label>
+            <label className="block pb-2">Phone number</label>
             <input
               type="number"
               value={phoneNumber}
@@ -306,9 +321,10 @@ const ShippingInfo = ({
           </div>
         </div>
 
+
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
-            <label className="block pb-2">Address 1</label>
+            <label className="block pb-2">House No.,Building Name</label>
             <input
               type="address"
               value={address1}
@@ -318,7 +334,7 @@ const ShippingInfo = ({
             />
           </div>
           <div className="w-[50%]">
-            <label className="block pb-2">Address 2</label>
+            <label className="block pb-2">Road name, Area, Colony</label>
             <input
               type="address"
               value={address2}
@@ -328,9 +344,10 @@ const ShippingInfo = ({
             />
           </div>
         </div>
+
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
-            <label className="block pb-2">LandMark</label>
+            <label className="block pb-2">Add Newarby LandMark</label>
             <input
               type="address"
               value={landmark}
@@ -340,7 +357,7 @@ const ShippingInfo = ({
             />
           </div>
           <div className="w-[50%]">
-            <label className="block pb-2">Alt Phone number</label>
+            <label className="block pb-2">Alternate Phone number</label>
             <input
               type="number"
               value={altphoneNumber}
@@ -350,6 +367,7 @@ const ShippingInfo = ({
             />
           </div>
         </div>
+
         <div className="w-full flex pb-3">
           <div className="w-[50%]">
             <label className="block pb-2">City</label>
@@ -362,7 +380,7 @@ const ShippingInfo = ({
             />
           </div>
           <div className="w-[50%]">
-            <label className="block pb-2">Zip Code</label>
+            <label className="block pb-2">Pincode</label>
             <input
               type="number"
               value={zipCode}
@@ -374,36 +392,61 @@ const ShippingInfo = ({
         </div>
       </form>
       <div>
-        <h5
-          className="text-[18px] font-[500] cursor-pointer inline-block"
+        <button
+          className="px-4 py-2 mt-3 border border-gray-300 rounded-md shadow-sm hover:bg-gray-100"
           onClick={handleChooseSavedAddressClick}
         >
           Choose from saved address
-        </h5>
+        </button>
+
         {userInfo && (
           <div>
-            {user &&
-              user.addresses.map((item, index) => (
-                <div className="w-full flex mt-1" key={index}>
+            {user && user.addresses.map((item, index) => (
+              <div className="w-full bg-white rounded-lg shadow mb-5 p-3 relative flex flex-col"
+                key={index}
+                onClick={() => handleSavedAddressClick(index, item)}
+              >
+                <div className="flex items-center mb-2">
                   <input
                     type="radio"
-                    value={item.addressType}
+                    value={index}
                     checked={selectedAddressIndex === index}
                     onChange={() => handleSavedAddressClick(index, item)}
                   />
-                  <h5 className="pl-2">{`${item.addressType} ${item.address1} ${item.address2}`}</h5>
+                  <h5 className="pl-2 font-semibold">{item.userName}</h5>
+                  <p className="pl-2 mt-1 mb-1">{item.phoneNumber}</p>
+                  <p className="ml-2 p-1 pt-0 pb-0 mt-1 mb-1 font-thin bg-slate-200 border rounded-md">{item.addressType}</p>
                 </div>
-              ))}
-            <div className="w-full flex mt-1">
-              <button
-                className="px-4 py-2 mt-3 border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={handleAddNewAddressClick}
-              >
-                Add New Address
-              </button>
-            </div>
+                <div className="flex flex-col pl-6">
+                  {/* <p className="mb-1">{item.userName}</p> */}
+                  <p className="mb-1">{item.address1}</p>
+                  <p className="mb-1"> {item.address2}</p>
+                  {/* <p className="mb-1">{item.phoneNumber}</p> */}
+                  {/* <p className="mb-1">{item.altphoneNumber}</p> */}
+                  {/* <p className="mb-1">{item.landmark}</p> */}
+                  <div className="flex">
+                    <p className="mb-1">{item.city}</p>
+                    <p className="mb-1 ml-1"> {item.zipCode}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {user && user.addresses.length === 0 && (
+              <h5 className="text-center pt-8 text-[18px]">
+                You do not have any saved address!
+              </h5>
+            )}
           </div>
         )}
+
+        <div className="w-full flex mt-1">
+          <button
+            className="px-4 py-2 mt-3 border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            onClick={handleAddNewAddressClick}
+          >
+            Add New Address
+          </button>
+        </div>
       </div>
     </div>
   );
