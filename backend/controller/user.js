@@ -36,7 +36,7 @@ router.post("/create-user", async (req, res, next) => {
 
     const activationToken = createActivationToken(user);
 
-    const activationUrl = `http://localhost:3000/activation/${activationToken}`;
+    const activationUrl = `https://vaymp1-kwfw.vercel.app/activation/${activationToken}`;
 
     try {
       await sendMail({
@@ -430,7 +430,7 @@ router.post(
     await user.save({ validateBeforeSave: false });
 
     // Create reset password URL
-    const resetUrl = `http://localhost:3000/password/reset/${resetToken}`;
+    const resetUrl = `https://vaymp1-kwfw.vercel.app/password/reset/${resetToken}`;
 
     // Send email
     const message = `Your password reset token is as follows:\n\n${resetUrl}\n\nIf you have not requested this email, please ignore it.`;

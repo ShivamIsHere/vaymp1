@@ -8,7 +8,7 @@ const { isAuthenticated, isSeller, isAdmin } = require("./middleware/auth");
 
 // CORS configuration
 const corsOptions = {
-  origin: ['http://localhost:3000'], // Allowed origin
+  origin: 'https://vaymp1-kwfw.vercel.app', // Allowed origin
   credentials: true, // Allow credentials (cookies)
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: 'Content-Type,Authorization',

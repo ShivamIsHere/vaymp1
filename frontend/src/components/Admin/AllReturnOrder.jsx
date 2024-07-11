@@ -64,7 +64,7 @@ console.log("item",item)
           //stockItem.qty -= 1; // Reset qty to 0
           console.log("after update stock",newStock)
           // Make HTTP PUT request to update stock using Axios
-          const response = await axios.patch(`http://localhost:8000/api/v2/product/update-stock/${productId}`, {
+          const response = await axios.patch(`${server}/api/v2/product/update-stock/${productId}`, {
             stock: newStock, // Update the stock value in the request body
           });
   
@@ -175,7 +175,7 @@ console.log("item",item)
           console.log("params.row.kuchviId",params.row.kuchviId)
           await updateStockCancel(params.row.productId,params.row.size)
 
-         const response=await axios.patch(`http://localhost:8000/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
+         const response=await axios.patch(`${server}/api/v2/kuchvi/update-kuchvi/${params.row.kuchviId}`, {
           status: "Returned", // Update the stock value in the request body
           refund:true,
           refundStatus:true
