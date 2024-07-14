@@ -477,7 +477,7 @@ const UserOrderDetails = () => {
             // Handle return logic here
             console.log("================???????", data);
             const response = await axios.patch(
-              `${server}/api/v2/kuchvi/update-kuchvi/${data.kuchviId}`,
+              `${server}/kuchvi/update-kuchvi/${data.kuchviId}`,
               {
                 return1: true, // Update the stock value in the request body
                 returnedAt: Date.now(),
@@ -532,7 +532,7 @@ const UserOrderDetails = () => {
             const img = data.image;
             const kuchviId = data.kuchviId;
             const response = await axios.patch(
-              `${server}/api/v2/kuchvi/update-kuchvi/${data.kuchviId}`,
+              `${server}/kuchvi/update-kuchvi/${data.kuchviId}`,
               {
                 cancel: true, // Update the stock value in the request body
                 status: "cancel Request",
