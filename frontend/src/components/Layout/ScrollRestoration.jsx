@@ -5,7 +5,7 @@ const useScrollRestoration = () => {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0); // Scroll to top on new page load
+    // window.scrollTo(0, 0); // Scroll to top on new page load
 
     const handlePopState = (event) => {
       if (event.state && event.state.scrollPosition) {
