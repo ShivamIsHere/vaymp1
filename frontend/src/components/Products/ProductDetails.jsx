@@ -455,7 +455,6 @@ const ProductDetails =  ({ data }) => {
                             title="Add to wishlist"
                           />
                         )}
-                        
                       </span>
                     </div>
                   </div>
@@ -512,12 +511,6 @@ const ProductDetails =  ({ data }) => {
                             title="Add to wishlist"
                           />
                         )}
-                        <RiShareForwardLine
-                    size={34}
-                    className="ml-2 text-blue-400"
-                    title="Share this product"
-                    onClick={copyToClipboard}
-                  />
                       </span>
                     </div>
                   </div>
